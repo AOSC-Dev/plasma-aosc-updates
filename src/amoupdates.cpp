@@ -18,6 +18,7 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 #include <QDBusVariant>
+#include <QDBusArgument>
 #include <QLocale>
 #include <QDebug>
 
@@ -456,6 +457,14 @@ void AmoUpdates::setNetworkOnline(bool online)
     emit networkStateChanged();
 }
 
+void AmoUpdates::setNetworkMobile(bool mobile)
+{
+    if (m_networkMobile == mobile)
+        return;
+    m_networkMobile = mobile;
+    emit networkStateChanged();
+}
+
 void AmoUpdates::setOnBattery(bool onBattery)
 {
     if (m_onBattery == onBattery)
@@ -480,6 +489,44 @@ void AmoUpdates::refreshSystemState()
         setNetworkOnline(unwrapDBusVariant(networkState.value()).toUInt() >= 50);
     }
 
+    // A connection is considered mobile if any active connection is of type
+    // "gsm" or "cdma" (WWAN / cellular modems).
+    const QDBusReply<QVariant> activeConnections = networkManager.call(
+        QStringLiteral("Get"),
+        QStringLiteral("org.freedesktop.NetworkManager"),
+        QStringLiteral("ActiveConnections"));
+    bool mobile = false;
+    if (activeConnections.isValid()) {
+        const QVariant unwrapped = unwrapDBusVariant(activeConnections.value());
+        QStringList paths;
+        if (unwrapped.canConvert<QDBusArgument>()) {
+            paths = qdbus_cast<QStringList>(qvariant_cast<QDBusArgument>(unwrapped));
+        } else {
+            paths = unwrapped.toStringList();
+        }
+        for (const QString &path : paths) {
+            if (path.isEmpty())
+                continue;
+            QDBusInterface activeConnection(
+                QStringLiteral("org.freedesktop.NetworkManager"),
+                path,
+                QStringLiteral("org.freedesktop.DBus.Properties"),
+                QDBusConnection::systemBus());
+            const QDBusReply<QVariant> type = activeConnection.call(
+                QStringLiteral("Get"),
+                QStringLiteral("org.freedesktop.NetworkManager.Connection.Active"),
+                QStringLiteral("Type"));
+            if (type.isValid()) {
+                const QString typeStr = unwrapDBusVariant(type.value()).toString();
+                if (typeStr == QStringLiteral("gsm") || typeStr == QStringLiteral("cdma")) {
+                    mobile = true;
+                    break;
+                }
+            }
+        }
+    }
+    setNetworkMobile(mobile);
+
     QDBusInterface upower(QStringLiteral("org.freedesktop.UPower"),
                           QStringLiteral("/org/freedesktop/UPower"),
                           QStringLiteral("org.freedesktop.DBus.Properties"),
@@ -497,11 +544,18 @@ void AmoUpdates::onNetworkPropertiesChanged(const QString &interfaceName,
                                             const QStringList &invalidatedProperties)
 {
     Q_UNUSED(invalidatedProperties);
-    if (interfaceName != QStringLiteral("org.freedesktop.NetworkManager") ||
-        !changedProperties.contains(QStringLiteral("State")))
+    if (interfaceName != QStringLiteral("org.freedesktop.NetworkManager"))
         return;
 
-    setNetworkOnline(unwrapDBusVariant(changedProperties.value(QStringLiteral("State"))).toUInt() >= 50);
+    if (changedProperties.contains(QStringLiteral("State"))) {
+        setNetworkOnline(unwrapDBusVariant(changedProperties.value(QStringLiteral("State"))).toUInt() >= 50);
+    }
+
+    // ActiveConnections changed (a connection was established or torn down),
+    // so re-evaluate whether we're on a mobile connection.
+    if (changedProperties.contains(QStringLiteral("ActiveConnections"))) {
+        refreshSystemState();
+    }
 }
 
 void AmoUpdates::onPowerPropertiesChanged(const QString &interfaceName,

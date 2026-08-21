@@ -17,7 +17,11 @@ PlasmoidItem
 {
     id: root
 
-    fullRepresentation: Full {}
+    fullRepresentation: Full {
+        checkDaily: root.checkDaily
+        checkWeekly: root.checkWeekly
+        checkMonthly: root.checkMonthly
+    }
     toolTipSubText: AmoUpdates.message
     Plasmoid.icon: AmoUpdates.iconName
 
@@ -27,6 +31,8 @@ PlasmoidItem
     property bool checkDaily: plasmoid.configuration.daily
     property bool checkWeekly: plasmoid.configuration.weekly
     property bool checkMonthly: plasmoid.configuration.monthly
+    property bool autoCheck: plasmoid.configuration.auto_check
+    property bool checkOnMobile: plasmoid.configuration.check_on_mobile
 
     property double lastCheckAttempt: 0
     property double lastCheckTimestamp: plasmoid.configuration.last_check_timestamp
@@ -36,7 +42,7 @@ PlasmoidItem
     readonly property int secsInWeek: secsInDay * 7;
     readonly property int secsInMonth: secsInDay * 30;
 
-    readonly property bool networkAllowed: AmoUpdates.isNetworkOnline
+    readonly property bool networkAllowed: AmoUpdates.isNetworkMobile ? checkOnMobile : AmoUpdates.isNetworkOnline
     readonly property bool batteryAllowed: AmoUpdates.isOnBattery ? plasmoid.configuration.check_on_battery : true
 
     Timer {
@@ -73,6 +79,10 @@ PlasmoidItem
     }
 
     function needsForcedUpdate() {
+        if (!autoCheck) {
+            return false;
+        }
+
         var now = Date.now() / 1000;
         if (now - lastCheckAttempt < secsAutoCheckLimit) {
             return false;
@@ -112,7 +122,7 @@ PlasmoidItem
         // Always do an initial check when the plasmoid loads, so the tray
         // icon reflects the current state even if the last check was recent
         // (e.g. new updates appeared on the server since then).
-        if (networkAllowed && batteryAllowed) {
+        if (autoCheck && networkAllowed && batteryAllowed) {
             lastCheckAttempt = Date.now() / 1000;
             AmoUpdates.checkUpdates(false /* manual */);
         }

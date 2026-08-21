@@ -21,6 +21,14 @@
       <label>Check for updates when on battery</label>
       <default>false</default>
     </entry>
+    <entry name="check_on_mobile" type="Bool">
+      <label>Check for updates when on a mobile connection</label>
+      <default>false</default>
+    </entry>
+    <entry name="auto_check" type="Bool">
+      <label>Automatically check for updates</label>
+      <default>true</default>
+    </entry>
     <entry name="last_check_timestamp" type="Double">
       <label>Timestamp of the last successful update check</label>
       <default>0.0</default>

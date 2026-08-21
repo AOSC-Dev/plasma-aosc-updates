@@ -39,7 +39,7 @@ class AmoUpdates : public QObject
     Q_PROPERTY(QString timestamp READ timestamp NOTIFY updatesChanged)
     Q_PROPERTY(int percentage READ percentage NOTIFY percentageChanged)
     Q_PROPERTY(bool isNetworkOnline READ isNetworkOnline NOTIFY networkStateChanged)
-    Q_PROPERTY(bool isNetworkMobile READ isNetworkMobile CONSTANT)
+    Q_PROPERTY(bool isNetworkMobile READ isNetworkMobile NOTIFY networkStateChanged)
     Q_PROPERTY(bool isOnBattery READ isOnBattery NOTIFY isOnBatteryChanged)
     Q_PROPERTY(bool lastCheckSuccessful READ lastCheckSuccessful NOTIFY updatesChanged)
     Q_PROPERTY(QStringList packages READ packages NOTIFY updatesChanged)
@@ -57,7 +57,7 @@ public:
     QString timestamp() const { return m_timestamp; }
     int percentage() const { return m_percentage; }
     bool isNetworkOnline() const { return m_networkOnline; }
-    bool isNetworkMobile() const { return false; }
+    bool isNetworkMobile() const { return m_networkMobile; }
     bool isOnBattery() const { return m_onBattery; }
     bool lastCheckSuccessful() const { return m_lastCheckSuccessful; }
     QStringList packages() const;
@@ -113,6 +113,7 @@ private:
     void setErrorMessage(const QString &message);
     void setPercentage(int percentage);
     void setNetworkOnline(bool online);
+    void setNetworkMobile(bool mobile);
     void setOnBattery(bool onBattery);
     void refreshSystemState();
     void setTimestamp(const QString &timestamp);
@@ -134,6 +135,7 @@ private:
     qint64 m_downloaded = 0;
     bool m_hasGlobalDownloadProgress = false;
     bool m_networkOnline = true;
+    bool m_networkMobile = false;
     bool m_onBattery = false;
     bool m_lastCheckSuccessful = false;
     double m_lastRefreshTimestamp = 0.0;

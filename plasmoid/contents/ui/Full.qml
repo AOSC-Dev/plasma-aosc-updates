@@ -22,15 +22,12 @@ Item {
     property bool anySelected: false
     property bool allSelected: false
     property bool populatePreSelected: true
+    property bool checkDaily: false
+    property bool checkWeekly: false
+    property bool checkMonthly: false
 
     width: Kirigami.Units.gridUnit * 20
     height: Kirigami.Units.gridUnit * 20
-
-    Binding {
-        target: timestampLabel
-        property: "text"
-        value: AmoUpdates.timestamp
-    }
 
     Connections {
         target: AmoUpdates
@@ -55,7 +52,7 @@ Item {
             Layout.fillWidth: true
             level: 4
             wrapMode: Text.WordWrap
-            text: AmoUpdates.message
+            text: AmoUpdates.isNetworkOnline ? AmoUpdates.message : i18n("Network is offline")
         }
 
         PlasmaComponents3.Label {
@@ -65,6 +62,10 @@ Item {
             text: {
                 if (AmoUpdates.isActive)
                     return AmoUpdates.statusMessage
+                else if (!AmoUpdates.isNetworkOnline)
+                    return ""
+                else if (AmoUpdates.count === 0 && AmoUpdates.lastCheckSuccessful)
+                    return i18n("Updates are automatically checked %1.", updateInterval())
                 else
                     return ""
             }
@@ -80,7 +81,7 @@ Item {
             font.italic: true
             font.pointSize: Kirigami.Theme.smallFont.pointSize;
             opacity: 0.6;
-            text: AmoUpdates.timestamp
+            text: i18n("Last check: %1 ago", formatDuration(AmoUpdates.lastRefreshTimestamp()))
         }
 
         PlasmaComponents3.Label {
@@ -250,6 +251,32 @@ Item {
             }
         }
         return result
+    }
+
+    function updateInterval() {
+        if (checkDaily)
+            return i18n("daily")
+        else if (checkWeekly)
+            return i18n("weekly")
+        else if (checkMonthly)
+            return i18n("monthly")
+        return i18n("never")
+    }
+
+    function formatDuration(timestamp) {
+        if (timestamp <= 0)
+            return i18n("never")
+        var seconds = Math.floor(Date.now() / 1000 - timestamp)
+        if (seconds < 60)
+            return i18np("%1 second", "%1 seconds", seconds)
+        var minutes = Math.floor(seconds / 60)
+        if (minutes < 60)
+            return i18np("%1 minute", "%1 minutes", minutes)
+        var hours = Math.floor(minutes / 60)
+        if (hours < 24)
+            return i18np("%1 hour", "%1 hours", hours)
+        var days = Math.floor(hours / 24)
+        return i18np("%1 day", "%1 days", days)
     }
 
     function populateModel() {

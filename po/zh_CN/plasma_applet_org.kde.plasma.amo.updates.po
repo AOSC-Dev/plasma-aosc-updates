@@ -14,6 +14,12 @@ msgstr ""
 msgid "General"
 msgstr "常规"
 
+msgid "Automatic update checks:"
+msgstr "自动检查更新："
+
+msgid "Check for updates automatically"
+msgstr "自动检查更新"
+
 msgid "Check interval:"
 msgstr "检查更新间隔："
 
@@ -31,6 +37,50 @@ msgstr "检查更新的时机："
 
 msgid "On battery"
 msgstr "使用电池时"
+
+msgid "On a mobile connection"
+msgstr "使用移动网络时"
+
+msgid "Network is offline"
+msgstr "网络处于离线状态"
+
+msgid "Updates are automatically checked %1."
+msgstr "更新将自动检查，%1。"
+
+msgid "daily"
+msgstr "每天"
+
+msgid "weekly"
+msgstr "每周"
+
+msgid "monthly"
+msgstr "每月"
+
+msgid "never"
+msgstr "从不"
+
+msgid "Last check: %1 ago"
+msgstr "上次检查：%1 前"
+
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "%1 秒"
+msgstr[1] "%1 秒"
+
+msgid "%1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "%1 分钟"
+msgstr[1] "%1 分钟"
+
+msgid "%1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "%1 小时"
+msgstr[1] "%1 小时"
+
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1 天"
+msgstr[1] "%1 天"
 
 msgctxt "Package Name (Version)"
 msgid "%1 (%2)"

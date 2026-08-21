@@ -12,9 +12,17 @@ KCM.SimpleKCM {
     property alias cfg_weekly: weekly.checked
     property alias cfg_monthly: monthly.checked
     property alias cfg_check_on_battery: battery.checked
+    property alias cfg_check_on_mobile: mobile.checked
+    property alias cfg_auto_check: autoCheck.checked
 
     Kirigami.FormLayout {
         id: form
+
+        CheckBox {
+            id: autoCheck
+            Kirigami.FormData.label: i18nc("@label", "Automatic update checks:")
+            text: i18n("Check for updates automatically")
+        }
 
         ButtonGroup {
             id: intervalGroup
@@ -43,6 +51,11 @@ KCM.SimpleKCM {
             id: battery
             Kirigami.FormData.label: i18nc("@label part of a sentence", "Check for updates when:")
             text: i18nc("@option:check part of a sentence: Check for updates when", "On battery")
+        }
+
+        CheckBox {
+            id: mobile
+            text: i18nc("@option:check part of a sentence: Check for updates when", "On a mobile connection")
         }
     }
 }
