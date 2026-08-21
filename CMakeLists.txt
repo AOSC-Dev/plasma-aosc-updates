@@ -25,6 +25,12 @@ find_package(KF6IconThemes REQUIRED)
 find_package(KF6Declarative REQUIRED)
 find_package(Plasma REQUIRED)
 
+# Keep the user-local layout compatible with Qt 6's default QML import path
+# convention.  This can be overridden for distro packaging, for example with
+# -DAMO_QML_INSTALL_DIR=lib64/qt6/qml.
+set(AMO_QML_INSTALL_DIR "lib/qt6/qml" CACHE PATH
+    "Install directory for the Amo QML plugin")
+
 # ---------------------------------------------------------------------------
 # QML plugin library exposing the AmoUpdates singleton to the plasmoid UI.
 # ---------------------------------------------------------------------------
@@ -53,10 +59,10 @@ target_link_libraries(amoqmlplugin
 
 # Install the QML plugin into the org/kde/plasma/amo module directory.
 install(TARGETS amoqmlplugin
-    LIBRARY DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/amo
+    LIBRARY DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
 )
 install(FILES src/qmldir
-    DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/amo
+    DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
 )
 
 # ---------------------------------------------------------------------------
