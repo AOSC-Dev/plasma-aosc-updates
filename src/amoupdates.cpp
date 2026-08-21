@@ -225,8 +225,10 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
 
     if (success) {
         setMessage(QStringLiteral("Updates installed"));
-        setStatusMessage(QStringLiteral("Idle"));
+        setStatusMessage(QStringLiteral("Refreshing update list..."));
         setErrorMessage(QString());
+        setActive(true);
+        resetProgress();
         emit updatesInstalled();
         // Re-check to refresh the badge.
         m_client.fetchUpdates();

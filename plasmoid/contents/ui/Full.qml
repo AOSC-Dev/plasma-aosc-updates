@@ -196,11 +196,31 @@ Item {
             enabled: fullRepresentation.anySelected
             Layout.alignment: Qt.AlignHCenter
             text: i18n("Install Updates")
-            onClicked: AmoUpdates.installUpdates(selectedPackages())
+            onClicked: installDialog.open()
 
             PlasmaComponents3.ToolTip {
                 text: i18n("Performs the software update")
             }
+        }
+    }
+
+    QQC2.Dialog {
+        id: installDialog
+
+        title: i18n("Install updates?")
+        modal: true
+        standardButtons: QQC2.Dialog.Ok | QQC2.Dialog.Cancel
+
+        contentItem: PlasmaComponents3.Label {
+            width: Kirigami.Units.gridUnit * 16
+            wrapMode: Text.WordWrap
+            text: i18np("Install the selected package?", "Install the %1 selected packages?", selectedPackages().length)
+        }
+
+        onAccepted: {
+            var packages = selectedPackages()
+            if (packages.length > 0)
+                AmoUpdates.installUpdates(packages)
         }
     }
 
