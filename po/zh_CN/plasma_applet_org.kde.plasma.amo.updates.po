@@ -1,0 +1,79 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma-aosc-updates\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2026-08-21 00:00+0800\n"
+"Last-Translator: Amo Updates contributors\n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "General"
+msgstr "常规"
+
+msgid "Check interval:"
+msgstr "检查更新间隔："
+
+msgid "Daily"
+msgstr "每天"
+
+msgid "Weekly"
+msgstr "每周"
+
+msgid "Monthly"
+msgstr "每月"
+
+msgid "Check for updates when:"
+msgstr "检查更新的时机："
+
+msgid "On battery"
+msgstr "使用电池时"
+
+msgctxt "Package Name (Version)"
+msgid "%1 (%2)"
+msgstr "%1（%2）"
+
+msgctxt "description of the update"
+msgid "Update Description"
+msgstr "更新描述"
+
+msgid "No description available"
+msgstr "没有可用的描述"
+
+msgid "Error: %1"
+msgstr "错误：%1"
+
+msgid "No updates available"
+msgstr "没有可用的更新"
+
+msgid "The update check failed"
+msgstr "检查更新失败"
+
+msgid "Update check has not completed"
+msgstr "尚未完成更新检查"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Check for Updates"
+msgstr "检查更新"
+
+msgid "Select all packages"
+msgstr "选择所有软件包"
+
+msgid "Install Updates"
+msgstr "安装更新"
+
+msgid "Performs the software update"
+msgstr "执行软件更新"
+
+msgid "Install updates?"
+msgstr "安装更新吗？"
+
+msgid "Install the selected package?"
+msgid_plural "Install the %1 selected packages?"
+msgstr[0] "安装选中的软件包吗？"
+msgstr[1] "安装选中的 %1 个软件包吗？"

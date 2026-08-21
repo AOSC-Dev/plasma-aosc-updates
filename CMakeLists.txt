@@ -69,3 +69,6 @@ install(FILES src/qmldir
 # Plasmoid package
 # ---------------------------------------------------------------------------
 plasma_install_package(plasmoid org.kde.plasma.amo.updates)
+
+# Install gettext catalogs used by the plasmoid's QML i18n() calls.
+KI18N_INSTALL(po)
