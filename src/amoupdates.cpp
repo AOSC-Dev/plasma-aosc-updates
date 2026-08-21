@@ -226,7 +226,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         // with a notification on every occurrence. Only notify when the
         // failure persists across consecutive checks, mirroring the
         // behaviour of plasma-pk-updates.
-        const bool notify = m_isManualCheck || !maybeNotifyTransientError(error);
+        const bool notify = m_isManualCheck || maybeNotifyTransientError(error);
         if (notify)
             showErrorNotification(error);
         emit updatesChanged();
