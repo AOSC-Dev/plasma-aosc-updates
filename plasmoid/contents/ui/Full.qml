@@ -197,8 +197,8 @@ Item {
             opacity: 0.6
             Layout.alignment: Qt.AlignHCenter
             text: i18n("Download size: %1 · Disk space: %2",
-                       formatBytes(AmoUpdates.totalDownloadSize()),
-                       formatBytes(AmoUpdates.diskSizeDelta(), true))
+                       formatBytes(AmoUpdates.totalDownloadSize),
+                       formatBytes(AmoUpdates.diskSizeDelta, true))
         }
 
         PlasmaComponents3.Button {

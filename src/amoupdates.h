@@ -46,6 +46,8 @@ class AmoUpdates : public QObject
     Q_PROPERTY(bool isOnBattery READ isOnBattery NOTIFY isOnBatteryChanged)
     Q_PROPERTY(bool lastCheckSuccessful READ lastCheckSuccessful NOTIFY updatesChanged)
     Q_PROPERTY(QStringList packages READ packages NOTIFY updatesChanged)
+    Q_PROPERTY(qint64 totalDownloadSize READ totalDownloadSize NOTIFY updatesChanged)
+    Q_PROPERTY(qint64 diskSizeDelta READ diskSizeDelta NOTIFY updatesChanged)
 
 public:
     explicit AmoUpdates(QObject *parent = nullptr);
@@ -74,8 +76,8 @@ public:
     Q_INVOKABLE QString packageDescription(const QString &packageId) const;
     Q_INVOKABLE qint64 packageDownloadSize(const QString &packageId) const;
     Q_INVOKABLE QString packageOperation(const QString &packageId) const;
-    Q_INVOKABLE qint64 totalDownloadSize() const;
-    Q_INVOKABLE qint64 diskSizeDelta() const;
+    qint64 totalDownloadSize() const;
+    qint64 diskSizeDelta() const;
     Q_INVOKABLE double lastRefreshTimestamp() const;
 
 signals:
