@@ -104,11 +104,13 @@ QStringList AmoUpdates::packages() const
 
 void AmoUpdates::checkUpdates(bool manual)
 {
-    m_isManualCheck = manual;
-
     if (m_active)
         return;
 
+    // Record whether this check was user-initiated only after confirming a
+    // new check will actually start, so a rejected request (m_active) can't
+    // reclassify the operation already in progress.
+    m_isManualCheck = manual;
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
