@@ -104,6 +104,8 @@ private:
 
     QString findEventMessage(const QJsonObject &obj) const;
     int findEventPercent(const QJsonObject &obj) const;
+    void resetProgress();
+    void updateDownloadProgress(const QString &eventName, const QJsonValue &eventValue);
 
     AmoClient m_client;
     bool m_active = false;
@@ -111,6 +113,9 @@ private:
     QString m_statusMessage;
     QString m_timestamp;
     int m_percentage = 0;
+    qint64 m_downloadTotal = 0;
+    qint64 m_downloaded = 0;
+    bool m_hasGlobalDownloadProgress = false;
     bool m_networkOnline = true;
     bool m_onBattery = false;
     bool m_lastCheckSuccessful = false;

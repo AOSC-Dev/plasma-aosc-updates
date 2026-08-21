@@ -66,6 +66,7 @@ void AmoUpdates::checkUpdates(bool manual)
         return;
 
     setActive(true);
+    resetProgress();
     setStatusMessage(QStringLiteral("Checking for updates..."));
     m_client.refresh();
 }
@@ -76,6 +77,7 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
         return;
 
     setActive(true);
+    resetProgress();
     setStatusMessage(QStringLiteral("Installing updates..."));
     m_client.applyChanges(packageIds, QStringList(), false);
 }
@@ -86,6 +88,7 @@ void AmoUpdates::installAllUpdates()
         return;
 
     setActive(true);
+    resetProgress();
     setStatusMessage(QStringLiteral("Installing all updates..."));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
@@ -212,17 +215,25 @@ void AmoUpdates::onStatusChanged(const QString &statusJson)
         return;
     const QJsonObject obj = doc.object();
 
-    // Tagged oma event: {"DownloadEvent": {...}} / {"...Event": {...}}
+    // Tagged oma events are externally tagged enum values. Depending on the
+    // variant, the value is either an object (NewProgressBar/ProgressInc) or
+    // a number (NewGlobalProgressBar/GlobalProgressAdd).
     if (obj.size() == 1) {
-        const QJsonValue tagged = obj.begin().value();
-        if (tagged.isObject()) {
-            const QString msg = findEventMessage(tagged.toObject());
-            if (!msg.isEmpty()) {
-                setStatusMessage(msg);
-            }
-            const int percent = findEventPercent(tagged.toObject());
-            if (percent >= 0) {
-                setPercentage(percent);
+        const QString eventName = obj.begin().key();
+        const QJsonValue eventValue = obj.begin().value();
+        if (eventName != QStringLiteral("status")) {
+            updateDownloadProgress(eventName, eventValue);
+
+            const QJsonValue tagged = eventValue;
+            if (tagged.isObject()) {
+                const QString msg = findEventMessage(tagged.toObject());
+                if (!msg.isEmpty()) {
+                    setStatusMessage(msg);
+                }
+                const int percent = findEventPercent(tagged.toObject());
+                if (percent >= 0) {
+                    setPercentage(percent);
+                }
             }
             return;
         }
@@ -241,8 +252,57 @@ void AmoUpdates::onStatusChanged(const QString &statusJson)
     // Progress percentage if present.
     const QJsonValue percentValue = obj.value(QStringLiteral("percent"));
     if (percentValue.isDouble()) {
-        setPercentage(percentValue.toInt());
+        const int dpkgPercent = qBound(0, percentValue.toInt(), 100);
+        if (m_hasGlobalDownloadProgress) {
+            setPercentage(50 + dpkgPercent / 2);
+        } else {
+            setPercentage(dpkgPercent);
+        }
     }
+}
+
+void AmoUpdates::resetProgress()
+{
+    m_downloadTotal = 0;
+    m_downloaded = 0;
+    m_hasGlobalDownloadProgress = false;
+    setPercentage(0);
+}
+
+void AmoUpdates::updateDownloadProgress(const QString &eventName,
+                                        const QJsonValue &eventValue)
+{
+    if (eventName == QStringLiteral("NewGlobalProgressBar")) {
+        m_downloadTotal = eventValue.toVariant().toLongLong();
+        m_downloaded = 0;
+        m_hasGlobalDownloadProgress = m_downloadTotal > 0;
+        setPercentage(0);
+        return;
+    }
+
+    if (eventName == QStringLiteral("GlobalProgressAdd")) {
+        m_downloaded += eventValue.toVariant().toLongLong();
+    } else if (eventName == QStringLiteral("GlobalProgressSub")) {
+        m_downloaded -= eventValue.toVariant().toLongLong();
+    } else if (eventName == QStringLiteral("ProgressInc") && !m_hasGlobalDownloadProgress) {
+        // Older/variant event streams may not include global progress events.
+        // In that case, accumulate per-file increments as a fallback.
+        if (eventValue.isObject()) {
+            m_downloaded += eventValue.toObject().value(QStringLiteral("size"))
+                                .toVariant().toLongLong();
+        }
+    } else {
+        return;
+    }
+
+    m_downloaded = qMax<qint64>(0, m_downloaded);
+    if (m_downloadTotal <= 0)
+        return;
+
+    m_downloaded = qMin(m_downloaded, m_downloadTotal);
+    const int downloadPercent = qBound(
+        0, static_cast<int>((m_downloaded * 100) / m_downloadTotal), 100);
+    setPercentage(downloadPercent / 2);
 }
 
 QString AmoUpdates::findEventMessage(const QJsonObject &obj) const
