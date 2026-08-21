@@ -303,7 +303,9 @@ Item {
         if (unit === 0)
             text = i18np("%1 byte", "%1 bytes", Math.round(abs))
         else
-            text = i18n("%1 %2", abs.toFixed(1), units[unit])
+            // Round to one decimal and pass a numeric value so i18n can
+            // apply the locale's decimal separator (e.g. "1,5 MB" in German).
+            text = i18n("%1 %2", Math.round(abs * 10) / 10, units[unit])
         return negative ? "-" + text : text
     }
 
