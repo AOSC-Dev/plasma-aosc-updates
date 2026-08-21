@@ -22,6 +22,16 @@ PlasmaExtras.ListItem {
 
     signal checkStateChanged(bool checked)
 
+    // Human-readable label for the update operation (Upgrade / Downgrade /
+    // ReInstall / Install), plus an accent colour.
+    readonly property string operationLabel: operation === "Downgrade" ? i18n("Downgrade")
+                                            : operation === "ReInstall" ? i18n("Reinstall")
+                                            : operation === "Install" ? i18n("Install")
+                                            : i18n("Upgrade")
+    readonly property color operationColor: operation === "Downgrade" ? Kirigami.Theme.negativeTextColor
+                                            : operation === "Upgrade" ? Kirigami.Theme.positiveTextColor
+                                            : Kirigami.Theme.neutralTextColor
+
     width: ListView.view ? ListView.view.width : parent ? parent.width : 0
     implicitHeight: innerLayout.implicitHeight + (Kirigami.Units.smallSpacing * 2)
     enabled: true
@@ -46,11 +56,24 @@ PlasmaExtras.ListItem {
             spacing: Kirigami.Units.smallSpacing / 2
             Layout.fillWidth: true
 
-            PlasmaComponents3.Label {
-                id: nameLabel
+            RowLayout {
                 Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: i18nc("Package Name (Version)", "%1 (%2)", name, version)
+                spacing: Kirigami.Units.smallSpacing
+
+                PlasmaComponents3.Label {
+                    id: nameLabel
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                    text: i18nc("Package Name (Version)", "%1 (%2)", name, version)
+                }
+
+                PlasmaComponents3.Label {
+                    visible: operation !== ""
+                    font.pointSize: Kirigami.Theme.smallFont.pointSize
+                    font.weight: Font.DemiBold
+                    color: operationColor
+                    text: operationLabel
+                }
             }
 
             PlasmaComponents3.Label {

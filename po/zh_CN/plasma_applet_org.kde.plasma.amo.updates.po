@@ -113,6 +113,18 @@ msgstr "更新描述"
 msgid "No description available"
 msgstr "没有可用的描述"
 
+msgid "Upgrade"
+msgstr "升级"
+
+msgid "Downgrade"
+msgstr "降级"
+
+msgid "Reinstall"
+msgstr "重装"
+
+msgid "Install"
+msgstr "安装"
+
 msgid "Error: %1"
 msgstr "错误：%1"
 
