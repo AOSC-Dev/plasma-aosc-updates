@@ -19,6 +19,7 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 find_package(KF6I18n REQUIRED)
 find_package(KF6CoreAddons REQUIRED)
+find_package(KF6Config REQUIRED)
 find_package(KF6DBusAddons REQUIRED)
 find_package(KF6Notifications REQUIRED)
 find_package(KF6IconThemes REQUIRED)
@@ -52,6 +53,7 @@ target_link_libraries(amoqmlplugin
     Qt6::Quick
     KF6::I18n
     KF6::CoreAddons
+    KF6::ConfigCore
     KF6::DBusAddons
     KF6::Notifications
     KF6::IconThemes

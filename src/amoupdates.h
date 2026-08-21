@@ -128,6 +128,25 @@ private:
     void showErrorNotification(const QString &message);
     void showInstalledNotification();
 
+    /**
+     * @brief Whether \a error is a transient failure (e.g. no network, a
+     *        lock held by another package manager) that may resolve on its
+     *        own, so automatic checks shouldn't spam the user.
+     */
+    static bool isTransientError(const QString &error);
+
+    /**
+     * @brief Decide whether a failed automatic check should show a
+     *        notification. Transient failures are suppressed on the first
+     *        occurrence, then notify once they persist.
+     */
+    bool maybeNotifyTransientError(const QString &error);
+
+    /**
+     * @brief Reset the consecutive-failure counter after a successful check.
+     */
+    void resetFailedAutoRefreshCount();
+
     QString findEventMessage(const QJsonObject &obj) const;
     int findEventPercent(const QJsonObject &obj) const;
     void resetProgress();
@@ -147,6 +166,7 @@ private:
     bool m_networkMobile = false;
     bool m_onBattery = false;
     bool m_lastCheckSuccessful = false;
+    bool m_isManualCheck = false;
     double m_lastRefreshTimestamp = 0.0;
     int m_lastUpdateCount = 0;
     QPointer<KNotification> m_lastNotification;
