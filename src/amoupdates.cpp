@@ -24,6 +24,8 @@
 
 #include <KNotification>
 #include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <utility>
 
@@ -102,10 +104,7 @@ QStringList AmoUpdates::packages() const
 
 void AmoUpdates::checkUpdates(bool manual)
 {
-    // `manual` is currently unused: amo's Refresh always performs a full
-    // metadata refresh, so there is no cached path to bypass. It is kept in
-    // the API for future use and to mirror plasma-pk-updates' signature.
-    Q_UNUSED(manual);
+    m_isManualCheck = manual;
 
     if (m_active)
         return;
@@ -222,13 +221,62 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
-        showErrorNotification(error);
+        // For automatic checks, transient failures (no network, another
+        // package manager holding the lock, ...) shouldn't spam the user
+        // with a notification on every occurrence. Only notify when the
+        // failure persists across consecutive checks, mirroring the
+        // behaviour of plasma-pk-updates.
+        const bool notify = m_isManualCheck || !maybeNotifyTransientError(error);
+        if (notify)
+            showErrorNotification(error);
         emit updatesChanged();
         return;
     }
 
+    // A successful check resets the consecutive-failure counter.
+    resetFailedAutoRefreshCount();
+
     // After a successful refresh, fetch the actual update list.
     m_client.fetchUpdates();
+}
+
+bool AmoUpdates::isTransientError(const QString &error)
+{
+    const QString lowered = error.toLower();
+    return lowered.contains(QStringLiteral("network"))
+        || lowered.contains(QStringLiteral("no such host"))
+        || lowered.contains(QStringLiteral("resolve"))
+        || lowered.contains(QStringLiteral("timed out"))
+        || lowered.contains(QStringLiteral("timeout"))
+        || lowered.contains(QStringLiteral("connection refused"))
+        || lowered.contains(QStringLiteral("connection reset"))
+        || lowered.contains(QStringLiteral("another task is already running"))
+        || lowered.contains(QStringLiteral("lock"));
+}
+
+bool AmoUpdates::maybeNotifyTransientError(const QString &error)
+{
+    if (!isTransientError(error))
+        return true;
+
+    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-amo-updates")),
+                     QStringLiteral("General"));
+    qint64 failCount = grp.readEntry(QStringLiteral("FailedAutoRefreshCount"), qint64(0));
+    failCount += 1;
+    grp.writeEntry(QStringLiteral("FailedAutoRefreshCount"), failCount);
+    grp.sync();
+
+    // Suppress the notification for the first transient failure only; if it
+    // keeps happening, the user should be informed.
+    return failCount > 1;
+}
+
+void AmoUpdates::resetFailedAutoRefreshCount()
+{
+    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-amo-updates")),
+                     QStringLiteral("General"));
+    grp.writeEntry(QStringLiteral("FailedAutoRefreshCount"), qint64(0));
+    grp.sync();
 }
 
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
