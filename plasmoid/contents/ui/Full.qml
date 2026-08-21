@@ -285,7 +285,7 @@ Item {
         for (var i = 0; i < packages.length; i++) {
             var id = packages[i]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"selected": populatePreSelected, "id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id)})
+            updatesModel.append({"selected": populatePreSelected, "id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id)})
         }
         updateSelectionState();
     }
