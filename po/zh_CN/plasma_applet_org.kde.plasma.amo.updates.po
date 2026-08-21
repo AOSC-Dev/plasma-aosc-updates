@@ -96,6 +96,17 @@ msgstr "打开"
 msgid "Update check failed"
 msgstr "检查更新失败"
 
+msgid "Download size: %1 · Disk space: %2"
+msgstr "下载大小：%1 · 磁盘空间：%2"
+
+msgid "%1 byte"
+msgid_plural "%1 bytes"
+msgstr[0] "%1 字节"
+msgstr[1] "%1 字节"
+
+msgid "%1 %2"
+msgstr "%1 %2"
+
 msgid "Updates installed"
 msgstr "更新已安装"
 

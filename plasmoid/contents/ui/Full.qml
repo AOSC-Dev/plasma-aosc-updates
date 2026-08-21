@@ -191,6 +191,16 @@ Item {
             }
         }
 
+        PlasmaComponents3.Label {
+            visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
+            font.pointSize: Kirigami.Theme.smallFont.pointSize
+            opacity: 0.6
+            Layout.alignment: Qt.AlignHCenter
+            text: i18n("Download size: %1 · Disk space: %2",
+                       formatBytes(AmoUpdates.totalDownloadSize()),
+                       formatBytes(AmoUpdates.diskSizeDelta(), true))
+        }
+
         PlasmaComponents3.Button {
             visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
             icon.name: "install"
@@ -277,6 +287,24 @@ Item {
             return i18np("%1 hour", "%1 hours", hours)
         var days = Math.floor(hours / 24)
         return i18np("%1 day", "%1 days", days)
+    }
+
+    function formatBytes(bytes, signed) {
+        var value = Number(bytes)
+        var negative = signed && value < 0
+        var abs = Math.abs(value)
+        var units = ["B", "KB", "MB", "GB", "TB"]
+        var unit = 0
+        while (abs >= 1024 && unit < units.length - 1) {
+            abs /= 1024
+            unit++
+        }
+        var text
+        if (unit === 0)
+            text = i18np("%1 byte", "%1 bytes", Math.round(abs))
+        else
+            text = i18n("%1 %2", abs.toFixed(1), units[unit])
+        return negative ? "-" + text : text
     }
 
     function populateModel() {
