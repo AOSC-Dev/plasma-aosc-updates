@@ -1,0 +1,133 @@
+/***************************************************************************
+ *   Copyright (C) 2024 by Amo Updates contributors                        *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
+#pragma once
+
+#include <QObject>
+#include <QDBusInterface>
+#include <QDBusPendingCallWatcher>
+#include <QJsonObject>
+#include <QList>
+#include <QString>
+
+/**
+ * @brief A single package that can be updated.
+ *
+ * Mirrors the relevant fields of oma's InstallEntry so the UI can
+ * display name, version change, download size and operation type.
+ */
+struct UpdatePackage
+{
+    QString name;          // e.g. "firefox"
+    QString oldVersion;    // empty for fresh installs
+    QString newVersion;
+    QString arch;
+    qint64 downloadSize = 0;
+    QString operation;     // "Upgrade", "Install", "ReInstall", "Downgrade"
+    bool automatic = false;
+};
+
+/**
+ * @brief The result of a completed amo task.
+ */
+struct AmoResult
+{
+    quint64 requestId = 0;
+    bool success = false;
+    QString error;
+};
+
+/**
+ * @brief Thin QDBus wrapper around the `io.aosc.Amo1` interface.
+ *
+ * amo runs as a system D-Bus service (io.aosc.Amo at /io/aosc/Amo) and
+ * exposes methods to refresh package metadata, list available updates and
+ * apply changes. This class turns those calls into Qt signals.
+ */
+class AmoClient : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit AmoClient(QObject *parent = nullptr);
+
+    /**
+     * @brief Whether the system D-Bus connection is available.
+     */
+    bool isAvailable() const;
+
+    /**
+     * @brief Request a metadata refresh. Emits refreshStarted with the
+     *        request id, then refreshFinished when done.
+     */
+    void refresh();
+
+    /**
+     * @brief Fetch the list of available updates. Emits updatesListed.
+     */
+    void fetchUpdates();
+
+    /**
+     * @brief Apply changes. `install`/`remove` are package names,
+     *        `upgradeAll` upgrades every available package.
+     */
+    void applyChanges(const QStringList &install,
+                      const QStringList &remove,
+                      bool upgradeAll);
+
+    /**
+     * @brief The last known list of available updates.
+     */
+    QList<UpdatePackage> updates() const { return m_updates; }
+
+    /**
+     * @brief Total download size of all available updates (bytes).
+     */
+    qint64 totalDownloadSize() const { return m_totalDownloadSize; }
+
+    /**
+     * @brief Disk size delta of all available updates (bytes).
+     */
+    qint64 diskSizeDelta() const { return m_diskSizeDelta; }
+
+signals:
+    void refreshStarted(quint64 requestId);
+    void refreshFinished(bool success, const QString &error);
+    void updatesListed(const QList<UpdatePackage> &updates,
+                       qint64 totalDownloadSize,
+                       qint64 diskSizeDelta);
+    void applyStarted(quint64 requestId);
+    void applyFinished(bool success, const QString &error);
+    void statusChanged(const QString &statusJson);
+    void errorOccurred(const QString &message);
+
+private slots:
+    void onRefreshReply(QDBusPendingCallWatcher *watcher);
+    void onUpdatesReply(QDBusPendingCallWatcher *watcher);
+    void onApplyReply(QDBusPendingCallWatcher *watcher);
+    void onStatusSignal(const QDBusMessage &message);
+    void onResultReportSignal(const QDBusMessage &message);
+
+private:
+    void parseUpdates(const QString &json);
+    void handleResult(const QString &json);
+
+    enum class TaskType {
+        None,
+        Refresh,
+        Apply,
+    };
+
+    QDBusInterface *m_iface;
+    QList<UpdatePackage> m_updates;
+    qint64 m_totalDownloadSize = 0;
+    qint64 m_diskSizeDelta = 0;
+    quint64 m_lastRequestId = 0;
+    TaskType m_pendingTask = TaskType::None;
+};

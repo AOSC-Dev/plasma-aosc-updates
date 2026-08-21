@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "",
+                "Name": "Amo Updates"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "Check and install system updates via amo",
+        "Description[zh_CN]": "通过 amo 检查并安装系统更新",
+        "Icon": "system-software-update",
+        "Id": "org.kde.plasma.amo.updates",
+        "License": "GPL-2.0-or-later",
+        "Name": "Amo Updates",
+        "Name[zh_CN]": "Amo 更新",
+        "Version": "1.0",
+        "Website": ""
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationAreaCategory": "SystemServices",
+    "X-Plasma-Provides": "org.kde.plasma.updates"
+}
