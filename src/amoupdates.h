@@ -33,6 +33,7 @@ class AmoUpdates : public QObject
     Q_PROPERTY(bool isActive READ isActive NOTIFY activeChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString statusMessage READ statusMessage NOTIFY statusMessageChanged)
+    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(QString iconName READ iconName NOTIFY updatesChanged)
     Q_PROPERTY(bool isSystemUpToDate READ isSystemUpToDate NOTIFY updatesChanged)
     Q_PROPERTY(QString timestamp READ timestamp NOTIFY updatesChanged)
@@ -50,6 +51,7 @@ public:
     bool isActive() const { return m_active; }
     QString message() const { return m_message; }
     QString statusMessage() const { return m_statusMessage; }
+    QString errorMessage() const { return m_errorMessage; }
     QString iconName() const;
     bool isSystemUpToDate() const { return count() == 0; }
     QString timestamp() const { return m_timestamp; }
@@ -78,6 +80,7 @@ signals:
     void activeChanged();
     void messageChanged();
     void statusMessageChanged();
+    void errorMessageChanged();
     void percentageChanged();
     void networkStateChanged();
     void isOnBatteryChanged();
@@ -91,6 +94,7 @@ private slots:
     void onRefreshFinished(bool success, const QString &error);
     void onApplyFinished(bool success, const QString &error);
     void onStatusChanged(const QString &statusJson);
+    void onDescriptionsChanged();
     void onNetworkPropertiesChanged(const QString &interfaceName,
                                     const QVariantMap &changedProperties,
                                     const QStringList &invalidatedProperties);
@@ -102,6 +106,7 @@ private:
     void setActive(bool active);
     void setMessage(const QString &message);
     void setStatusMessage(const QString &message);
+    void setErrorMessage(const QString &message);
     void setPercentage(int percentage);
     void setNetworkOnline(bool online);
     void setOnBattery(bool onBattery);
@@ -118,6 +123,7 @@ private:
     bool m_active = false;
     QString m_message;
     QString m_statusMessage;
+    QString m_errorMessage;
     QString m_timestamp;
     int m_percentage = 0;
     qint64 m_downloadTotal = 0;

@@ -28,6 +28,7 @@ struct UpdatePackage
     QString oldVersion;    // empty for fresh installs
     QString newVersion;
     QString arch;
+    QString description;
     qint64 downloadSize = 0;
     QString operation;     // "Upgrade", "Install", "ReInstall", "Downgrade"
     bool automatic = false;
@@ -102,6 +103,7 @@ signals:
     void updatesListed(const QList<UpdatePackage> &updates,
                        qint64 totalDownloadSize,
                        qint64 diskSizeDelta);
+    void descriptionsChanged();
     void applyStarted(quint64 requestId);
     void applyFinished(bool success, const QString &error);
     void statusChanged(const QString &statusJson);
@@ -111,6 +113,7 @@ private slots:
     void onRefreshReply(QDBusPendingCallWatcher *watcher);
     void onUpdatesReply(QDBusPendingCallWatcher *watcher);
     void onApplyReply(QDBusPendingCallWatcher *watcher);
+    void onDescriptionReply(QDBusPendingCallWatcher *watcher);
     void onStatusSignal(const QDBusMessage &message);
     void onResultReportSignal(const QDBusMessage &message);
 
@@ -128,6 +131,7 @@ private:
     QList<UpdatePackage> m_updates;
     qint64 m_totalDownloadSize = 0;
     qint64 m_diskSizeDelta = 0;
+    int m_pendingDescriptions = 0;
     quint64 m_lastRequestId = 0;
     TaskType m_pendingTask = TaskType::None;
 };

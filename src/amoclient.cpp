@@ -123,6 +123,20 @@ void AmoClient::onUpdatesReply(QDBusPendingCallWatcher *watcher)
 
     parseUpdates(reply.value());
     emit updatesListed(m_updates, m_totalDownloadSize, m_diskSizeDelta);
+
+    m_pendingDescriptions = m_updates.size();
+    if (m_pendingDescriptions == 0) {
+        emit descriptionsChanged();
+        return;
+    }
+
+    for (const UpdatePackage &pkg : std::as_const(m_updates)) {
+        QDBusPendingCall call = m_iface->asyncCall(QStringLiteral("GetDescription"), pkg.name);
+        auto *descriptionWatcher = new QDBusPendingCallWatcher(call, this);
+        descriptionWatcher->setProperty("packageName", pkg.name);
+        connect(descriptionWatcher, &QDBusPendingCallWatcher::finished,
+                this, &AmoClient::onDescriptionReply);
+    }
 }
 
 void AmoClient::onApplyReply(QDBusPendingCallWatcher *watcher)
@@ -139,6 +153,25 @@ void AmoClient::onApplyReply(QDBusPendingCallWatcher *watcher)
     m_lastRequestId = reply.value();
     emit applyStarted(m_lastRequestId);
     // The result arrives later via the result_report signal.
+}
+
+void AmoClient::onDescriptionReply(QDBusPendingCallWatcher *watcher)
+{
+    const QString packageName = watcher->property("packageName").toString();
+    QDBusPendingReply<QString> reply(*watcher);
+    if (!reply.isError()) {
+        for (UpdatePackage &pkg : m_updates) {
+            if (pkg.name == packageName) {
+                pkg.description = reply.value();
+                break;
+            }
+        }
+    }
+
+    watcher->deleteLater();
+    --m_pendingDescriptions;
+    if (m_pendingDescriptions == 0)
+        emit descriptionsChanged();
 }
 
 void AmoClient::onStatusSignal(const QDBusMessage &message)
@@ -192,6 +225,7 @@ void AmoClient::parseUpdates(const QString &json)
         pkg.oldVersion = obj.value(QStringLiteral("old_version")).toString();
         pkg.newVersion = obj.value(QStringLiteral("new_version")).toString();
         pkg.arch = obj.value(QStringLiteral("arch")).toString();
+        pkg.description.clear();
         pkg.downloadSize = obj.value(QStringLiteral("download_size")).toVariant().toLongLong();
         pkg.automatic = obj.value(QStringLiteral("automatic")).toBool();
 

@@ -83,6 +83,14 @@ Item {
             text: AmoUpdates.timestamp
         }
 
+        PlasmaComponents3.Label {
+            Layout.fillWidth: true
+            visible: !AmoUpdates.isActive && AmoUpdates.errorMessage !== ""
+            wrapMode: Text.WordWrap
+            color: Kirigami.Theme.negativeTextColor
+            text: i18n("Error: %1", AmoUpdates.errorMessage)
+        }
+
         PlasmaComponents3.ProgressBar {
             Layout.fillWidth: true
             visible: AmoUpdates.isActive
@@ -146,11 +154,15 @@ Item {
 
                 visible: AmoUpdates.count === 0 && !AmoUpdates.isActive
 
-                text: AmoUpdates.lastCheckSuccessful ? i18n("No updates available") : ""
+                text: AmoUpdates.lastCheckSuccessful
+                    ? i18n("No updates available")
+                    : (AmoUpdates.errorMessage !== ""
+                        ? i18n("The update check failed")
+                        : i18n("Update check has not completed"))
 
                 helpfulAction: QQC2.Action {
                     icon.name: "view-refresh"
-                    text: i18n("Check for Updates")
+                    text: AmoUpdates.errorMessage !== "" ? i18n("Retry") : i18n("Check for Updates")
                     onTriggered: {
                         AmoUpdates.checkUpdates(true /* manual */) // circumvent the checks, the user knows what they're doing ;)
                     }

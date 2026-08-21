@@ -21,6 +21,8 @@
 #include <QLocale>
 #include <QDebug>
 
+#include <utility>
+
 namespace {
 
 QVariant unwrapDBusVariant(const QVariant &value)
@@ -43,11 +45,14 @@ AmoUpdates::AmoUpdates(QObject *parent)
             this, &AmoUpdates::onApplyFinished);
     connect(&m_client, &AmoClient::statusChanged,
             this, &AmoUpdates::onStatusChanged);
+    connect(&m_client, &AmoClient::descriptionsChanged,
+            this, &AmoUpdates::onDescriptionsChanged);
     connect(&m_client, &AmoClient::errorOccurred,
             this, [this](const QString &msg) {
                 setMessage(msg);
                 setActive(false);
                 setStatusMessage(QStringLiteral("Error"));
+                setErrorMessage(msg);
             });
 
     QDBusConnection bus = QDBusConnection::systemBus();
@@ -67,6 +72,7 @@ AmoUpdates::AmoUpdates(QObject *parent)
 
     setMessage(QStringLiteral("Idle"));
     setStatusMessage(QStringLiteral("Idle"));
+    setErrorMessage(QString());
 }
 
 QString AmoUpdates::iconName() const
@@ -97,6 +103,7 @@ void AmoUpdates::checkUpdates(bool manual)
 
     setActive(true);
     resetProgress();
+    setErrorMessage(QString());
     setStatusMessage(QStringLiteral("Checking for updates..."));
     m_client.refresh();
 }
@@ -108,6 +115,7 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
 
     setActive(true);
     resetProgress();
+    setErrorMessage(QString());
     setStatusMessage(QStringLiteral("Installing updates..."));
     m_client.applyChanges(packageIds, QStringList(), false);
 }
@@ -119,6 +127,7 @@ void AmoUpdates::installAllUpdates()
 
     setActive(true);
     resetProgress();
+    setErrorMessage(QString());
     setStatusMessage(QStringLiteral("Installing all updates..."));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
@@ -139,10 +148,7 @@ QString AmoUpdates::packageVersion(const QString &packageId) const
 
 QString AmoUpdates::packageDescription(const QString &packageId) const
 {
-    Q_UNUSED(packageId);
-    // amo does not currently expose per-package descriptions in the
-    // updates list; return an empty string so the UI shows a placeholder.
-    return QString();
+    return m_packageMap.value(packageId).description;
 }
 
 QString AmoUpdates::packageOperation(const QString &packageId) const
@@ -184,6 +190,7 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
 
     setActive(false);
     setLastCheckSuccessful(true);
+    setErrorMessage(QString());
     setTimestamp(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     m_lastRefreshTimestamp = QDateTime::currentMSecsSinceEpoch() / 1000.0;
 
@@ -203,6 +210,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         setLastCheckSuccessful(false);
         setMessage(QStringLiteral("Update check failed"));
         setStatusMessage(error);
+        setErrorMessage(error);
         emit updateError(error);
         return;
     }
@@ -218,12 +226,14 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
     if (success) {
         setMessage(QStringLiteral("Updates installed"));
         setStatusMessage(QStringLiteral("Idle"));
+        setErrorMessage(QString());
         emit updatesInstalled();
         // Re-check to refresh the badge.
         m_client.fetchUpdates();
     } else {
         setMessage(QStringLiteral("Update failed"));
         setStatusMessage(error);
+        setErrorMessage(error);
         emit updateError(error);
     }
 }
@@ -396,6 +406,22 @@ void AmoUpdates::setStatusMessage(const QString &message)
         return;
     m_statusMessage = message;
     emit statusMessageChanged();
+}
+
+void AmoUpdates::setErrorMessage(const QString &message)
+{
+    if (m_errorMessage == message)
+        return;
+    m_errorMessage = message;
+    emit errorMessageChanged();
+}
+
+void AmoUpdates::onDescriptionsChanged()
+{
+    m_packageMap.clear();
+    for (const UpdatePackage &pkg : m_client.updates())
+        m_packageMap.insert(pkg.name, pkg);
+    emit updatesChanged();
 }
 
 void AmoUpdates::setPercentage(int percentage)
