@@ -109,5 +109,12 @@ PlasmoidItem
 
     Component.onCompleted: {
         timer.start()
+        // Always do an initial check when the plasmoid loads, so the tray
+        // icon reflects the current state even if the last check was recent
+        // (e.g. new updates appeared on the server since then).
+        if (networkAllowed && batteryAllowed) {
+            lastCheckAttempt = Date.now() / 1000;
+            AmoUpdates.checkUpdates(false /* manual */);
+        }
     }
 }

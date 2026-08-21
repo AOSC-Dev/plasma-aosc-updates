@@ -18,8 +18,6 @@ import org.kde.kirigami as Kirigami
 PlasmaExtras.ListItem {
     id: packageDelegate
 
-    property string updateText
-    property variant updateUrls: []
     readonly property bool expanded: ListView.isCurrentItem
 
     signal checkStateChanged(bool checked)
@@ -89,7 +87,7 @@ PlasmaExtras.ListItem {
                     Layout.fillWidth: true
                     font.pointSize: Kirigami.Theme.smallFont.pointSize
                     opacity: 0.6
-                    text: updateText == "" ? i18n("No description available") : updateText
+                    text: desc == "" ? i18n("No description available") : desc
                     wrapMode: Text.WordWrap
                 }
             }

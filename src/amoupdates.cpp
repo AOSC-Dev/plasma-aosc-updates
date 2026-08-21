@@ -96,6 +96,9 @@ QStringList AmoUpdates::packages() const
 
 void AmoUpdates::checkUpdates(bool manual)
 {
+    // `manual` is currently unused: amo's Refresh always performs a full
+    // metadata refresh, so there is no cached path to bypass. It is kept in
+    // the API for future use and to mirror plasma-pk-updates' signature.
     Q_UNUSED(manual);
 
     if (m_active)
@@ -212,6 +215,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
+        emit updatesChanged();
         return;
     }
 
@@ -221,18 +225,17 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
 
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
-    setActive(false);
-
     if (success) {
         setMessage(QStringLiteral("Updates installed"));
         setStatusMessage(QStringLiteral("Refreshing update list..."));
         setErrorMessage(QString());
-        setActive(true);
         resetProgress();
         emit updatesInstalled();
-        // Re-check to refresh the badge.
+        // Stay active while re-fetching the list, then refresh the badge.
+        setActive(true);
         m_client.fetchUpdates();
     } else {
+        setActive(false);
         setMessage(QStringLiteral("Update failed"));
         setStatusMessage(error);
         setErrorMessage(error);
@@ -507,7 +510,6 @@ void AmoUpdates::setTimestamp(const QString &timestamp)
     if (m_timestamp == timestamp)
         return;
     m_timestamp = timestamp;
-    emit updatesChanged();
 }
 
 void AmoUpdates::setLastCheckSuccessful(bool ok)
@@ -515,5 +517,4 @@ void AmoUpdates::setLastCheckSuccessful(bool ok)
     if (m_lastCheckSuccessful == ok)
         return;
     m_lastCheckSuccessful = ok;
-    emit updatesChanged();
 }
