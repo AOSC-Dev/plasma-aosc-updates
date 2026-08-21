@@ -91,6 +91,12 @@ private slots:
     void onRefreshFinished(bool success, const QString &error);
     void onApplyFinished(bool success, const QString &error);
     void onStatusChanged(const QString &statusJson);
+    void onNetworkPropertiesChanged(const QString &interfaceName,
+                                    const QVariantMap &changedProperties,
+                                    const QStringList &invalidatedProperties);
+    void onPowerPropertiesChanged(const QString &interfaceName,
+                                  const QVariantMap &changedProperties,
+                                  const QStringList &invalidatedProperties);
 
 private:
     void setActive(bool active);
@@ -99,6 +105,7 @@ private:
     void setPercentage(int percentage);
     void setNetworkOnline(bool online);
     void setOnBattery(bool onBattery);
+    void refreshSystemState();
     void setTimestamp(const QString &timestamp);
     void setLastCheckSuccessful(bool ok);
 

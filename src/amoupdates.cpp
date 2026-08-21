@@ -14,8 +14,23 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QDateTime>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDBusVariant>
 #include <QLocale>
 #include <QDebug>
+
+namespace {
+
+QVariant unwrapDBusVariant(const QVariant &value)
+{
+    if (value.canConvert<QDBusVariant>())
+        return qvariant_cast<QDBusVariant>(value).variant();
+    return value;
+}
+
+}
 
 AmoUpdates::AmoUpdates(QObject *parent)
     : QObject(parent)
@@ -34,6 +49,21 @@ AmoUpdates::AmoUpdates(QObject *parent)
                 setActive(false);
                 setStatusMessage(QStringLiteral("Error"));
             });
+
+    QDBusConnection bus = QDBusConnection::systemBus();
+    bus.connect(QStringLiteral("org.freedesktop.NetworkManager"),
+                QStringLiteral("/org/freedesktop/NetworkManager"),
+                QStringLiteral("org.freedesktop.DBus.Properties"),
+                QStringLiteral("PropertiesChanged"),
+                this,
+                SLOT(onNetworkPropertiesChanged(QString,QVariantMap,QStringList)));
+    bus.connect(QStringLiteral("org.freedesktop.UPower"),
+                QStringLiteral("/org/freedesktop/UPower"),
+                QStringLiteral("org.freedesktop.DBus.Properties"),
+                QStringLiteral("PropertiesChanged"),
+                this,
+                SLOT(onPowerPropertiesChanged(QString,QVariantMap,QStringList)));
+    refreshSystemState();
 
     setMessage(QStringLiteral("Idle"));
     setStatusMessage(QStringLiteral("Idle"));
@@ -390,6 +420,58 @@ void AmoUpdates::setOnBattery(bool onBattery)
         return;
     m_onBattery = onBattery;
     emit isOnBatteryChanged();
+}
+
+void AmoUpdates::refreshSystemState()
+{
+    QDBusInterface networkManager(QStringLiteral("org.freedesktop.NetworkManager"),
+                                   QStringLiteral("/org/freedesktop/NetworkManager"),
+                                   QStringLiteral("org.freedesktop.DBus.Properties"),
+                                   QDBusConnection::systemBus());
+    const QDBusReply<QVariant> networkState = networkManager.call(
+        QStringLiteral("Get"),
+        QStringLiteral("org.freedesktop.NetworkManager"),
+        QStringLiteral("State"));
+    if (networkState.isValid()) {
+        // NetworkManager considers local, site and global connectivity usable
+        // for update checks.  Disconnected and connecting states are not.
+        setNetworkOnline(unwrapDBusVariant(networkState.value()).toUInt() >= 50);
+    }
+
+    QDBusInterface upower(QStringLiteral("org.freedesktop.UPower"),
+                          QStringLiteral("/org/freedesktop/UPower"),
+                          QStringLiteral("org.freedesktop.DBus.Properties"),
+                          QDBusConnection::systemBus());
+    const QDBusReply<QVariant> onBattery = upower.call(
+        QStringLiteral("Get"),
+        QStringLiteral("org.freedesktop.UPower"),
+        QStringLiteral("OnBattery"));
+    if (onBattery.isValid())
+        setOnBattery(unwrapDBusVariant(onBattery.value()).toBool());
+}
+
+void AmoUpdates::onNetworkPropertiesChanged(const QString &interfaceName,
+                                            const QVariantMap &changedProperties,
+                                            const QStringList &invalidatedProperties)
+{
+    Q_UNUSED(invalidatedProperties);
+    if (interfaceName != QStringLiteral("org.freedesktop.NetworkManager") ||
+        !changedProperties.contains(QStringLiteral("State")))
+        return;
+
+    setNetworkOnline(unwrapDBusVariant(changedProperties.value(QStringLiteral("State"))).toUInt() >= 50);
+}
+
+void AmoUpdates::onPowerPropertiesChanged(const QString &interfaceName,
+                                          const QVariantMap &changedProperties,
+                                          const QStringList &invalidatedProperties)
+{
+    Q_UNUSED(invalidatedProperties);
+    if (interfaceName != QStringLiteral("org.freedesktop.UPower") ||
+        !changedProperties.contains(QStringLiteral("OnBattery")))
+        return;
+
+    setOnBattery(unwrapDBusVariant(changedProperties.value(QStringLiteral("OnBattery"))).toBool());
 }
 
 void AmoUpdates::setTimestamp(const QString &timestamp)
