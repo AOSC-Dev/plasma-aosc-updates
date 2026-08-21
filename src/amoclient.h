@@ -108,6 +108,9 @@ signals:
     void applyFinished(bool success, const QString &error);
     void statusChanged(const QString &statusJson);
     void errorOccurred(const QString &message);
+    /// Emitted when amo's file watcher detects changes to dpkg status or
+    /// apt lists (i.e. the set of available updates may have changed).
+    void updatesChanged();
 
 private slots:
     void onRefreshReply(QDBusPendingCallWatcher *watcher);
@@ -116,6 +119,7 @@ private slots:
     void onDescriptionReply(QDBusPendingCallWatcher *watcher);
     void onStatusSignal(const QDBusMessage &message);
     void onResultReportSignal(const QDBusMessage &message);
+    void onUpdatesChangedSignal(const QDBusMessage &message);
 
 private:
     void parseUpdates(const QString &json);

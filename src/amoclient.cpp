@@ -41,6 +41,13 @@ AmoClient::AmoClient(QObject *parent)
     QDBusConnection::systemBus().connect(
         kService, kPath, kInterface, QStringLiteral("ResultReport"),
         this, SLOT(onResultReportSignal(QDBusMessage)));
+
+    // Subscribe to the UpdatesChanged signal emitted by amo's file watcher
+    // when dpkg status or apt lists change. Older amo versions don't have
+    // this signal; the connection simply fails silently.
+    QDBusConnection::systemBus().connect(
+        kService, kPath, kInterface, QStringLiteral("UpdatesChanged"),
+        this, SLOT(onUpdatesChangedSignal(QDBusMessage)));
 }
 
 bool AmoClient::isAvailable() const
@@ -196,6 +203,14 @@ void AmoClient::onResultReportSignal(const QDBusMessage &message)
         return;
 
     handleResult(args.first().toString());
+}
+
+void AmoClient::onUpdatesChangedSignal(const QDBusMessage &message)
+{
+    if (message.type() != QDBusMessage::SignalMessage)
+        return;
+
+    emit updatesChanged();
 }
 
 void AmoClient::parseUpdates(const QString &json)

@@ -47,6 +47,8 @@ AmoUpdates::AmoUpdates(QObject *parent)
             this, &AmoUpdates::onStatusChanged);
     connect(&m_client, &AmoClient::descriptionsChanged,
             this, &AmoUpdates::onDescriptionsChanged);
+    connect(&m_client, &AmoClient::updatesChanged,
+            this, &AmoUpdates::onUpdatesChangedExternally);
     connect(&m_client, &AmoClient::errorOccurred,
             this, [this](const QString &msg) {
                 setMessage(msg);
@@ -427,6 +429,15 @@ void AmoUpdates::onDescriptionsChanged()
     for (const UpdatePackage &pkg : m_client.updates())
         m_packageMap.insert(pkg.name, pkg);
     emit updatesChanged();
+}
+
+void AmoUpdates::onUpdatesChangedExternally()
+{
+    // amo's file watcher detected a change to dpkg status or apt lists.
+    // Re-fetch the update list so the tray icon reflects the new state.
+    if (!m_active)
+        m_client.fetchUpdates();
+    emit updatesChangedExternally();
 }
 
 void AmoUpdates::setPercentage(int percentage)

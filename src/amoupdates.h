@@ -86,6 +86,9 @@ signals:
     void isOnBatteryChanged();
     void updatesInstalled();
     void updateError(const QString &message);
+    /// Emitted when amo's file watcher detects changes (dpkg status / apt
+    /// lists), i.e. the set of available updates may have changed.
+    void updatesChangedExternally();
 
 private slots:
     void onUpdatesListed(const QList<UpdatePackage> &updates,
@@ -95,6 +98,7 @@ private slots:
     void onApplyFinished(bool success, const QString &error);
     void onStatusChanged(const QString &statusJson);
     void onDescriptionsChanged();
+    void onUpdatesChangedExternally();
     void onNetworkPropertiesChanged(const QString &interfaceName,
                                     const QVariantMap &changedProperties,
                                     const QStringList &invalidatedProperties);
