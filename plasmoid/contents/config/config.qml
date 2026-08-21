@@ -5,6 +5,6 @@ ConfigModel {
     ConfigCategory {
          name: i18n("General")
          icon: "system-software-update"
-         source: "ConfigGeneral.qml"
+         source: "config/ConfigGeneral.qml"
     }
 }
