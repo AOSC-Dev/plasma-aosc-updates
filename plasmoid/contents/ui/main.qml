@@ -28,7 +28,8 @@ PlasmoidItem
     property bool checkWeekly: plasmoid.configuration.weekly
     property bool checkMonthly: plasmoid.configuration.monthly
 
-    property double lastCheckAttempt: AmoUpdates.lastRefreshTimestamp()
+    property double lastCheckAttempt: 0
+    property double lastCheckTimestamp: plasmoid.configuration.last_check_timestamp
     readonly property int secsAutoCheckLimit: 10 * 60
 
     readonly property int secsInDay: 60 * 60 * 24;
@@ -42,10 +43,10 @@ PlasmoidItem
         id: timer
         repeat: true
         triggeredOnStart: true
-        interval: 1000 * 60 * 60; // 1 hour
+        interval: 1000 * 60; // Re-evaluate the configured interval every minute.
         onTriggered: {
             if (needsForcedUpdate() && networkAllowed && batteryAllowed) {
-                lastCheckAttempt = Date.now();
+                lastCheckAttempt = Date.now() / 1000;
                 AmoUpdates.checkUpdates(false /* manual */);
             }
         }
@@ -72,14 +73,17 @@ PlasmoidItem
     }
 
     function needsForcedUpdate() {
-        if ((Date.now() - lastCheckAttempt)/1000 < secsAutoCheckLimit) {
+        var now = Date.now() / 1000;
+        if (now - lastCheckAttempt < secsAutoCheckLimit) {
             return false;
         }
 
-        var secs = (Date.now() - AmoUpdates.lastRefreshTimestamp())/1000; // compare with the saved timestamp
-        if (secs < 0) { // never checked before
+        if (lastCheckTimestamp <= 0) {
             return true;
-        } else if (checkDaily) {
+        }
+
+        var secs = now - lastCheckTimestamp;
+        if (checkDaily) {
             return secs >= secsInDay;
         } else if (checkWeekly) {
             return secs >= secsInWeek;
@@ -91,6 +95,14 @@ PlasmoidItem
 
     Connections {
         target: AmoUpdates
+        function onUpdatesChanged() {
+            var timestamp = AmoUpdates.lastRefreshTimestamp()
+            if (timestamp > 0 && timestamp > lastCheckTimestamp) {
+                plasmoid.configuration.last_check_timestamp = timestamp
+                plasmoid.configuration.writeConfig()
+                lastCheckAttempt = Date.now() / 1000
+            }
+        }
         function onNetworkStateChanged() { timer.restart() }
         function onIsOnBatteryChanged() { timer.restart() }
     }

@@ -21,5 +21,9 @@
       <label>Check for updates when on battery</label>
       <default>false</default>
     </entry>
+    <entry name="last_check_timestamp" type="Double">
+      <label>Timestamp of the last successful update check</label>
+      <default>0.0</default>
+    </entry>
   </group>
 </kcfg>
