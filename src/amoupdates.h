@@ -14,8 +14,11 @@
 #include <QHash>
 #include <QTimer>
 #include <QJsonObject>
+#include <QPointer>
 
 #include "amoclient.h"
+
+class KNotification;
 
 /**
  * @brief Backend singleton exposed to QML as `AmoUpdates`.
@@ -89,6 +92,9 @@ signals:
     /// Emitted when amo's file watcher detects changes (dpkg status / apt
     /// lists), i.e. the set of available updates may have changed.
     void updatesChangedExternally();
+    /// Emitted when the user activates the "Open" action of the updates
+    /// notification, so the QML side can expand the plasmoid.
+    void openRequested();
 
 private slots:
     void onUpdatesListed(const QList<UpdatePackage> &updates,
@@ -118,6 +124,9 @@ private:
     void refreshSystemState();
     void setTimestamp(const QString &timestamp);
     void setLastCheckSuccessful(bool ok);
+    void showUpdatesNotification(int count);
+    void showErrorNotification(const QString &message);
+    void showInstalledNotification();
 
     QString findEventMessage(const QJsonObject &obj) const;
     int findEventPercent(const QJsonObject &obj) const;
@@ -139,5 +148,7 @@ private:
     bool m_onBattery = false;
     bool m_lastCheckSuccessful = false;
     double m_lastRefreshTimestamp = 0.0;
+    int m_lastUpdateCount = 0;
+    QPointer<KNotification> m_lastNotification;
     QHash<QString, UpdatePackage> m_packageMap;
 };

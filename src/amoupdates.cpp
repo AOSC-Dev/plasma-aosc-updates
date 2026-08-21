@@ -22,6 +22,9 @@
 #include <QLocale>
 #include <QDebug>
 
+#include <KNotification>
+#include <KLocalizedString>
+
 #include <utility>
 
 namespace {
@@ -204,6 +207,7 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
         setMessage(QStringLiteral("System is up to date"));
     } else {
         setMessage(QStringLiteral("%1 update(s) available").arg(updates.size()));
+        showUpdatesNotification(updates.size());
     }
 
     emit updatesChanged();
@@ -218,6 +222,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
+        showErrorNotification(error);
         emit updatesChanged();
         return;
     }
@@ -234,6 +239,7 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
         setErrorMessage(QString());
         resetProgress();
         emit updatesInstalled();
+        showInstalledNotification();
         // Stay active while re-fetching the list, then refresh the badge.
         setActive(true);
         m_client.fetchUpdates();
@@ -243,6 +249,7 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
+        showErrorNotification(error);
     }
 }
 
@@ -582,4 +589,57 @@ void AmoUpdates::setLastCheckSuccessful(bool ok)
     if (m_lastCheckSuccessful == ok)
         return;
     m_lastCheckSuccessful = ok;
+}
+
+void AmoUpdates::showUpdatesNotification(int count)
+{
+    // Only notify when the number of available updates changed since the
+    // last notification, so automatic checks don't spam the user.
+    if (count == m_lastUpdateCount && m_lastNotification)
+        return;
+
+    if (m_lastNotification)
+        m_lastNotification->close();
+
+    m_lastUpdateCount = count;
+    m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
+                                           KNotification::Persistent,
+                                           this);
+    m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    m_lastNotification->setTitle(i18n("Software Updates Available"));
+    m_lastNotification->setText(i18np("You have %1 new update", "You have %1 new updates", count));
+    m_lastNotification->setIconName(QStringLiteral("update-high"));
+    KNotificationAction *openAction = m_lastNotification->addDefaultAction(i18n("Open"));
+    connect(openAction, &KNotificationAction::activated, this, [this]() {
+        emit openRequested();
+    });
+    connect(m_lastNotification, &KNotification::closed, this, [this]() {
+        m_lastNotification = nullptr;
+        m_lastUpdateCount = 0;
+    });
+    m_lastNotification->sendEvent();
+}
+
+void AmoUpdates::showErrorNotification(const QString &message)
+{
+    auto *notification = new KNotification(QStringLiteral("updateError"),
+                                           KNotification::CloseOnTimeout,
+                                           this);
+    notification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    notification->setTitle(i18n("Update check failed"));
+    notification->setText(message);
+    notification->setIconName(QStringLiteral("dialog-error"));
+    notification->sendEvent();
+}
+
+void AmoUpdates::showInstalledNotification()
+{
+    auto *notification = new KNotification(QStringLiteral("updatesInstalled"),
+                                           KNotification::CloseOnTimeout,
+                                           this);
+    notification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    notification->setTitle(i18n("Updates installed"));
+    notification->setText(i18n("The system has been updated successfully."));
+    notification->setIconName(QStringLiteral("update-none"));
+    notification->sendEvent();
 }

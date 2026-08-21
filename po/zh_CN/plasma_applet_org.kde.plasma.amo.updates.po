@@ -82,6 +82,26 @@ msgid_plural "%1 days"
 msgstr[0] "%1 天"
 msgstr[1] "%1 天"
 
+msgid "Software Updates Available"
+msgstr "有可用的软件更新"
+
+msgid "You have %1 new update"
+msgid_plural "You have %1 new updates"
+msgstr[0] "有 %1 个新更新"
+msgstr[1] "有 %1 个新更新"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Update check failed"
+msgstr "检查更新失败"
+
+msgid "Updates installed"
+msgstr "更新已安装"
+
+msgid "The system has been updated successfully."
+msgstr "系统已成功更新。"
+
 msgctxt "Package Name (Version)"
 msgid "%1 (%2)"
 msgstr "%1（%2）"

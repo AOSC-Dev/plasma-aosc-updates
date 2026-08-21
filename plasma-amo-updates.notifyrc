@@ -1,0 +1,27 @@
+[Global]
+IconName=system-software-update
+Name=Amo Updates
+Name[zh_CN]=Amo 更新
+Comment=System update notifications
+Comment[zh_CN]=系统更新通知
+
+[Event/updatesAvailable]
+Name=Software updates available
+Name[zh_CN]=有可用的软件更新
+Comment=New software updates are available
+Comment[zh_CN]=有新的软件更新可用
+Action=Popup
+
+[Event/updateError]
+Name=Update failed
+Name[zh_CN]=更新失败
+Comment=An error occurred while checking for or installing updates
+Comment[zh_CN]=检查或安装更新时发生错误
+Action=Popup
+
+[Event/updatesInstalled]
+Name=Updates installed
+Name[zh_CN]=更新已安装
+Comment=Software updates were installed successfully
+Comment[zh_CN]=软件更新已成功安装
+Action=Popup

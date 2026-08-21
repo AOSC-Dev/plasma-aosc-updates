@@ -65,6 +65,12 @@ install(FILES src/qmldir
     DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
 )
 
+# KNotification only dispatches application-defined events that have a
+# matching notifyrc description installed in the KDE data directory.
+install(FILES plasma-amo-updates.notifyrc
+    DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR}
+)
+
 # ---------------------------------------------------------------------------
 # Plasmoid package
 # ---------------------------------------------------------------------------

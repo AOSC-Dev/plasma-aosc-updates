@@ -115,6 +115,7 @@ PlasmoidItem
         }
         function onNetworkStateChanged() { timer.restart() }
         function onIsOnBatteryChanged() { timer.restart() }
+        function onOpenRequested() { root.expanded = true }
     }
 
     Component.onCompleted: {
