@@ -6,15 +6,15 @@ import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 
 KCM.SimpleKCM {
-    id: iconsPage
+    id: root
+
+    property alias cfg_daily: daily.checked
+    property alias cfg_weekly: weekly.checked
+    property alias cfg_monthly: monthly.checked
+    property alias cfg_check_on_battery: battery.checked
 
     Kirigami.FormLayout {
         id: form
-
-        property alias cfg_daily: daily.checked
-        property alias cfg_weekly: weekly.checked
-        property alias cfg_monthly: monthly.checked
-        property alias cfg_check_on_battery: battery.checked
 
         ButtonGroup {
             id: intervalGroup
