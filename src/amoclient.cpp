@@ -229,6 +229,9 @@ void AmoClient::parseUpdates(const QString &json)
     const QJsonObject root = doc.object();
 
     m_diskSizeDelta = root.value(QStringLiteral("disk_size_delta")).toVariant().toLongLong();
+    // amo's response already contains the aggregate download size of all
+    // install entries, so we must not accumulate it again from the per-package
+    // download_size fields below.
     m_totalDownloadSize = root.value(QStringLiteral("total_download_size")).toVariant().toULongLong();
 
     const QJsonArray install = root.value(QStringLiteral("install")).toArray();
@@ -256,7 +259,6 @@ void AmoClient::parseUpdates(const QString &json)
             pkg.operation = QStringLiteral("Install");
         }
 
-        m_totalDownloadSize += pkg.downloadSize;
         m_updates.append(pkg);
     }
 }
