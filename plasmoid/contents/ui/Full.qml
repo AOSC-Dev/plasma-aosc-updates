@@ -195,7 +195,10 @@ Item {
             visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
             font.pointSize: Kirigami.Theme.smallFont.pointSize
             opacity: 0.6
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Text.AlignHCenter
             text: i18n("Download size: %1 · Disk space: %2",
                        formatBytes(AmoUpdates.totalDownloadSize),
                        formatBytes(AmoUpdates.diskSizeDelta, true))
