@@ -27,16 +27,16 @@ cmake --build build
 cmake --install build
 ```
 
-The install puts the QML plugin into
-`~/.local/lib/qt6/qml/org/kde/plasma/amo` and the applet package into
-`~/.local/share/plasma/plasmoids`. For distro layouts that use `lib64`, set
-`-DAMO_QML_INSTALL_DIR=lib64/qt6/qml` when configuring.
+The install puts the whole applet package, including its bundled QML plugin
+(`org.kde.plasma.amo`, with the `AmoUpdates` singleton), into
+`~/.local/share/plasma/plasmoids/org.kde.plasma.amo.updates`. The plugin ships
+inside the package, so the applet is self-contained and needs no
+`QML_IMPORT_PATH` or other environment setup — it works from any install
+prefix out of the box.
 
-Because Qt6's QML engine does not search `~/.local/lib/qt6/qml` by default,
-point `QML_IMPORT_PATH` at it and restart the shell:
+After installing, restart the shell to pick up the new applet:
 
 ```sh
-systemctl --user set-environment QML_IMPORT_PATH=$HOME/.local/lib/qt6/qml
 systemctl --user restart plasma-plasmashell.service
 ```
 

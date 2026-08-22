@@ -14,7 +14,9 @@ import org.kde.plasma.components as PlasmaComponents3
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.amo 1.0
+// The amo QML plugin ships inside this package (contents/ui/org/kde/plasma/amo),
+// so a relative directory import resolves it without any QML_IMPORT_PATH setup.
+import "org/kde/plasma/amo"
 
 Item {
     id: fullRepresentation

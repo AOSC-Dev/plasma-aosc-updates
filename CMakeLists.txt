@@ -26,12 +26,6 @@ find_package(KF6IconThemes REQUIRED)
 find_package(KF6Declarative REQUIRED)
 find_package(Plasma REQUIRED)
 
-# Keep the user-local layout compatible with Qt 6's default QML import path
-# convention.  This can be overridden for distro packaging, for example with
-# -DAMO_QML_INSTALL_DIR=lib64/qt6/qml.
-set(AMO_QML_INSTALL_DIR "lib/qt6/qml" CACHE PATH
-    "Install directory for the Amo QML plugin")
-
 # ---------------------------------------------------------------------------
 # QML plugin library exposing the AmoUpdates singleton to the plasmoid UI.
 # ---------------------------------------------------------------------------
@@ -59,12 +53,20 @@ target_link_libraries(amoqmlplugin
     KF6::IconThemes
 )
 
-# Install the QML plugin into the org/kde/plasma/amo module directory.
+# Ship the QML plugin inside the plasmoid package itself, under
+# contents/ui/org/kde/plasma/amo.  The UI imports it with a relative directory
+# import (`import "org/kde/plasma/amo"`), which Qt resolves against the
+# directory of the importing QML file (contents/ui).  The applet is therefore
+# fully self-contained: it loads from any install prefix (~/.local included)
+# without needing QML_IMPORT_PATH or any other environment setup.
+set(AMO_PLASMOID_INSTALL_DIR
+    "${KDE_INSTALL_DATADIR}/plasma/plasmoids/org.kde.plasma.amo.updates")
+
 install(TARGETS amoqmlplugin
-    LIBRARY DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
+    LIBRARY DESTINATION ${AMO_PLASMOID_INSTALL_DIR}/contents/ui/org/kde/plasma/amo
 )
 install(FILES src/qmldir
-    DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
+    DESTINATION ${AMO_PLASMOID_INSTALL_DIR}/contents/ui/org/kde/plasma/amo
 )
 
 # KNotification only dispatches application-defined events that have a
