@@ -4,7 +4,7 @@
         "Authors": [
             {
                 "Email": "",
-                "Name": "Amo Updates"
+                "Name": "AOSC Updates"
             }
         ],
         "Category": "System Information",
@@ -13,8 +13,8 @@
         "Icon": "system-software-update",
         "Id": "org.kde.plasma.amo.updates",
         "License": "GPL-2.0-or-later",
-        "Name": "Amo Updates",
-        "Name[zh_CN]": "Amo 更新",
+        "Name": "AOSC Updates",
+        "Name[zh_CN]": "AOSC 更新",
         "Version": "1.0",
         "Website": ""
     },

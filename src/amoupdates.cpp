@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2024 by Amo Updates contributors                        *
+ *   Copyright (C) 2024 by AOSC Updates contributors                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,8 @@
 
 namespace {
 
+constexpr auto kTranslationDomain = "plasma_applet_org.kde.plasma.amo.updates";
+
 QVariant unwrapDBusVariant(const QVariant &value)
 {
     if (value.canConvert<QDBusVariant>())
@@ -59,7 +61,7 @@ AmoUpdates::AmoUpdates(QObject *parent)
             this, [this](const QString &msg) {
                 setMessage(msg);
                 setActive(false);
-                setStatusMessage(QStringLiteral("Error"));
+                setStatusMessage(i18nd(kTranslationDomain, "Error"));
                 setErrorMessage(msg);
             });
 
@@ -78,8 +80,8 @@ AmoUpdates::AmoUpdates(QObject *parent)
                 SLOT(onPowerPropertiesChanged(QString,QVariantMap,QStringList)));
     refreshSystemState();
 
-    setMessage(QStringLiteral("Idle"));
-    setStatusMessage(QStringLiteral("Idle"));
+    setMessage(i18nd(kTranslationDomain, "Idle"));
+    setStatusMessage(i18nd(kTranslationDomain, "Idle"));
     setErrorMessage(QString());
 }
 
@@ -114,7 +116,7 @@ void AmoUpdates::checkUpdates(bool manual)
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(QStringLiteral("Checking for updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Checking for updates..."));
     m_client.refresh();
 }
 
@@ -126,7 +128,7 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(QStringLiteral("Installing updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Installing updates..."));
     m_client.applyChanges(packageIds, QStringList(), false);
 }
 
@@ -138,7 +140,7 @@ void AmoUpdates::installAllUpdates()
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(QStringLiteral("Installing all updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Installing all updates..."));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
 
@@ -205,9 +207,12 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
     m_lastRefreshTimestamp = QDateTime::currentMSecsSinceEpoch() / 1000.0;
 
     if (updates.isEmpty()) {
-        setMessage(QStringLiteral("System is up to date"));
+        setMessage(i18nd(kTranslationDomain, "System is up to date"));
     } else {
-        setMessage(QStringLiteral("%1 update(s) available").arg(updates.size()));
+        setMessage(i18ndp(kTranslationDomain,
+                          "%1 update available",
+                          "%1 updates available",
+                          updates.size()));
         showUpdatesNotification(updates.size());
     }
 
@@ -219,7 +224,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
     if (!success) {
         setActive(false);
         setLastCheckSuccessful(false);
-        setMessage(QStringLiteral("Update check failed"));
+        setMessage(i18nd(kTranslationDomain, "Update check failed"));
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
@@ -284,8 +289,8 @@ void AmoUpdates::resetFailedAutoRefreshCount()
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
     if (success) {
-        setMessage(QStringLiteral("Updates installed"));
-        setStatusMessage(QStringLiteral("Refreshing update list..."));
+        setMessage(i18nd(kTranslationDomain, "Updates installed"));
+        setStatusMessage(i18nd(kTranslationDomain, "Refreshing update list..."));
         setErrorMessage(QString());
         resetProgress();
         emit updatesInstalled();
@@ -295,7 +300,7 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
         m_client.fetchUpdates();
     } else {
         setActive(false);
-        setMessage(QStringLiteral("Update failed"));
+        setMessage(i18nd(kTranslationDomain, "Update failed"));
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
@@ -656,10 +661,14 @@ void AmoUpdates::showUpdatesNotification(int count)
                                            KNotification::Persistent,
                                            this);
     m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
-    m_lastNotification->setTitle(i18n("Software Updates Available"));
-    m_lastNotification->setText(i18np("You have %1 new update", "You have %1 new updates", count));
+    m_lastNotification->setTitle(i18nd(kTranslationDomain, "Software Updates Available"));
+    m_lastNotification->setText(i18ndp(kTranslationDomain,
+                                       "You have %1 new update",
+                                       "You have %1 new updates",
+                                       count));
     m_lastNotification->setIconName(QStringLiteral("update-high"));
-    KNotificationAction *openAction = m_lastNotification->addDefaultAction(i18n("Open"));
+    KNotificationAction *openAction = m_lastNotification->addDefaultAction(
+        i18nd(kTranslationDomain, "Open"));
     connect(openAction, &KNotificationAction::activated, this, [this]() {
         emit openRequested();
     });
@@ -676,7 +685,7 @@ void AmoUpdates::showErrorNotification(const QString &message)
                                            KNotification::CloseOnTimeout,
                                            this);
     notification->setComponentName(QStringLiteral("plasma-amo-updates"));
-    notification->setTitle(i18n("Update check failed"));
+    notification->setTitle(i18nd(kTranslationDomain, "Update check failed"));
     notification->setText(message);
     notification->setIconName(QStringLiteral("dialog-error"));
     notification->sendEvent();
@@ -688,8 +697,9 @@ void AmoUpdates::showInstalledNotification()
                                            KNotification::CloseOnTimeout,
                                            this);
     notification->setComponentName(QStringLiteral("plasma-amo-updates"));
-    notification->setTitle(i18n("Updates installed"));
-    notification->setText(i18n("The system has been updated successfully."));
+    notification->setTitle(i18nd(kTranslationDomain, "Updates installed"));
+    notification->setText(i18nd(kTranslationDomain,
+                                 "The system has been updated successfully."));
     notification->setIconName(QStringLiteral("update-none"));
     notification->sendEvent();
 }

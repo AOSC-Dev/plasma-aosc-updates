@@ -1,7 +1,7 @@
 [Global]
 IconName=system-software-update
-Name=Amo Updates
-Name[zh_CN]=Amo 更新
+Name=AOSC Updates
+Name[zh_CN]=AOSC 更新
 Comment=System update notifications
 Comment[zh_CN]=系统更新通知
 

@@ -40,7 +40,7 @@ systemctl --user set-environment QML_IMPORT_PATH=$HOME/.local/lib/qt6/qml
 systemctl --user restart plasma-plasmashell.service
 ```
 
-Then add "Amo Updates" from the system tray settings ("Extra Items").
+Then add "AOSC Updates" from the system tray settings ("Extra Items").
 
 ## License
 
