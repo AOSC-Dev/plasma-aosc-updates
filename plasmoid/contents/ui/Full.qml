@@ -109,13 +109,12 @@ Item {
 
             visible: AmoUpdates.count && !AmoUpdates.isActive
 
-            ListView {
+            contentItem: ListView {
                 id: updatesView
 
                 reuseItems: true
                 clip: true
                 model: updatesModel
-                anchors.fill: parent
                 currentIndex: -1
                 property int lastIndex: -1
                 boundsBehavior: Flickable.StopAtBounds
