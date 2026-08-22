@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2024 by Amo Updates contributors                        *
+ *   Copyright (C) 2024 by AOSC Updates contributors                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,7 +18,10 @@
 #include <QJsonParseError>
 #include <QDebug>
 
+#include <KLocalizedString>
+
 namespace {
+constexpr auto kTranslationDomain = "plasma_applet_org.kde.plasma.amo.updates";
 const QString kService = QStringLiteral("io.aosc.Amo");
 const QString kPath = QStringLiteral("/io/aosc/Amo");
 const QString kInterface = QStringLiteral("io.aosc.Amo1");
@@ -58,7 +61,8 @@ bool AmoClient::isAvailable() const
 void AmoClient::refresh()
 {
     if (!m_iface->isValid()) {
-        emit errorOccurred(QStringLiteral("Cannot connect to amo D-Bus service."));
+        emit errorOccurred(i18nd(kTranslationDomain,
+                                 "Cannot connect to amo D-Bus service."));
         return;
     }
 
@@ -72,7 +76,8 @@ void AmoClient::refresh()
 void AmoClient::fetchUpdates()
 {
     if (!m_iface->isValid()) {
-        emit errorOccurred(QStringLiteral("Cannot connect to amo D-Bus service."));
+        emit errorOccurred(i18nd(kTranslationDomain,
+                                 "Cannot connect to amo D-Bus service."));
         return;
     }
 
@@ -87,7 +92,8 @@ void AmoClient::applyChanges(const QStringList &install,
                              bool upgradeAll)
 {
     if (!m_iface->isValid()) {
-        emit errorOccurred(QStringLiteral("Cannot connect to amo D-Bus service."));
+        emit errorOccurred(i18nd(kTranslationDomain,
+                                 "Cannot connect to amo D-Bus service."));
         return;
     }
 
@@ -268,8 +274,9 @@ void AmoClient::handleResult(const QString &json)
     QJsonParseError parseError;
     const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8(), &parseError);
     if (parseError.error != QJsonParseError::NoError) {
-        const QString error = QStringLiteral("Failed to parse result: %1")
-                                  .arg(parseError.errorString());
+        const QString error = i18nd(kTranslationDomain,
+                                    "Failed to parse result: %1",
+                                    parseError.errorString());
         const TaskType task = m_pendingTask;
         m_pendingTask = TaskType::None;
         if (task == TaskType::Apply) {

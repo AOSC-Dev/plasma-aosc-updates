@@ -3,23 +3,26 @@ msgstr ""
 "Project-Id-Version: plasma-aosc-updates\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-08-21 00:00+0800\n"
-"Last-Translator: Amo Updates contributors\n"
+"PO-Revision-Date: 2026-08-22 00:00+0800\n"
+"Last-Translator: AOSC Updates contributors\n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "General"
 msgstr "常规"
 
+msgctxt "@label"
 msgid "Automatic update checks:"
 msgstr "自动检查更新："
 
 msgid "Check for updates automatically"
 msgstr "自动检查更新"
 
+msgctxt "@label check interval for updates"
 msgid "Check interval:"
 msgstr "检查更新间隔："
 
@@ -32,17 +35,42 @@ msgstr "每周"
 msgid "Monthly"
 msgstr "每月"
 
+msgctxt "@label part of a sentence"
 msgid "Check for updates when:"
 msgstr "检查更新的时机："
 
+msgctxt "@option:check part of a sentence: Check for updates when"
 msgid "On battery"
 msgstr "使用电池时"
 
+msgctxt "@option:check part of a sentence: Check for updates when"
 msgid "On a mobile connection"
 msgstr "使用移动网络时"
 
 msgid "Network is offline"
 msgstr "网络处于离线状态"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "Idle"
+msgstr "空闲"
+
+msgid "Checking for updates..."
+msgstr "正在检查更新……"
+
+msgid "Installing updates..."
+msgstr "正在安装更新……"
+
+msgid "Installing all updates..."
+msgstr "正在安装所有更新……"
+
+msgid "System is up to date"
+msgstr "系统已是最新状态"
+
+msgid "%1 update available"
+msgid_plural "%1 updates available"
+msgstr[0] "有 %1 个可用更新"
 
 msgid "Updates are automatically checked %1."
 msgstr "更新将自动检查，%1。"
@@ -65,22 +93,18 @@ msgstr "上次检查：%1 前"
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] "%1 秒"
-msgstr[1] "%1 秒"
 
 msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "%1 分钟"
-msgstr[1] "%1 分钟"
 
 msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 小时"
-msgstr[1] "%1 小时"
 
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] "%1 天"
-msgstr[1] "%1 天"
 
 msgid "Software Updates Available"
 msgstr "有可用的软件更新"
@@ -88,7 +112,6 @@ msgstr "有可用的软件更新"
 msgid "You have %1 new update"
 msgid_plural "You have %1 new updates"
 msgstr[0] "有 %1 个新更新"
-msgstr[1] "有 %1 个新更新"
 
 msgid "Open"
 msgstr "打开"
@@ -96,13 +119,24 @@ msgstr "打开"
 msgid "Update check failed"
 msgstr "检查更新失败"
 
+msgid "Update failed"
+msgstr "更新失败"
+
+msgid "Refreshing update list..."
+msgstr "正在刷新更新列表……"
+
+msgid "Cannot connect to amo D-Bus service."
+msgstr "无法连接到 amo D-Bus 服务。"
+
+msgid "Failed to parse result: %1"
+msgstr "无法解析操作结果：%1"
+
 msgid "Download size: %1 · Disk space: %2"
 msgstr "下载大小：%1 · 磁盘空间：%2"
 
 msgid "%1 byte"
 msgid_plural "%1 bytes"
 msgstr[0] "%1 字节"
-msgstr[1] "%1 字节"
 
 msgid "%1 %2"
 msgstr "%1 %2"
@@ -154,9 +188,6 @@ msgstr "重试"
 msgid "Check for Updates"
 msgstr "检查更新"
 
-msgid "Select all packages"
-msgstr "选择所有软件包"
-
 msgid "Install Updates"
 msgstr "安装更新"
 
@@ -166,7 +197,5 @@ msgstr "执行软件更新"
 msgid "Install updates?"
 msgstr "安装更新吗？"
 
-msgid "Install the selected package?"
-msgid_plural "Install the %1 selected packages?"
-msgstr[0] "安装选中的软件包吗？"
-msgstr[1] "安装选中的 %1 个软件包吗？"
+msgid "Install all available updates?"
+msgstr "安装所有可用更新吗？"
