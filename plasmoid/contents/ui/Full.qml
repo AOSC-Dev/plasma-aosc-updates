@@ -19,9 +19,6 @@ import org.kde.plasma.amo 1.0
 Item {
     id: fullRepresentation
 
-    property bool anySelected: false
-    property bool allSelected: false
-    property bool populatePreSelected: true
     property bool checkDaily: false
     property bool checkWeekly: false
     property bool checkMonthly: false
@@ -130,7 +127,6 @@ Item {
                         }
                         updatesView.lastIndex = updatesView.currentIndex
                     }
-                    onCheckStateChanged: updateSelectionState();
                 }
             }
         }
@@ -171,26 +167,6 @@ Item {
             }
         }
 
-        PlasmaComponents3.CheckBox {
-            Layout.fillWidth: true
-            Layout.leftMargin: Kirigami.Units.smallSpacing
-
-            visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
-
-            tristate: true
-
-            checkState: fullRepresentation.allSelected ? Qt.Checked :
-                        (fullRepresentation.anySelected ? Qt.PartiallyChecked
-                                                        : Qt.Unchecked)
-
-            text: i18n("Select all packages")
-
-            onClicked: {
-                populatePreSelected = !fullRepresentation.anySelected;
-                populateModel();
-            }
-        }
-
         PlasmaComponents3.Label {
             visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
             font.pointSize: Kirigami.Theme.smallFont.pointSize
@@ -207,7 +183,6 @@ Item {
         PlasmaComponents3.Button {
             visible: AmoUpdates.count !== 0 && !AmoUpdates.isActive
             icon.name: "install"
-            enabled: fullRepresentation.anySelected
             Layout.alignment: Qt.AlignHCenter
             text: i18n("Install Updates")
             onClicked: installDialog.open()
@@ -228,42 +203,10 @@ Item {
         contentItem: PlasmaComponents3.Label {
             width: Kirigami.Units.gridUnit * 16
             wrapMode: Text.WordWrap
-            text: i18np("Install the selected package?", "Install the %1 selected packages?", selectedPackages().length)
+            text: i18n("Install all available updates?")
         }
 
-        onAccepted: {
-            var packages = selectedPackages()
-            if (packages.length > 0)
-                AmoUpdates.installUpdates(packages)
-        }
-    }
-
-    function updateSelectionState() {
-        var anySelected = false;
-        var allSelected = true;
-        for (var i = 0; i < updatesModel.count; i++) {
-            var pkg = updatesModel.get(i)
-            if (pkg.selected)
-                anySelected = true;
-            else
-                allSelected = false;
-
-            if (anySelected && !allSelected)
-                break; // Can't change anymore
-        }
-        fullRepresentation.anySelected = anySelected;
-        fullRepresentation.allSelected = allSelected;
-    }
-
-    function selectedPackages() {
-        var result = []
-        for (var i = 0; i < updatesModel.count; i++) {
-            var pkg = updatesModel.get(i)
-            if (pkg.selected) {
-                result.push(pkg.id)
-            }
-        }
-        return result
+        onAccepted: AmoUpdates.installAllUpdates()
     }
 
     function updateInterval() {
@@ -318,8 +261,7 @@ Item {
         for (var i = 0; i < packages.length; i++) {
             var id = packages[i]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"selected": populatePreSelected, "id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id)})
+            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id)})
         }
-        updateSelectionState();
     }
 }
