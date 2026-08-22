@@ -20,8 +20,6 @@ PlasmaExtras.ListItem {
 
     readonly property bool expanded: ListView.isCurrentItem
 
-    signal checkStateChanged(bool checked)
-
     // Human-readable label for the update operation (Upgrade / Downgrade /
     // ReInstall / Install), plus an accent colour.
     readonly property string operationLabel: operation === "Downgrade" ? i18n("Downgrade")
@@ -42,15 +40,6 @@ PlasmaExtras.ListItem {
     RowLayout {
         id: innerLayout
         anchors.fill: parent
-
-        PlasmaComponents3.CheckBox {
-            Layout.alignment: Qt.AlignVCenter
-            checked: selected
-            onClicked: {
-                updatesModel.setProperty(index, "selected", checked)
-                packageDelegate.checkStateChanged(checked)
-            }
-        }
 
         ColumnLayout {
             spacing: Kirigami.Units.smallSpacing / 2
