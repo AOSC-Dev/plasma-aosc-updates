@@ -58,10 +58,22 @@ PlasmoidItem
         }
     }
 
+    // Show the attention (red dot) state only for security updates;
+    // routine upgrades keep the plain active state.
+    function trayStatus() {
+        if (AmoUpdates.isActive)
+            return PlasmaCore.Types.ActiveStatus;
+        if (AmoUpdates.hasImportantUpdates)
+            return PlasmaCore.Types.NeedsAttentionStatus;
+        if (!AmoUpdates.isSystemUpToDate)
+            return PlasmaCore.Types.ActiveStatus;
+        return PlasmaCore.Types.PassiveStatus;
+    }
+
     Binding {
         target: plasmoid
         property: "status"
-        value: AmoUpdates.isActive || !AmoUpdates.isSystemUpToDate ? PlasmaCore.Types.ActiveStatus : PlasmaCore.Types.PassiveStatus;
+        value: trayStatus()
     }
 
     compactRepresentation: MouseArea {
