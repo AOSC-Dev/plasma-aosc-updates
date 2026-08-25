@@ -109,6 +109,40 @@ msgstr[0] "%1 天"
 msgid "Software Updates Available"
 msgstr "有可用的软件更新"
 
+msgid "Important Security Updates Available"
+msgstr "有可用的重要安全更新"
+
+msgid "Important security updates are available."
+msgstr "有重要安全更新可用。"
+
+msgid "Update topic information is available."
+msgstr "有可用的更新主题信息。"
+
+msgid "View Details"
+msgstr "查看详情"
+
+msgid "Update Details"
+msgstr "更新详情"
+
+msgid "Security update"
+msgstr "安全更新"
+
+msgid "Topic update"
+msgstr "主题更新"
+
+msgid "Affects %1 package"
+msgid_plural "Affects %1 packages"
+msgstr[0] "影响 %1 个软件包"
+
+msgid "Topic ID: %1"
+msgstr "主题 ID：%1"
+
+msgid "Affected packages: %1"
+msgstr "受影响的软件包：%1"
+
+msgid "Included topics: %1"
+msgstr "包含的主题：%1"
+
 msgid "You have %1 new update"
 msgid_plural "You have %1 new updates"
 msgstr[0] "有 %1 个新更新"

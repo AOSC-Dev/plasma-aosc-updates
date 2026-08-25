@@ -46,6 +46,9 @@ class AmoUpdates : public QObject
     Q_PROPERTY(bool isOnBattery READ isOnBattery NOTIFY isOnBatteryChanged)
     Q_PROPERTY(bool lastCheckSuccessful READ lastCheckSuccessful NOTIFY updatesChanged)
     Q_PROPERTY(QStringList packages READ packages NOTIFY updatesChanged)
+    Q_PROPERTY(QStringList topicUpdates READ topicUpdates NOTIFY updatesChanged)
+    Q_PROPERTY(int topicUpdateCount READ topicUpdateCount NOTIFY updatesChanged)
+    Q_PROPERTY(bool hasImportantUpdates READ hasImportantUpdates NOTIFY updatesChanged)
     Q_PROPERTY(qint64 totalDownloadSize READ totalDownloadSize NOTIFY updatesChanged)
     Q_PROPERTY(qint64 diskSizeDelta READ diskSizeDelta NOTIFY updatesChanged)
 
@@ -66,6 +69,9 @@ public:
     bool isOnBattery() const { return m_onBattery; }
     bool lastCheckSuccessful() const { return m_lastCheckSuccessful; }
     QStringList packages() const;
+    QStringList topicUpdates() const;
+    int topicUpdateCount() const { return m_client.topicUpdates().size(); }
+    bool hasImportantUpdates() const { return m_client.hasImportantUpdates(); }
 
     // ---- Methods callable from QML ----
     Q_INVOKABLE void checkUpdates(bool manual);
@@ -76,6 +82,12 @@ public:
     Q_INVOKABLE QString packageDescription(const QString &packageId) const;
     Q_INVOKABLE qint64 packageDownloadSize(const QString &packageId) const;
     Q_INVOKABLE QString packageOperation(const QString &packageId) const;
+    Q_INVOKABLE QString topicUpdateName(const QString &topicId) const;
+    Q_INVOKABLE QString topicUpdateCaution(const QString &topicId) const;
+    Q_INVOKABLE bool topicUpdateIsSecurity(const QString &topicId) const;
+    Q_INVOKABLE int topicUpdatePackageCount(const QString &topicId) const;
+    Q_INVOKABLE QStringList topicUpdatePackages(const QString &topicId) const;
+    Q_INVOKABLE QStringList topicUpdateTopics(const QString &topicId) const;
     qint64 totalDownloadSize() const;
     qint64 diskSizeDelta() const;
     Q_INVOKABLE double lastRefreshTimestamp() const;
@@ -171,6 +183,7 @@ private:
     bool m_isManualCheck = false;
     double m_lastRefreshTimestamp = 0.0;
     int m_lastUpdateCount = 0;
+    bool m_lastNotificationWasImportant = false;
     QPointer<KNotification> m_lastNotification;
     QHash<QString, UpdatePackage> m_packageMap;
 };

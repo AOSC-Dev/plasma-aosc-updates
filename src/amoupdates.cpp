@@ -104,6 +104,15 @@ QStringList AmoUpdates::packages() const
     return result;
 }
 
+QStringList AmoUpdates::topicUpdates() const
+{
+    QStringList result;
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics)
+        result.append(topic.id);
+    return result;
+}
+
 void AmoUpdates::checkUpdates(bool manual)
 {
     if (m_active)
@@ -166,6 +175,66 @@ QString AmoUpdates::packageDescription(const QString &packageId) const
 QString AmoUpdates::packageOperation(const QString &packageId) const
 {
     return m_packageMap.value(packageId).operation;
+}
+
+QString AmoUpdates::topicUpdateName(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.name;
+    }
+    return QString();
+}
+
+QString AmoUpdates::topicUpdateCaution(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.caution;
+    }
+    return QString();
+}
+
+bool AmoUpdates::topicUpdateIsSecurity(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.security;
+    }
+    return false;
+}
+
+int AmoUpdates::topicUpdatePackageCount(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.packageCount;
+    }
+    return 0;
+}
+
+QStringList AmoUpdates::topicUpdatePackages(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.packages;
+    }
+    return QStringList();
+}
+
+QStringList AmoUpdates::topicUpdateTopics(const QString &topicId) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.id == topicId)
+            return topic.topics;
+    }
+    return QStringList();
 }
 
 qint64 AmoUpdates::packageDownloadSize(const QString &packageId) const
@@ -649,19 +718,27 @@ void AmoUpdates::setLastCheckSuccessful(bool ok)
 void AmoUpdates::showUpdatesNotification(int count)
 {
     // Only notify when the number of available updates changed since the
-    // last notification, so automatic checks don't spam the user.
-    if (count == m_lastUpdateCount && m_lastNotification)
+    // last notification, or when the same transaction becomes important, so
+    // automatic checks don't spam the user while security changes stand out.
+    const bool important = hasImportantUpdates();
+    if (count == m_lastUpdateCount
+        && important == m_lastNotificationWasImportant
+        && m_lastNotification) {
         return;
+    }
 
     if (m_lastNotification)
         m_lastNotification->close();
 
     m_lastUpdateCount = count;
+    m_lastNotificationWasImportant = important;
     m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
                                            KNotification::Persistent,
                                            this);
     m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
-    m_lastNotification->setTitle(i18nd(kTranslationDomain, "Software Updates Available"));
+    m_lastNotification->setTitle(important
+        ? i18nd(kTranslationDomain, "Important Security Updates Available")
+        : i18nd(kTranslationDomain, "Software Updates Available"));
     m_lastNotification->setText(i18ndp(kTranslationDomain,
                                        "You have %1 new update",
                                        "You have %1 new updates",
@@ -675,6 +752,7 @@ void AmoUpdates::showUpdatesNotification(int count)
     connect(m_lastNotification, &KNotification::closed, this, [this]() {
         m_lastNotification = nullptr;
         m_lastUpdateCount = 0;
+        m_lastNotificationWasImportant = false;
     });
     m_lastNotification->sendEvent();
 }

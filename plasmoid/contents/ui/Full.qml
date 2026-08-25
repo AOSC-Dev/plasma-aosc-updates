@@ -38,6 +38,10 @@ Item {
         id: updatesModel
     }
 
+    ListModel {
+        id: topicUpdatesModel
+    }
+
     ColumnLayout {
         id: statusbar
 
@@ -87,6 +91,24 @@ Item {
             wrapMode: Text.WordWrap
             color: Kirigami.Theme.negativeTextColor
             text: i18n("Error: %1", AmoUpdates.errorMessage)
+        }
+
+        Kirigami.InlineMessage {
+            Layout.fillWidth: true
+            visible: AmoUpdates.topicUpdateCount > 0 && !AmoUpdates.isActive
+            type: AmoUpdates.hasImportantUpdates
+                ? Kirigami.MessageType.Warning
+                : Kirigami.MessageType.Information
+            text: AmoUpdates.hasImportantUpdates
+                ? i18n("Important security updates are available.")
+                : i18n("Update topic information is available.")
+            actions: [
+                Kirigami.Action {
+                    icon.name: "documentinfo"
+                    text: i18n("View Details")
+                    onTriggered: topicDetailsDialog.open()
+                }
+            ]
         }
 
         PlasmaComponents3.ProgressBar {
@@ -193,6 +215,99 @@ Item {
     }
 
     QQC2.Dialog {
+        id: topicDetailsDialog
+
+        title: i18n("Update Details")
+        modal: true
+        standardButtons: QQC2.Dialog.Close
+
+        contentItem: PlasmaComponents3.ScrollView {
+            implicitWidth: Kirigami.Units.gridUnit * 20
+            implicitHeight: Math.min(topicUpdatesView.contentHeight,
+                                     Kirigami.Units.gridUnit * 22)
+
+            contentItem: ListView {
+                id: topicUpdatesView
+
+                clip: true
+                spacing: Kirigami.Units.smallSpacing
+                model: topicUpdatesModel
+                boundsBehavior: Flickable.StopAtBounds
+
+                delegate: Kirigami.AbstractCard {
+                    required property string topicId
+                    required property string displayName
+                    required property string caution
+                    required property bool isSecurity
+                    required property int packageCount
+                    required property string packages
+                    required property string childTopics
+
+                    width: ListView.view.width
+
+                    contentItem: ColumnLayout {
+                        spacing: Kirigami.Units.smallSpacing
+
+                        PlasmaExtras.Heading {
+                            Layout.fillWidth: true
+                            level: 4
+                            wrapMode: Text.WordWrap
+                            text: displayName !== "" ? displayName : topicId
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            font.weight: Font.DemiBold
+                            color: isSecurity
+                                ? Kirigami.Theme.negativeTextColor
+                                : Kirigami.Theme.neutralTextColor
+                            text: isSecurity ? i18n("Security update") : i18n("Topic update")
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            visible: caution !== ""
+                            wrapMode: Text.WordWrap
+                            text: caution
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            opacity: 0.6
+                            text: i18np("Affects %1 package",
+                                       "Affects %1 packages",
+                                       packageCount)
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            visible: packages !== ""
+                            wrapMode: Text.WrapAnywhere
+                            opacity: 0.6
+                            text: i18n("Affected packages: %1", packages)
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            visible: childTopics !== ""
+                            wrapMode: Text.WrapAnywhere
+                            opacity: 0.6
+                            text: i18n("Included topics: %1", childTopics)
+                        }
+
+                        PlasmaComponents3.Label {
+                            Layout.fillWidth: true
+                            opacity: 0.6
+                            elide: Text.ElideRight
+                            text: i18n("Topic ID: %1", topicId)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    QQC2.Dialog {
         id: installDialog
 
         title: i18n("Install updates?")
@@ -261,6 +376,21 @@ Item {
             var id = packages[i]
             var desc = AmoUpdates.packageDescription(id)
             updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id)})
+        }
+
+        topicUpdatesModel.clear()
+        var topics = AmoUpdates.topicUpdates
+        for (var j = 0; j < topics.length; j++) {
+            var topicId = topics[j]
+            topicUpdatesModel.append({
+                "topicId": topicId,
+                "displayName": AmoUpdates.topicUpdateName(topicId),
+                "caution": AmoUpdates.topicUpdateCaution(topicId),
+                "isSecurity": AmoUpdates.topicUpdateIsSecurity(topicId),
+                "packageCount": AmoUpdates.topicUpdatePackageCount(topicId),
+                "packages": AmoUpdates.topicUpdatePackages(topicId).join(", "),
+                "childTopics": AmoUpdates.topicUpdateTopics(topicId).join(", ")
+            })
         }
     }
 }
