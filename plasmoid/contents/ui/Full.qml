@@ -96,12 +96,12 @@ Item {
         Kirigami.InlineMessage {
             Layout.fillWidth: true
             visible: AmoUpdates.topicUpdateCount > 0 && !AmoUpdates.isActive
-            type: AmoUpdates.hasImportantUpdates
+            type: AmoUpdates.hasSecurityUpdates
                 ? Kirigami.MessageType.Warning
                 : Kirigami.MessageType.Information
-            text: AmoUpdates.hasImportantUpdates
+            text: AmoUpdates.hasSecurityUpdates
                 ? i18n("Important security updates are available.")
-                : i18n("Update topic information is available.")
+                : i18n("Important updates are available.")
             actions: [
                 Kirigami.Action {
                     icon.name: "documentinfo"
@@ -260,8 +260,8 @@ Item {
                             font.weight: Font.DemiBold
                             color: isSecurity
                                 ? Kirigami.Theme.negativeTextColor
-                                : Kirigami.Theme.neutralTextColor
-                            text: isSecurity ? i18n("Security update") : i18n("Topic update")
+                                : Kirigami.Theme.highlightColor
+                            text: isSecurity ? i18n("Security update") : i18n("Important update")
                         }
 
                         PlasmaComponents3.Label {
@@ -372,20 +372,23 @@ Item {
     function populateModel() {
         updatesModel.clear()
         var packages = AmoUpdates.packages
-        // Security updates first, then the remaining packages.
+        // Security updates first, then other important updates, then the rest.
         var security = []
+        var important = []
         var regular = []
         for (var i = 0; i < packages.length; i++) {
             if (AmoUpdates.packageIsSecurity(packages[i]))
                 security.push(packages[i])
+            else if (AmoUpdates.packageIsImportant(packages[i]))
+                important.push(packages[i])
             else
                 regular.push(packages[i])
         }
-        var ordered = security.concat(regular)
+        var ordered = security.concat(important, regular)
         for (var j = 0; j < ordered.length; j++) {
             var id = ordered[j]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id), "isSecurity": AmoUpdates.packageIsSecurity(id)})
+            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id), "isSecurity": AmoUpdates.packageIsSecurity(id), "isImportant": AmoUpdates.packageIsImportant(id)})
         }
 
         topicUpdatesModel.clear()

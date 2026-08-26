@@ -63,7 +63,7 @@ PlasmoidItem
     function trayStatus() {
         if (AmoUpdates.isActive)
             return PlasmaCore.Types.ActiveStatus;
-        if (AmoUpdates.hasImportantUpdates)
+        if (AmoUpdates.hasSecurityUpdates)
             return PlasmaCore.Types.NeedsAttentionStatus;
         if (!AmoUpdates.isSystemUpToDate)
             return PlasmaCore.Types.ActiveStatus;

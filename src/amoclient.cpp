@@ -249,6 +249,7 @@ void AmoClient::parseUpdates(const QString &json)
     m_updates.clear();
     m_topicUpdates.clear();
     m_hasImportantUpdates = false;
+    m_hasSecurityUpdates = false;
     m_totalDownloadSize = 0;
     m_diskSizeDelta = 0;
 
@@ -285,12 +286,13 @@ void AmoClient::parseUpdates(const QString &json)
 
         if (!topic.id.isEmpty())
             m_topicUpdates.append(topic);
-        m_hasImportantUpdates = m_hasImportantUpdates || topic.security;
+        m_hasImportantUpdates = true;
+        m_hasSecurityUpdates = m_hasSecurityUpdates || topic.security;
     }
 
     // Keep the explicit aggregate flag for forward compatibility, while the
     // per-entry security flags remain the source of truth today.
-    m_hasImportantUpdates = m_hasImportantUpdates
+    m_hasSecurityUpdates = m_hasSecurityUpdates
         || root.value(QStringLiteral("has_important_updates")).toBool();
 
     m_diskSizeDelta = root.value(QStringLiteral("disk_size_delta")).toVariant().toLongLong();

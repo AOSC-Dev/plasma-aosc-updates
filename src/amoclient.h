@@ -108,9 +108,16 @@ public:
     QList<TopicUpdate> topicUpdates() const { return m_topicUpdates; }
 
     /**
-     * @brief Whether a matched TUM marks the transaction as a security update.
+     * @brief Whether any matched TUM covers the transaction, i.e. there are
+     *        important updates (security or otherwise).
      */
     bool hasImportantUpdates() const { return m_hasImportantUpdates; }
+
+    /**
+     * @brief Whether any matched TUM marks the transaction as a security
+     *        update.
+     */
+    bool hasSecurityUpdates() const { return m_hasSecurityUpdates; }
 
     /**
      * @brief Total download size of all available updates (bytes).
@@ -160,6 +167,7 @@ private:
     QList<UpdatePackage> m_updates;
     QList<TopicUpdate> m_topicUpdates;
     bool m_hasImportantUpdates = false;
+    bool m_hasSecurityUpdates = false;
     qint64 m_totalDownloadSize = 0;
     qint64 m_diskSizeDelta = 0;
     int m_pendingDescriptions = 0;
