@@ -16,8 +16,8 @@
  *
  * The plugin is loaded by the plasmoid's `metadata.json` via the
  * `X-Plasma-API` / `X-Plasma-MainScript` mechanism. It exposes the
- * `AmoUpdates` type in the `org.kde.plasma.amo` module so QML files can
- * do `import org.kde.plasma.amo 1.0` and use `AmoUpdates` directly.
+ * `AmoUpdates` type in the `io.aosc.plasmaaoscupdates` module so QML files can
+ * do `import io.aosc.plasmaaoscupdates 1.0` and use `AmoUpdates` directly.
  */
 class AmoUpdatesPlugin : public QQmlExtensionPlugin
 {

@@ -30,7 +30,7 @@ cmake --install build
 ```
 
 The install puts the QML plugin into
-`~/.local/lib/qt6/qml/org/kde/plasma/amo` and the applet package into
+`~/.local/lib/qt6/qml/io/aosc/plasmaaoscupdates` and the applet package into
 `~/.local/share/plasma/plasmoids`. For distro layouts that use `lib64`, set
 `-DAMO_QML_INSTALL_DIR=lib64/qt6/qml` when configuring.
 

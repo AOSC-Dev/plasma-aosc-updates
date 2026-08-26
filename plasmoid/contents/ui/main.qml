@@ -11,7 +11,7 @@ import QtQuick
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
-import org.kde.plasma.amo 1.0
+import io.aosc.plasmaaoscupdates 1.0
 
 PlasmoidItem
 {
