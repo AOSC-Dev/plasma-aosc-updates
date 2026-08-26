@@ -31,7 +31,7 @@
 
 namespace {
 
-constexpr auto kTranslationDomain = "plasma_applet_org.kde.plasma.amo.updates";
+constexpr auto kTranslationDomain = "plasma_applet_io.aosc.plasmaaoscupdates.updates";
 
 QVariant unwrapDBusVariant(const QVariant &value)
 {
@@ -397,7 +397,7 @@ bool AmoUpdates::maybeNotifyTransientError(const QString &error)
     if (!isTransientError(error))
         return true;
 
-    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-amo-updates")),
+    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-aosc-updates")),
                      QStringLiteral("General"));
     qint64 failCount = grp.readEntry(QStringLiteral("FailedAutoRefreshCount"), qint64(0));
     failCount += 1;
@@ -411,7 +411,7 @@ bool AmoUpdates::maybeNotifyTransientError(const QString &error)
 
 void AmoUpdates::resetFailedAutoRefreshCount()
 {
-    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-amo-updates")),
+    KConfigGroup grp(KSharedConfig::openConfig(QStringLiteral("plasma-aosc-updates")),
                      QStringLiteral("General"));
     grp.writeEntry(QStringLiteral("FailedAutoRefreshCount"), qint64(0));
     grp.sync();
@@ -800,7 +800,7 @@ void AmoUpdates::showUpdatesNotification(int count)
                                            security ? KNotification::Persistent
                                                      : KNotification::CloseOnTimeout,
                                            this);
-    m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    m_lastNotification->setComponentName(QStringLiteral("plasma-aosc-updates"));
     if (security)
         m_lastNotification->setUrgency(KNotification::CriticalUrgency);
     m_lastNotification->setTitle(security
@@ -837,7 +837,7 @@ void AmoUpdates::showErrorNotification(const QString &message)
     auto *notification = new KNotification(QStringLiteral("updateError"),
                                            KNotification::CloseOnTimeout,
                                            this);
-    notification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    notification->setComponentName(QStringLiteral("plasma-aosc-updates"));
     notification->setTitle(i18nd(kTranslationDomain, "Update check failed"));
     notification->setText(message);
     notification->setIconName(QStringLiteral("dialog-error"));
@@ -849,7 +849,7 @@ void AmoUpdates::showInstalledNotification()
     auto *notification = new KNotification(QStringLiteral("updatesInstalled"),
                                            KNotification::CloseOnTimeout,
                                            this);
-    notification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    notification->setComponentName(QStringLiteral("plasma-aosc-updates"));
     notification->setTitle(i18nd(kTranslationDomain, "Updates installed"));
     notification->setText(i18nd(kTranslationDomain,
                                  "The system has been updated successfully."));

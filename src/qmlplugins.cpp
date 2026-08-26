@@ -21,7 +21,7 @@ void AmoUpdatesPlugin::registerTypes(const char *uri)
     // Register AmoUpdates as a singleton so QML can use it without
     // instantiating it: `AmoUpdates.checkUpdates()` etc.
     qmlRegisterSingletonType<AmoUpdates>(
-        "org.kde.plasma.amo", 1, 0, "AmoUpdates",
+        "io.aosc.plasmaaoscupdates", 1, 0, "AmoUpdates",
         [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
             Q_UNUSED(engine);
             Q_UNUSED(scriptEngine);

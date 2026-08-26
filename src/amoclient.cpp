@@ -22,7 +22,7 @@
 #include <KLocalizedString>
 
 namespace {
-constexpr auto kTranslationDomain = "plasma_applet_org.kde.plasma.amo.updates";
+constexpr auto kTranslationDomain = "plasma_applet_io.aosc.plasmaaoscupdates.updates";
 const QString kService = QStringLiteral("io.aosc.Amo");
 const QString kPath = QStringLiteral("/io/aosc/Amo");
 const QString kInterface = QStringLiteral("io.aosc.Amo1");

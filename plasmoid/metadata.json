@@ -11,7 +11,7 @@
         "Description": "Check and install system updates via amo",
         "Description[zh_CN]": "通过 amo 检查并安装系统更新",
         "Icon": "system-software-update",
-        "Id": "org.kde.plasma.amo.updates",
+        "Id": "io.aosc.plasmaaoscupdates.updates",
         "License": "GPL-2.0-or-later",
         "Name": "AOSC Updates",
         "Name[zh_CN]": "AOSC 更新",

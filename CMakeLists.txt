@@ -59,24 +59,24 @@ target_link_libraries(amoqmlplugin
     KF6::IconThemes
 )
 
-# Install the QML plugin into the org/kde/plasma/amo module directory.
+# Install the QML plugin into the io/aosc/plasmaaoscupdates module directory.
 install(TARGETS amoqmlplugin
-    LIBRARY DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
+    LIBRARY DESTINATION ${AMO_QML_INSTALL_DIR}/io/aosc/plasmaaoscupdates
 )
 install(FILES src/qmldir
-    DESTINATION ${AMO_QML_INSTALL_DIR}/org/kde/plasma/amo
+    DESTINATION ${AMO_QML_INSTALL_DIR}/io/aosc/plasmaaoscupdates
 )
 
 # KNotification only dispatches application-defined events that have a
 # matching notifyrc description installed in the KDE data directory.
-install(FILES plasma-amo-updates.notifyrc
+install(FILES plasma-aosc-updates.notifyrc
     DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR}
 )
 
 # ---------------------------------------------------------------------------
 # Plasmoid package
 # ---------------------------------------------------------------------------
-plasma_install_package(plasmoid org.kde.plasma.amo.updates)
+plasma_install_package(plasmoid io.aosc.plasmaaoscupdates.updates)
 
 # Install gettext catalogs used by the plasmoid's QML i18n() calls.
 KI18N_INSTALL(po)
