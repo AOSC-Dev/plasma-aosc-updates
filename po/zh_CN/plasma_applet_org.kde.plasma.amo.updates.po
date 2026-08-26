@@ -147,6 +147,10 @@ msgid "You have %1 new update"
 msgid_plural "You have %1 new updates"
 msgstr[0] "有 %1 个新更新"
 
+msgid "You have %1 new update, %2 of which is a security update"
+msgid_plural "You have %1 new updates, %2 of which are security updates"
+msgstr[0] "有 %1 个新更新，其中 %2 个是安全更新"
+
 msgid "Open"
 msgstr "打开"
 

@@ -217,6 +217,17 @@ bool AmoUpdates::packageIsSecurity(const QString &packageName) const
     return false;
 }
 
+int AmoUpdates::securityUpdateCount() const
+{
+    int count = 0;
+    const auto updates = m_client.updates();
+    for (const UpdatePackage &pkg : updates) {
+        if (packageIsSecurity(pkg.name))
+            ++count;
+    }
+    return count;
+}
+
 int AmoUpdates::topicUpdatePackageCount(const QString &topicId) const
 {
     const auto topics = m_client.topicUpdates();
@@ -742,17 +753,30 @@ void AmoUpdates::showUpdatesNotification(int count)
 
     m_lastUpdateCount = count;
     m_lastNotificationWasImportant = important;
+    // Routine updates auto-close after a few seconds; security updates stay
+    // until dismissed and are marked as important.
     m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
-                                           KNotification::Persistent,
+                                           important ? KNotification::Persistent
+                                                     : KNotification::CloseOnTimeout,
                                            this);
     m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
+    if (important)
+        m_lastNotification->setUrgency(KNotification::CriticalUrgency);
     m_lastNotification->setTitle(important
         ? i18nd(kTranslationDomain, "Important Security Updates Available")
         : i18nd(kTranslationDomain, "Software Updates Available"));
-    m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                       "You have %1 new update",
-                                       "You have %1 new updates",
-                                       count));
+    const int securityCount = securityUpdateCount();
+    if (securityCount > 0) {
+        m_lastNotification->setText(i18ndp(kTranslationDomain,
+                                           "You have %1 new update, %2 of which is a security update",
+                                           "You have %1 new updates, %2 of which are security updates",
+                                           count, securityCount));
+    } else {
+        m_lastNotification->setText(i18ndp(kTranslationDomain,
+                                           "You have %1 new update",
+                                           "You have %1 new updates",
+                                           count));
+    }
     m_lastNotification->setIconName(QStringLiteral("update-high"));
     KNotificationAction *openAction = m_lastNotification->addDefaultAction(
         i18nd(kTranslationDomain, "Open"));
