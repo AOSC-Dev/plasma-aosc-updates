@@ -207,6 +207,16 @@ bool AmoUpdates::topicUpdateIsSecurity(const QString &topicId) const
     return false;
 }
 
+bool AmoUpdates::packageIsSecurity(const QString &packageName) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.security && topic.packages.contains(packageName))
+            return true;
+    }
+    return false;
+}
+
 int AmoUpdates::topicUpdatePackageCount(const QString &topicId) const
 {
     const auto topics = m_client.topicUpdates();

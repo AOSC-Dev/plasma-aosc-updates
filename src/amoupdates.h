@@ -85,6 +85,9 @@ public:
     Q_INVOKABLE QString topicUpdateName(const QString &topicId) const;
     Q_INVOKABLE QString topicUpdateCaution(const QString &topicId) const;
     Q_INVOKABLE bool topicUpdateIsSecurity(const QString &topicId) const;
+    /// Whether any matched TUM lists \a packageName as affected, i.e. the
+    /// package is part of a security update.
+    Q_INVOKABLE bool packageIsSecurity(const QString &packageName) const;
     Q_INVOKABLE int topicUpdatePackageCount(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdatePackages(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdateTopics(const QString &topicId) const;

@@ -20,13 +20,15 @@ PlasmaExtras.ListItem {
 
     readonly property bool expanded: ListView.isCurrentItem
 
-    // Human-readable label for the update operation (Upgrade / Downgrade /
-    // ReInstall / Install), plus an accent colour.
-    readonly property string operationLabel: operation === "Downgrade" ? i18n("Downgrade")
+    // Security updates take precedence over the operation label: show
+    // "Security update" in red instead of the green "Upgrade".
+    readonly property string operationLabel: isSecurity ? i18n("Security update")
+                                            : operation === "Downgrade" ? i18n("Downgrade")
                                             : operation === "ReInstall" ? i18n("Reinstall")
                                             : operation === "Install" ? i18n("Install")
                                             : i18n("Upgrade")
-    readonly property color operationColor: operation === "Downgrade" ? Kirigami.Theme.negativeTextColor
+    readonly property color operationColor: isSecurity ? Kirigami.Theme.negativeTextColor
+                                            : operation === "Downgrade" ? Kirigami.Theme.negativeTextColor
                                             : operation === "Upgrade" ? Kirigami.Theme.positiveTextColor
                                             : Kirigami.Theme.neutralTextColor
 

@@ -372,10 +372,20 @@ Item {
     function populateModel() {
         updatesModel.clear()
         var packages = AmoUpdates.packages
+        // Security updates first, then the remaining packages.
+        var security = []
+        var regular = []
         for (var i = 0; i < packages.length; i++) {
-            var id = packages[i]
+            if (AmoUpdates.packageIsSecurity(packages[i]))
+                security.push(packages[i])
+            else
+                regular.push(packages[i])
+        }
+        var ordered = security.concat(regular)
+        for (var j = 0; j < ordered.length; j++) {
+            var id = ordered[j]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id)})
+            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id), "isSecurity": AmoUpdates.packageIsSecurity(id)})
         }
 
         topicUpdatesModel.clear()
