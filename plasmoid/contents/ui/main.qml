@@ -76,6 +76,20 @@ PlasmoidItem
         value: trayStatus()
     }
 
+    // Expose a back action so that, when the applet is expanded inside the
+    // system tray, the tray header's back button returns to the main view
+    // while the details page is open, instead of collapsing the whole popup.
+    // (The details page's own Back button is hidden in that case to avoid
+    // showing two back buttons.)
+    //
+    // Note: fullRepresentation is the QQmlComponent, while
+    // fullRepresentationItem is the actual Full instance, so the latter is
+    // what we need to reach the showDetails property.
+    readonly property var backAction: Kirigami.Action {
+        enabled: root.fullRepresentationItem ? root.fullRepresentationItem.showDetails : false
+        onTriggered: root.fullRepresentationItem.showDetails = false
+    }
+
     compactRepresentation: MouseArea {
         anchors.fill: parent
         hoverEnabled: true
