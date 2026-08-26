@@ -91,6 +91,8 @@ public:
     Q_INVOKABLE int topicUpdatePackageCount(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdatePackages(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdateTopics(const QString &topicId) const;
+    /// Number of available updates that are part of a security TUM.
+    int securityUpdateCount() const;
     qint64 totalDownloadSize() const;
     qint64 diskSizeDelta() const;
     Q_INVOKABLE double lastRefreshTimestamp() const;
