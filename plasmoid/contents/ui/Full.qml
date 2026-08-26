@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
+import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents3
 import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.core as PlasmaCore
@@ -22,6 +23,7 @@ Item {
     property bool checkDaily: false
     property bool checkWeekly: false
     property bool checkMonthly: false
+    property bool showDetails: false
 
     width: Kirigami.Units.gridUnit * 20
     height: Kirigami.Units.gridUnit * 20
@@ -46,6 +48,7 @@ Item {
         id: statusbar
 
         anchors.fill: parent
+        visible: !showDetails
 
         spacing: Kirigami.Units.smallSpacing
 
@@ -106,7 +109,7 @@ Item {
                 Kirigami.Action {
                     icon.name: "documentinfo"
                     text: i18n("View Details")
-                    onTriggered: topicDetailsDialog.open()
+                    onTriggered: showDetails = true
                 }
             ]
         }
@@ -214,92 +217,116 @@ Item {
         }
     }
 
-    QQC2.Dialog {
-        id: topicDetailsDialog
+    Item {
+        id: detailsPage
+        anchors.fill: parent
+        visible: showDetails
 
-        title: i18n("Update Details")
-        modal: true
-        standardButtons: QQC2.Dialog.Close
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: Kirigami.Units.smallSpacing
 
-        contentItem: PlasmaComponents3.ScrollView {
-            implicitWidth: Kirigami.Units.gridUnit * 20
-            implicitHeight: Math.min(topicUpdatesView.contentHeight,
-                                     Kirigami.Units.gridUnit * 22)
-
-            contentItem: ListView {
-                id: topicUpdatesView
-
-                clip: true
+            RowLayout {
+                Layout.fillWidth: true
                 spacing: Kirigami.Units.smallSpacing
-                model: topicUpdatesModel
-                boundsBehavior: Flickable.StopAtBounds
+                // In the system tray the tray header already provides a back
+                // button (which triggers the applet's backAction), so showing
+                // this one as well would result in two back buttons.
+                visible: Plasmoid.containment.pluginName !== "org.kde.plasma.systemtray"
 
-                delegate: Kirigami.AbstractCard {
-                    required property string topicId
-                    required property string displayName
-                    required property string caution
-                    required property bool isSecurity
-                    required property int packageCount
-                    required property string packages
-                    required property string childTopics
+                PlasmaComponents3.ToolButton {
+                    icon.name: "go-previous"
+                    text: i18n("Back")
+                    onClicked: showDetails = false
+                }
 
-                    width: ListView.view.width
+                PlasmaExtras.Heading {
+                    Layout.fillWidth: true
+                    level: 4
+                    wrapMode: Text.WordWrap
+                    text: i18n("Update Details")
+                }
+            }
 
-                    contentItem: ColumnLayout {
-                        spacing: Kirigami.Units.smallSpacing
+            PlasmaComponents3.ScrollView {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                        PlasmaExtras.Heading {
-                            Layout.fillWidth: true
-                            level: 4
-                            wrapMode: Text.WordWrap
-                            text: displayName !== "" ? displayName : topicId
-                        }
+                contentItem: ListView {
+                    id: topicUpdatesView
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            font.weight: Font.DemiBold
-                            color: isSecurity
-                                ? Kirigami.Theme.negativeTextColor
-                                : Kirigami.Theme.highlightColor
-                            text: isSecurity ? i18n("Security update") : i18n("Important update")
-                        }
+                    clip: true
+                    spacing: Kirigami.Units.smallSpacing
+                    model: topicUpdatesModel
+                    boundsBehavior: Flickable.StopAtBounds
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            visible: caution !== ""
-                            wrapMode: Text.WordWrap
-                            text: caution
-                        }
+                    delegate: Kirigami.AbstractCard {
+                        required property string topicId
+                        required property string displayName
+                        required property string caution
+                        required property bool isSecurity
+                        required property int packageCount
+                        required property string packages
+                        required property string childTopics
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            opacity: 0.6
-                            text: i18np("Affects %1 package",
-                                       "Affects %1 packages",
-                                       packageCount)
-                        }
+                        width: ListView.view.width
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            visible: packages !== ""
-                            wrapMode: Text.WrapAnywhere
-                            opacity: 0.6
-                            text: i18n("Affected packages: %1", packages)
-                        }
+                        contentItem: ColumnLayout {
+                            spacing: Kirigami.Units.smallSpacing
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            visible: childTopics !== ""
-                            wrapMode: Text.WrapAnywhere
-                            opacity: 0.6
-                            text: i18n("Included topics: %1", childTopics)
-                        }
+                            PlasmaExtras.Heading {
+                                Layout.fillWidth: true
+                                level: 4
+                                wrapMode: Text.WordWrap
+                                text: displayName !== "" ? displayName : topicId
+                            }
 
-                        PlasmaComponents3.Label {
-                            Layout.fillWidth: true
-                            opacity: 0.6
-                            elide: Text.ElideRight
-                            text: i18n("Topic ID: %1", topicId)
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                font.weight: Font.DemiBold
+                                color: isSecurity
+                                    ? Kirigami.Theme.negativeTextColor
+                                    : Kirigami.Theme.highlightColor
+                                text: isSecurity ? i18n("Security update") : i18n("Important update")
+                            }
+
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                visible: caution !== ""
+                                wrapMode: Text.WordWrap
+                                text: caution
+                            }
+
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                opacity: 0.6
+                                text: i18np("Affects %1 package",
+                                           "Affects %1 packages",
+                                           packageCount)
+                            }
+
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                visible: packages !== ""
+                                wrapMode: Text.WrapAnywhere
+                                opacity: 0.6
+                                text: i18n("Affected packages: %1", packages)
+                            }
+
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                visible: childTopics !== ""
+                                wrapMode: Text.WrapAnywhere
+                                opacity: 0.6
+                                text: i18n("Included topics: %1", childTopics)
+                            }
+
+                            PlasmaComponents3.Label {
+                                Layout.fillWidth: true
+                                opacity: 0.6
+                                elide: Text.ElideRight
+                                text: i18n("Topic ID: %1", topicId)
+                            }
                         }
                     }
                 }
