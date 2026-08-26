@@ -328,6 +328,33 @@ void AmoClient::parseUpdates(const QString &json)
 
         m_updates.append(pkg);
     }
+
+    // Packages that would be removed as part of the transaction. The
+    // version field is the currently installed version.
+    const QJsonArray remove = root.value(QStringLiteral("remove")).toArray();
+    for (const QJsonValue &value : remove) {
+        const QJsonObject obj = value.toObject();
+
+        UpdatePackage pkg;
+        pkg.name = obj.value(QStringLiteral("name")).toString();
+        pkg.oldVersion = obj.value(QStringLiteral("version")).toString();
+        pkg.newVersion.clear();
+        pkg.arch = obj.value(QStringLiteral("arch")).toString();
+        pkg.description.clear();
+        pkg.downloadSize = 0;
+        pkg.operation = QStringLiteral("Remove");
+        // Distinguish automatic removals (e.g. orphaned dependencies) from
+        // explicit ones for the UI.
+        const QJsonArray details = obj.value(QStringLiteral("details")).toArray();
+        for (const QJsonValue &detail : details) {
+            if (detail.toString() == QStringLiteral("AutoRemove")) {
+                pkg.automatic = true;
+                break;
+            }
+        }
+
+        m_updates.append(pkg);
+    }
 }
 
 void AmoClient::handleResult(const QString &json)

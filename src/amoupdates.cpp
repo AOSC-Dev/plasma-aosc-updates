@@ -170,6 +170,10 @@ QString AmoUpdates::packageVersion(const QString &packageId) const
     if (pkg.operation == QStringLiteral("Upgrade") && !pkg.oldVersion.isEmpty()) {
         return QStringLiteral("%1 → %2").arg(pkg.oldVersion, pkg.newVersion);
     }
+    // Packages being removed have no new version; show the installed one.
+    if (pkg.operation == QStringLiteral("Remove")) {
+        return pkg.oldVersion;
+    }
     return pkg.newVersion;
 }
 

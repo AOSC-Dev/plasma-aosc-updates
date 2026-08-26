@@ -133,6 +133,9 @@ msgstr "重要更新"
 msgid "Topic update"
 msgstr "主题更新"
 
+msgid "Remove"
+msgstr "卸载"
+
 msgid "Affects %1 package"
 msgid_plural "Affects %1 packages"
 msgstr[0] "影响 %1 个软件包"
