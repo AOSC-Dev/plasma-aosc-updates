@@ -89,8 +89,14 @@ QString AmoUpdates::iconName() const
 {
     if (isActive())
         return QStringLiteral("update-busy");
-    if (!isSystemUpToDate())
+    // Security updates warrant the red icon; other important (TUM-matched,
+    // non-security) updates use the orange icon; routine updates use blue.
+    if (hasSecurityUpdates())
         return QStringLiteral("update-high");
+    if (hasImportantUpdates())
+        return QStringLiteral("update-medium");
+    if (!isSystemUpToDate())
+        return QStringLiteral("update-low");
     return QStringLiteral("update-none");
 }
 
