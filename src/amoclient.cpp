@@ -16,6 +16,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonParseError>
+#include <QLocale>
 #include <QDebug>
 
 #include <KLocalizedString>
@@ -25,6 +26,30 @@ constexpr auto kTranslationDomain = "plasma_applet_org.kde.plasma.amo.updates";
 const QString kService = QStringLiteral("io.aosc.Amo");
 const QString kPath = QStringLiteral("/io/aosc/Amo");
 const QString kInterface = QStringLiteral("io.aosc.Amo1");
+
+QString localizedTumText(const QJsonObject &translations)
+{
+    const QString locale = QLocale().name();
+    const QString language = locale.section(QLatin1Char('_'), 0, 0);
+    const QStringList candidates = {
+        locale,
+        language,
+        QStringLiteral("default"),
+        QStringLiteral("en_US"),
+    };
+
+    for (const QString &candidate : candidates) {
+        const QString value = translations.value(candidate).toString();
+        if (!value.isEmpty())
+            return value;
+    }
+
+    for (auto it = translations.constBegin(); it != translations.constEnd(); ++it) {
+        if (it.value().isString() && !it.value().toString().isEmpty())
+            return it.value().toString();
+    }
+    return QString();
+}
 }
 
 AmoClient::AmoClient(QObject *parent)
@@ -222,6 +247,8 @@ void AmoClient::onUpdatesChangedSignal(const QDBusMessage &message)
 void AmoClient::parseUpdates(const QString &json)
 {
     m_updates.clear();
+    m_topicUpdates.clear();
+    m_hasImportantUpdates = false;
     m_totalDownloadSize = 0;
     m_diskSizeDelta = 0;
 
@@ -233,6 +260,38 @@ void AmoClient::parseUpdates(const QString &json)
     }
 
     const QJsonObject root = doc.object();
+
+    const QJsonArray tum = root.value(QStringLiteral("tum")).toArray();
+    for (const QJsonValue &value : tum) {
+        if (!value.isObject())
+            continue;
+
+        const QJsonObject obj = value.toObject();
+        TopicUpdate topic;
+        topic.id = obj.value(QStringLiteral("id")).toString();
+        topic.kind = obj.value(QStringLiteral("kind")).toString();
+        topic.name = localizedTumText(obj.value(QStringLiteral("name")).toObject());
+        topic.caution = localizedTumText(obj.value(QStringLiteral("caution")).toObject());
+        topic.packageCount = obj.value(QStringLiteral("package_count")).toInt();
+        topic.security = obj.value(QStringLiteral("security")).toBool();
+
+        const QJsonArray packages = obj.value(QStringLiteral("packages")).toArray();
+        for (const QJsonValue &package : packages)
+            topic.packages.append(package.toString());
+
+        const QJsonArray topics = obj.value(QStringLiteral("topics")).toArray();
+        for (const QJsonValue &childTopic : topics)
+            topic.topics.append(childTopic.toString());
+
+        if (!topic.id.isEmpty())
+            m_topicUpdates.append(topic);
+        m_hasImportantUpdates = m_hasImportantUpdates || topic.security;
+    }
+
+    // Keep the explicit aggregate flag for forward compatibility, while the
+    // per-entry security flags remain the source of truth today.
+    m_hasImportantUpdates = m_hasImportantUpdates
+        || root.value(QStringLiteral("has_important_updates")).toBool();
 
     m_diskSizeDelta = root.value(QStringLiteral("disk_size_delta")).toVariant().toLongLong();
     // amo's response already contains the aggregate download size of all

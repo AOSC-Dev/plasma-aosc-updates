@@ -35,6 +35,21 @@ struct UpdatePackage
 };
 
 /**
+ * @brief Details for a topic update matched by oma-tum.
+ */
+struct TopicUpdate
+{
+    QString id;
+    QString kind;
+    QString name;
+    QString caution;
+    QStringList packages;
+    QStringList topics;
+    int packageCount = 0;
+    bool security = false;
+};
+
+/**
  * @brief The result of a completed amo task.
  */
 struct AmoResult
@@ -88,6 +103,16 @@ public:
     QList<UpdatePackage> updates() const { return m_updates; }
 
     /**
+     * @brief Topic update manifests matching the current transaction.
+     */
+    QList<TopicUpdate> topicUpdates() const { return m_topicUpdates; }
+
+    /**
+     * @brief Whether a matched TUM marks the transaction as a security update.
+     */
+    bool hasImportantUpdates() const { return m_hasImportantUpdates; }
+
+    /**
      * @brief Total download size of all available updates (bytes).
      */
     qint64 totalDownloadSize() const { return m_totalDownloadSize; }
@@ -133,6 +158,8 @@ private:
 
     QDBusInterface *m_iface;
     QList<UpdatePackage> m_updates;
+    QList<TopicUpdate> m_topicUpdates;
+    bool m_hasImportantUpdates = false;
     qint64 m_totalDownloadSize = 0;
     qint64 m_diskSizeDelta = 0;
     int m_pendingDescriptions = 0;
