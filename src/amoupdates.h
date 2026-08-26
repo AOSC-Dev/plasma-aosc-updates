@@ -69,6 +69,7 @@ public:
     bool isNetworkMobile() const { return m_networkMobile; }
     bool isOnBattery() const { return m_onBattery; }
     bool lastCheckSuccessful() const { return m_lastCheckSuccessful; }
+    /// Qualified "name:arch" ids of all packages in the transaction.
     QStringList packages() const;
     QStringList topicUpdates() const;
     int topicUpdateCount() const { return m_client.topicUpdates().size(); }
@@ -87,12 +88,14 @@ public:
     Q_INVOKABLE QString topicUpdateName(const QString &topicId) const;
     Q_INVOKABLE QString topicUpdateCaution(const QString &topicId) const;
     Q_INVOKABLE bool topicUpdateIsSecurity(const QString &topicId) const;
-    /// Whether any matched TUM lists \a packageName as affected, i.e. the
-    /// package is part of a security update.
-    Q_INVOKABLE bool packageIsSecurity(const QString &packageName) const;
-    /// Whether any matched TUM lists \a packageName as affected, i.e. the
-    /// package is part of an important update (security or otherwise).
-    Q_INVOKABLE bool packageIsImportant(const QString &packageName) const;
+    /// Whether any matched TUM lists the package as affected, i.e. it is
+    /// part of a security update. \a packageId is the "name:arch" id from
+    /// packages().
+    Q_INVOKABLE bool packageIsSecurity(const QString &packageId) const;
+    /// Whether any matched TUM lists the package as affected, i.e. it is
+    /// part of an important update (security or otherwise). \a packageId is
+    /// the "name:arch" id from packages().
+    Q_INVOKABLE bool packageIsImportant(const QString &packageId) const;
     Q_INVOKABLE int topicUpdatePackageCount(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdatePackages(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdateTopics(const QString &topicId) const;

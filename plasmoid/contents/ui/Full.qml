@@ -372,19 +372,26 @@ Item {
     function populateModel() {
         updatesModel.clear()
         var packages = AmoUpdates.packages
-        // Security updates first, then other important updates, then the rest.
+        // Security first, then other important updates, then by operation:
+        // remove, install, and finally upgrades (including reinstall/downgrade).
         var security = []
         var important = []
-        var regular = []
+        var remove = []
+        var install = []
+        var upgrade = []
         for (var i = 0; i < packages.length; i++) {
             if (AmoUpdates.packageIsSecurity(packages[i]))
                 security.push(packages[i])
             else if (AmoUpdates.packageIsImportant(packages[i]))
                 important.push(packages[i])
+            else if (AmoUpdates.packageOperation(packages[i]) === "Remove")
+                remove.push(packages[i])
+            else if (AmoUpdates.packageOperation(packages[i]) === "Install")
+                install.push(packages[i])
             else
-                regular.push(packages[i])
+                upgrade.push(packages[i])
         }
-        var ordered = security.concat(important, regular)
+        var ordered = security.concat(important, remove, install, upgrade)
         for (var j = 0; j < ordered.length; j++) {
             var id = ordered[j]
             var desc = AmoUpdates.packageDescription(id)
