@@ -100,12 +100,25 @@ QString AmoUpdates::iconName() const
     return QStringLiteral("update-none");
 }
 
+// Package IDs exposed to QML are qualified as "name:arch" so entries with
+// the same name but different architectures (e.g. a cross-grade removing one
+// arch while installing another) do not collide in m_packageMap.
+static QString packageQualifiedId(const UpdatePackage &pkg)
+{
+    return pkg.name + QLatin1Char(':') + pkg.arch;
+}
+
+static QString packageBaseName(const QString &packageId)
+{
+    return packageId.section(QLatin1Char(':'), 0, 0);
+}
+
 QStringList AmoUpdates::packages() const
 {
     QStringList result;
     const auto updates = m_client.updates();
     for (const UpdatePackage &pkg : updates) {
-        result << pkg.name;
+        result << packageQualifiedId(pkg);
     }
     return result;
 }
@@ -140,11 +153,17 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
     if (m_active || packageIds.isEmpty())
         return;
 
+    // packageIds are "name:arch" qualified ids; amo expects bare names.
+    QStringList names;
+    names.reserve(packageIds.size());
+    for (const QString &id : packageIds)
+        names << packageBaseName(id);
+
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
     setStatusMessage(i18nd(kTranslationDomain, "Installing updates..."));
-    m_client.applyChanges(packageIds, QStringList(), false);
+    m_client.applyChanges(names, QStringList(), false);
 }
 
 void AmoUpdates::installAllUpdates()
@@ -217,21 +236,23 @@ bool AmoUpdates::topicUpdateIsSecurity(const QString &topicId) const
     return false;
 }
 
-bool AmoUpdates::packageIsSecurity(const QString &packageName) const
+bool AmoUpdates::packageIsSecurity(const QString &packageId) const
 {
+    const QString name = packageBaseName(packageId);
     const auto topics = m_client.topicUpdates();
     for (const TopicUpdate &topic : topics) {
-        if (topic.security && topic.packages.contains(packageName))
+        if (topic.security && topic.packages.contains(name))
             return true;
     }
     return false;
 }
 
-bool AmoUpdates::packageIsImportant(const QString &packageName) const
+bool AmoUpdates::packageIsImportant(const QString &packageId) const
 {
+    const QString name = packageBaseName(packageId);
     const auto topics = m_client.topicUpdates();
     for (const TopicUpdate &topic : topics) {
-        if (topic.packages.contains(packageName))
+        if (topic.packages.contains(name))
             return true;
     }
     return false;
@@ -242,7 +263,7 @@ int AmoUpdates::securityUpdateCount() const
     int count = 0;
     const auto updates = m_client.updates();
     for (const UpdatePackage &pkg : updates) {
-        if (packageIsSecurity(pkg.name))
+        if (packageIsSecurity(packageQualifiedId(pkg)))
             ++count;
     }
     return count;
@@ -307,7 +328,7 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
 
     m_packageMap.clear();
     for (const UpdatePackage &pkg : updates) {
-        m_packageMap.insert(pkg.name, pkg);
+        m_packageMap.insert(packageQualifiedId(pkg), pkg);
     }
 
     setActive(false);
@@ -600,7 +621,7 @@ void AmoUpdates::onDescriptionsChanged()
 {
     m_packageMap.clear();
     for (const UpdatePackage &pkg : m_client.updates())
-        m_packageMap.insert(pkg.name, pkg);
+        m_packageMap.insert(packageQualifiedId(pkg), pkg);
     emit updatesChanged();
 }
 
