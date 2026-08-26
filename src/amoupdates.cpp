@@ -217,6 +217,16 @@ bool AmoUpdates::packageIsSecurity(const QString &packageName) const
     return false;
 }
 
+bool AmoUpdates::packageIsImportant(const QString &packageName) const
+{
+    const auto topics = m_client.topicUpdates();
+    for (const TopicUpdate &topic : topics) {
+        if (topic.packages.contains(packageName))
+            return true;
+    }
+    return false;
+}
+
 int AmoUpdates::securityUpdateCount() const
 {
     int count = 0;
@@ -741,9 +751,9 @@ void AmoUpdates::showUpdatesNotification(int count)
     // Only notify when the number of available updates changed since the
     // last notification, or when the same transaction becomes important, so
     // automatic checks don't spam the user while security changes stand out.
-    const bool important = hasImportantUpdates();
+    const bool security = hasSecurityUpdates();
     if (count == m_lastUpdateCount
-        && important == m_lastNotificationWasImportant
+        && security == m_lastNotificationWasImportant
         && m_lastNotification) {
         return;
     }
@@ -752,17 +762,17 @@ void AmoUpdates::showUpdatesNotification(int count)
         m_lastNotification->close();
 
     m_lastUpdateCount = count;
-    m_lastNotificationWasImportant = important;
+    m_lastNotificationWasImportant = security;
     // Routine updates auto-close after a few seconds; security updates stay
     // until dismissed and are marked as important.
     m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
-                                           important ? KNotification::Persistent
+                                           security ? KNotification::Persistent
                                                      : KNotification::CloseOnTimeout,
                                            this);
     m_lastNotification->setComponentName(QStringLiteral("plasma-amo-updates"));
-    if (important)
+    if (security)
         m_lastNotification->setUrgency(KNotification::CriticalUrgency);
-    m_lastNotification->setTitle(important
+    m_lastNotification->setTitle(security
         ? i18nd(kTranslationDomain, "Important Security Updates Available")
         : i18nd(kTranslationDomain, "Software Updates Available"));
     const int securityCount = securityUpdateCount();

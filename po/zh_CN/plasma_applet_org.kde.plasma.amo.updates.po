@@ -115,8 +115,8 @@ msgstr "有可用的重要安全更新"
 msgid "Important security updates are available."
 msgstr "有重要安全更新可用。"
 
-msgid "Update topic information is available."
-msgstr "有可用的更新主题信息。"
+msgid "Important updates are available."
+msgstr "有重要更新可用。"
 
 msgid "View Details"
 msgstr "查看详情"
@@ -126,6 +126,9 @@ msgstr "更新详情"
 
 msgid "Security update"
 msgstr "安全更新"
+
+msgid "Important update"
+msgstr "重要更新"
 
 msgid "Topic update"
 msgstr "主题更新"

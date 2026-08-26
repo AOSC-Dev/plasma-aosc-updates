@@ -20,14 +20,19 @@ PlasmaExtras.ListItem {
 
     readonly property bool expanded: ListView.isCurrentItem
 
-    // Security updates take precedence over the operation label: show
-    // "Security update" in red instead of the green "Upgrade".
+    // TUM-matched updates take precedence over the operation label: security
+    // updates show "Security update" in red, other important updates show
+    // "Important update" in blue, routine upgrades keep their operation label.
+    // isSecurity / isImportant come from the ListModel (do NOT declare
+    // readonly properties with the same name, they would shadow the model).
     readonly property string operationLabel: isSecurity ? i18n("Security update")
+                                            : isImportant ? i18n("Important update")
                                             : operation === "Downgrade" ? i18n("Downgrade")
                                             : operation === "ReInstall" ? i18n("Reinstall")
                                             : operation === "Install" ? i18n("Install")
                                             : i18n("Upgrade")
     readonly property color operationColor: isSecurity ? Kirigami.Theme.negativeTextColor
+                                            : isImportant ? Kirigami.Theme.highlightColor
                                             : operation === "Downgrade" ? Kirigami.Theme.negativeTextColor
                                             : operation === "Upgrade" ? Kirigami.Theme.positiveTextColor
                                             : Kirigami.Theme.neutralTextColor

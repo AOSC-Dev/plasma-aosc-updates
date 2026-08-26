@@ -49,6 +49,7 @@ class AmoUpdates : public QObject
     Q_PROPERTY(QStringList topicUpdates READ topicUpdates NOTIFY updatesChanged)
     Q_PROPERTY(int topicUpdateCount READ topicUpdateCount NOTIFY updatesChanged)
     Q_PROPERTY(bool hasImportantUpdates READ hasImportantUpdates NOTIFY updatesChanged)
+    Q_PROPERTY(bool hasSecurityUpdates READ hasSecurityUpdates NOTIFY updatesChanged)
     Q_PROPERTY(qint64 totalDownloadSize READ totalDownloadSize NOTIFY updatesChanged)
     Q_PROPERTY(qint64 diskSizeDelta READ diskSizeDelta NOTIFY updatesChanged)
 
@@ -72,6 +73,7 @@ public:
     QStringList topicUpdates() const;
     int topicUpdateCount() const { return m_client.topicUpdates().size(); }
     bool hasImportantUpdates() const { return m_client.hasImportantUpdates(); }
+    bool hasSecurityUpdates() const { return m_client.hasSecurityUpdates(); }
 
     // ---- Methods callable from QML ----
     Q_INVOKABLE void checkUpdates(bool manual);
@@ -88,6 +90,9 @@ public:
     /// Whether any matched TUM lists \a packageName as affected, i.e. the
     /// package is part of a security update.
     Q_INVOKABLE bool packageIsSecurity(const QString &packageName) const;
+    /// Whether any matched TUM lists \a packageName as affected, i.e. the
+    /// package is part of an important update (security or otherwise).
+    Q_INVOKABLE bool packageIsImportant(const QString &packageName) const;
     Q_INVOKABLE int topicUpdatePackageCount(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdatePackages(const QString &topicId) const;
     Q_INVOKABLE QStringList topicUpdateTopics(const QString &topicId) const;
