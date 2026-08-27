@@ -27,6 +27,13 @@ const QString kService = QStringLiteral("io.aosc.Amo");
 const QString kPath = QStringLiteral("/io/aosc/Amo");
 const QString kInterface = QStringLiteral("io.aosc.Amo1");
 
+// The bus daemon's NameOwnerChanged signal tells us when the amo service
+// name gains or loses an owner (i.e. the service was started, stopped or
+// restarted).
+const QString kDBusService = QStringLiteral("org.freedesktop.DBus");
+const QString kDBusPath = QStringLiteral("/org/freedesktop/DBus");
+const QString kDBusInterface = QStringLiteral("org.freedesktop.DBus");
+
 QString localizedTumText(const QJsonObject &translations)
 {
     const QString locale = QLocale().name();
@@ -76,6 +83,16 @@ AmoClient::AmoClient(QObject *parent)
     QDBusConnection::systemBus().connect(
         kService, kPath, kInterface, QStringLiteral("UpdatesChanged"),
         this, SLOT(onUpdatesChangedSignal(QDBusMessage)));
+
+    // Watch for the amo service being stopped or restarted while a task is
+    // in flight. amo can be restarted by the update transaction itself (or
+    // crash); the pending request then belongs to a dead process and its
+    // result would never arrive, leaving the tray stuck on the progress
+    // bar. Fail the pending task as soon as the owner changes.
+    QDBusConnection::systemBus().connect(
+        kDBusService, kDBusPath, kDBusInterface,
+        QStringLiteral("NameOwnerChanged"),
+        this, SLOT(onNameOwnerChanged(QString,QString,QString)));
 }
 
 bool AmoClient::isAvailable() const
@@ -137,6 +154,11 @@ void AmoClient::onRefreshReply(QDBusPendingCallWatcher *watcher)
 {
     watcher->deleteLater();
 
+    // The task may already have been aborted when amo was restarted; drop
+    // the stale reply in that case to avoid a duplicate signal.
+    if (m_pendingTask != TaskType::Refresh)
+        return;
+
     QDBusPendingReply<quint64> reply(*watcher);
     if (reply.isError()) {
         m_pendingTask = TaskType::None;
@@ -180,6 +202,11 @@ void AmoClient::onUpdatesReply(QDBusPendingCallWatcher *watcher)
 void AmoClient::onApplyReply(QDBusPendingCallWatcher *watcher)
 {
     watcher->deleteLater();
+
+    // The task may already have been aborted when amo was restarted; drop
+    // the stale reply in that case to avoid a duplicate signal.
+    if (m_pendingTask != TaskType::Apply)
+        return;
 
     QDBusPendingReply<quint64> reply(*watcher);
     if (reply.isError()) {
@@ -242,6 +269,41 @@ void AmoClient::onUpdatesChangedSignal(const QDBusMessage &message)
         return;
 
     emit updatesChanged();
+}
+
+void AmoClient::onNameOwnerChanged(const QString &name,
+                                   const QString &oldOwner,
+                                   const QString &newOwner)
+{
+    Q_UNUSED(oldOwner);
+    Q_UNUSED(newOwner);
+
+    if (name != kService)
+        return;
+
+    // Recreate the interface so future calls talk to the current process.
+    // If the service just disappeared the new interface is simply invalid
+    // and becomes usable again once the name is re-owned. The signal
+    // subscriptions on the bus connection are name-based and keep following
+    // the service across restarts.
+    delete m_iface;
+    m_iface = new QDBusInterface(kService, kPath, kInterface,
+                                 QDBusConnection::systemBus(), this);
+
+    // A pending task was handed to the previous amo process; its result
+    // will never arrive, so fail it to unblock the UI. This covers both a
+    // service restarted mid-operation and one stopped entirely.
+    if (m_pendingTask == TaskType::None)
+        return;
+
+    const QString error = i18nd(kTranslationDomain,
+                                "The update service was restarted during the operation.");
+    const TaskType task = m_pendingTask;
+    m_pendingTask = TaskType::None;
+    if (task == TaskType::Apply)
+        emit applyFinished(false, error);
+    else
+        emit refreshFinished(false, error);
 }
 
 void AmoClient::parseUpdates(const QString &json)
