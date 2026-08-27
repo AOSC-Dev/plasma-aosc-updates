@@ -152,6 +152,12 @@ private slots:
     void onStatusSignal(const QDBusMessage &message);
     void onResultReportSignal(const QDBusMessage &message);
     void onUpdatesChangedSignal(const QDBusMessage &message);
+    /// Called when the amo D-Bus service name gains or loses an owner, i.e.
+    /// the service was started, stopped or restarted. Fails any pending
+    /// task whose result will never be delivered.
+    void onNameOwnerChanged(const QString &name,
+                            const QString &oldOwner,
+                            const QString &newOwner);
 
 private:
     void parseUpdates(const QString &json);

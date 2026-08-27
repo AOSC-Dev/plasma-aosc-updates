@@ -65,6 +65,9 @@ msgstr "正在安装更新……"
 msgid "Installing all updates..."
 msgstr "正在安装所有更新……"
 
+msgid "The update service was restarted during the operation."
+msgstr "更新服务在操作过程中被重启。"
+
 msgid "System is up to date"
 msgstr "系统已是最新状态"
 
