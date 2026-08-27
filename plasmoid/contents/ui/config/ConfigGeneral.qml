@@ -32,29 +32,34 @@ KCM.SimpleKCM {
             id: daily
             Kirigami.FormData.label: i18nc("@label check interval for updates", "Check interval:")
             ButtonGroup.group: intervalGroup
+            enabled: autoCheck.checked
             text: i18n("Daily")
         }
 
         RadioButton {
             id: weekly
             ButtonGroup.group: intervalGroup
+            enabled: autoCheck.checked
             text: i18n("Weekly")
         }
 
         RadioButton {
             id: monthly
             ButtonGroup.group: intervalGroup
+            enabled: autoCheck.checked
             text: i18n("Monthly")
         }
 
         CheckBox {
             id: battery
             Kirigami.FormData.label: i18nc("@label part of a sentence", "Check for updates when:")
+            enabled: autoCheck.checked
             text: i18nc("@option:check part of a sentence: Check for updates when", "On battery")
         }
 
         CheckBox {
             id: mobile
+            enabled: autoCheck.checked
             text: i18nc("@option:check part of a sentence: Check for updates when", "On a mobile connection")
         }
     }
