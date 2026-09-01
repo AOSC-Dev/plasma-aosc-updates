@@ -493,7 +493,7 @@ void AmoUpdates::onStatusChanged(const QString &statusJson)
     // Progress percentage if present.
     const QJsonValue percentValue = obj.value(QStringLiteral("percent"));
     if (percentValue.isDouble()) {
-        const int dpkgPercent = qBound(0, percentValue.toInt(), 100);
+        const int dpkgPercent = qBound(0, static_cast<int>(percentValue.toDouble()), 100);
         if (m_hasGlobalDownloadProgress) {
             setPercentage(50 + dpkgPercent / 2);
         } else {
@@ -571,7 +571,7 @@ int AmoUpdates::findEventPercent(const QJsonObject &obj) const
     if (obj.contains(QStringLiteral("percent"))) {
         const QJsonValue p = obj.value(QStringLiteral("percent"));
         if (p.isDouble()) {
-            return p.toInt();
+            return static_cast<int>(p.toDouble());
         }
     }
     for (auto it = obj.begin(); it != obj.end(); ++it) {
