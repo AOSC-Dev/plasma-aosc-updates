@@ -29,14 +29,6 @@ void AmoJob::setProgress(int percent, const QString &message)
     emit infoMessage(this, message);
 }
 
-void AmoJob::setDownloadProgress(qint64 downloaded, qint64 total)
-{
-    if (total > 0) {
-        setTotalAmount(KJob::Bytes, static_cast<qulonglong>(total));
-        setProcessedAmount(KJob::Bytes, static_cast<qulonglong>(downloaded));
-    }
-}
-
 void AmoJob::finish(bool success, const QString &error)
 {
     if (!success) {
