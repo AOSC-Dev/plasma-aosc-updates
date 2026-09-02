@@ -465,6 +465,11 @@ void AmoUpdates::resetFailedAutoRefreshCount()
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
     if (success) {
+        // The install itself has finished; dismiss the progress
+        // notification before showing the result one, so the user never
+        // sees two popups for the same operation (the subsequent update-
+        // list refresh is not part of the install).
+        finishProgressJob(true, QString());
         setStatusMessage(i18nd(kTranslationDomain, "Refreshing update list..."));
         setErrorMessage(QString());
         resetProgress();
@@ -694,10 +699,12 @@ void AmoUpdates::startProgressJob(const QString &title)
     m_progressJob->setProperty("desktopFileName",
                                QStringLiteral("io.aosc.plasmaaoscupdates.updates"));
     m_progressJob->setProperty("immediateProgressReporting", true);
-    // A check is quick and happens automatically; don't leave a lingering
-    // notification for it. Installs keep the notification so the user sees
-    // the result, like Dolphin's copy jobs.
-    m_progressJob->setFinishedNotificationHidden(m_activity == Activity::CheckingUpdates);
+    // The progress notification is transient for checks and installs alike:
+    // it disappears as soon as the operation finishes. The outcome (success
+    // or failure) is announced by a dedicated result notification, so
+    // keeping the job around would show a duplicate popup for the same
+    // operation.
+    m_progressJob->setFinishedNotificationHidden(true);
     // registerJob() connects the KJob progress signals to the tracker, so
     // the description/infoMessage must be emitted after it.
     m_jobTracker->registerJob(m_progressJob);

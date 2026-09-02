@@ -31,8 +31,14 @@ void AmoJob::setProgress(int percent, const QString &message)
 
 void AmoJob::finish(bool success, const QString &error)
 {
+    // The progress notification is transient and never shows the outcome
+    // itself: success/failure is announced by AmoUpdates' dedicated
+    // notifications (updatesInstalled / updateError). Without an error the
+    // transient job is removed on completion; on failure we mark it as
+    // "killed" so the lingering error view is dismissed too, instead of
+    // showing a second (duplicate) notification for the same operation.
     if (!success) {
-        setError(KJob::UserDefinedError);
+        setError(KJob::KilledJobError);
         setErrorText(error);
     }
     emitResult();
