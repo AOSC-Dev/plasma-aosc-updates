@@ -37,7 +37,7 @@ class AmoUpdates : public QObject
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString statusMessage READ statusMessage NOTIFY statusMessageChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
-    Q_PROPERTY(QString iconName READ iconName NOTIFY updatesChanged)
+    Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged)
     Q_PROPERTY(bool isSystemUpToDate READ isSystemUpToDate NOTIFY updatesChanged)
     Q_PROPERTY(QString timestamp READ timestamp NOTIFY updatesChanged)
     Q_PROPERTY(int percentage READ percentage NOTIFY percentageChanged)
@@ -109,6 +109,7 @@ signals:
     void updatesChanged();
     void activeChanged();
     void messageChanged();
+    void iconNameChanged();
     void statusMessageChanged();
     void errorMessageChanged();
     void percentageChanged();

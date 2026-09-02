@@ -375,6 +375,8 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
     emit updatesChanged();
     // message() depends on m_checkDone, which just became true.
     emit messageChanged();
+    // iconName() depends on the update list (security/important/count).
+    emit iconNameChanged();
 }
 
 void AmoUpdates::onRefreshFinished(bool success, const QString &error)
@@ -623,6 +625,8 @@ void AmoUpdates::setActive(bool active)
     emit activeChanged();
     // message() depends on isActive(), so it may have changed as well.
     emit messageChanged();
+    // iconName() depends on isActive() (update-busy while active).
+    emit iconNameChanged();
 }
 
 void AmoUpdates::setStatusMessage(const QString &message)
