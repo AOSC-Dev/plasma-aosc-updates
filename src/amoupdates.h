@@ -17,8 +17,10 @@
 #include <QPointer>
 
 #include "amoclient.h"
+#include "amojob.h"
 
 class KNotification;
+class KUiServerV2JobTracker;
 
 /**
  * @brief Backend singleton exposed to QML as `AmoUpdates`.
@@ -161,6 +163,15 @@ private:
     void showErrorNotification(const QString &message);
     void showInstalledNotification();
 
+    /// Create (or reuse) the KJob that mirrors the current operation and
+    /// register it with the job tracker, so the notification applet shows a
+    /// Dolphin-style progress notification.
+    void startProgressJob(const QString &title);
+    /// Forward the current progress to the job (no-op when no job is active).
+    void updateProgressJob();
+    /// Finish the job (success or failure).
+    void finishProgressJob(bool success, const QString &error);
+
     /**
      * @brief Whether \a error is a transient failure (e.g. no network, a
      *        lock held by another package manager) that may resolve on its
@@ -209,4 +220,9 @@ private:
     bool m_lastNotificationWasImportant = false;
     QPointer<KNotification> m_lastNotification;
     QHash<QString, UpdatePackage> m_packageMap;
+
+    /// Job shown as a Dolphin-style progress notification while an
+    /// operation is running; owned by the job tracker.
+    AmoJob *m_progressJob = nullptr;
+    KUiServerV2JobTracker *m_jobTracker = nullptr;
 };
