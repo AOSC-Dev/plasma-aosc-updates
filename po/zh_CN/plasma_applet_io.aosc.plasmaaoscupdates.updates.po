@@ -65,6 +65,16 @@ msgstr "正在安装更新……"
 msgid "Installing all updates..."
 msgstr "正在安装所有更新……"
 
+# Job titles shown in the progress notification (no trailing ellipsis).
+msgid "Checking for updates"
+msgstr "正在检查更新"
+
+msgid "Installing updates"
+msgstr "正在安装更新"
+
+msgid "Installing all updates"
+msgstr "正在安装所有更新"
+
 msgid "The update service was restarted during the operation."
 msgstr "更新服务在操作过程中被重启。"
 
