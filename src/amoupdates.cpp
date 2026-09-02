@@ -180,7 +180,11 @@ void AmoUpdates::checkUpdates(bool manual)
     resetProgress();
     setErrorMessage(QString());
     setStatusMessage(i18nd(kTranslationDomain, "Checking for updates..."));
-    startProgressJob(i18nd(kTranslationDomain, "Checking for updates"));
+    // Background (automatic) checks stay quiet: don't pop up a progress
+    // notification for every periodic/startup check, only when the user
+    // explicitly asked for one. Installs always show progress.
+    if (manual)
+        startProgressJob(i18nd(kTranslationDomain, "Checking for updates"));
     m_client.refresh();
 }
 
