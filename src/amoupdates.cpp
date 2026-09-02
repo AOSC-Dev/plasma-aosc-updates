@@ -26,6 +26,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KUiServerV2JobTracker>
 
 #include <utility>
 
@@ -62,6 +63,7 @@ AmoUpdates::AmoUpdates(QObject *parent)
                 setActive(false);
                 setStatusMessage(i18nd(kTranslationDomain, "Error"));
                 setErrorMessage(msg);
+                finishProgressJob(false, msg);
             });
 
     QDBusConnection bus = QDBusConnection::systemBus();
@@ -81,6 +83,11 @@ AmoUpdates::AmoUpdates(QObject *parent)
 
     setStatusMessage(i18nd(kTranslationDomain, "Idle"));
     setErrorMessage(QString());
+
+    // Forward progress of amo operations to org.kde.JobViewServer so the
+    // notification applet shows a Dolphin-style progress notification (and
+    // the task manager shows progress).
+    m_jobTracker = new KUiServerV2JobTracker(this);
 }
 
 QString AmoUpdates::message() const
@@ -173,6 +180,7 @@ void AmoUpdates::checkUpdates(bool manual)
     resetProgress();
     setErrorMessage(QString());
     setStatusMessage(i18nd(kTranslationDomain, "Checking for updates..."));
+    startProgressJob(i18nd(kTranslationDomain, "Checking for updates"));
     m_client.refresh();
 }
 
@@ -192,6 +200,7 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
     resetProgress();
     setErrorMessage(QString());
     setStatusMessage(i18nd(kTranslationDomain, "Installing updates..."));
+    startProgressJob(i18nd(kTranslationDomain, "Installing updates"));
     m_client.applyChanges(names, QStringList(), false);
 }
 
@@ -205,6 +214,7 @@ void AmoUpdates::installAllUpdates()
     resetProgress();
     setErrorMessage(QString());
     setStatusMessage(i18nd(kTranslationDomain, "Installing all updates..."));
+    startProgressJob(i18nd(kTranslationDomain, "Installing all updates"));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
 
@@ -372,6 +382,10 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
     if (!updates.isEmpty())
         showUpdatesNotification(updates.size());
 
+    // The operation (check or install) is complete; dismiss the progress
+    // notification.
+    finishProgressJob(true, QString());
+
     emit updatesChanged();
     // message() depends on m_checkDone, which just became true.
     emit messageChanged();
@@ -395,6 +409,7 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         const bool notify = m_isManualCheck || maybeNotifyTransientError(error);
         if (notify)
             showErrorNotification(error);
+        finishProgressJob(false, error);
         emit updatesChanged();
         // message() depends on m_checkDone, which just became true.
         emit messageChanged();
@@ -466,6 +481,7 @@ void AmoUpdates::onApplyFinished(bool success, const QString &error)
         setErrorMessage(error);
         emit updateError(error);
         showErrorNotification(error);
+        finishProgressJob(false, error);
     }
 }
 
@@ -664,6 +680,47 @@ void AmoUpdates::setPercentage(int percentage)
         return;
     m_percentage = percentage;
     emit percentageChanged();
+    updateProgressJob();
+}
+
+void AmoUpdates::startProgressJob(const QString &title)
+{
+    if (m_progressJob)
+        return;
+
+    m_progressJob = new AmoJob(this);
+    // The notification applet uses the desktop file to resolve the
+    // application name and icon; the plasmoid's metadata.json provides it.
+    m_progressJob->setProperty("desktopFileName",
+                               QStringLiteral("io.aosc.plasmaaoscupdates.updates"));
+    m_progressJob->setProperty("immediateProgressReporting", true);
+    // A check is quick and happens automatically; don't leave a lingering
+    // notification for it. Installs keep the notification so the user sees
+    // the result, like Dolphin's copy jobs.
+    m_progressJob->setFinishedNotificationHidden(m_activity == Activity::CheckingUpdates);
+    // registerJob() connects the KJob progress signals to the tracker, so
+    // the description/infoMessage must be emitted after it.
+    m_jobTracker->registerJob(m_progressJob);
+    emit m_progressJob->description(m_progressJob, title);
+    updateProgressJob();
+}
+
+void AmoUpdates::updateProgressJob()
+{
+    if (!m_progressJob)
+        return;
+
+    m_progressJob->setProgress(m_percentage, m_statusMessage);
+    m_progressJob->setDownloadProgress(m_downloaded, m_downloadTotal);
+}
+
+void AmoUpdates::finishProgressJob(bool success, const QString &error)
+{
+    if (!m_progressJob)
+        return;
+
+    m_progressJob->finish(success, error);
+    m_progressJob = nullptr;
 }
 
 void AmoUpdates::setNetworkOnline(bool online)
