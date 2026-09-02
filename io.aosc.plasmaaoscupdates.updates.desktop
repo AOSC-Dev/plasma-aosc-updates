@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=AOSC Updates
+Name[zh_CN]=AOSC 更新
+GenericName=System Updater
+GenericName[zh_CN]=系统更新
+Comment=Check and install system updates via amo
+Comment[zh_CN]=通过 amo 检查并安装系统更新
+Icon=system-software-update
+NoDisplay=true
+Terminal=false
+Categories=System;Settings;

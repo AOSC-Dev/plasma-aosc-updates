@@ -76,6 +76,13 @@ install(FILES plasma-aosc-updates.notifyrc
     DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR}
 )
 
+# A .desktop file lets KService resolve the plasmoid as an application, so
+# progress notifications forwarded to org.kde.JobViewServer show "AOSC
+# Updates" (with its icon) as the source instead of "plasmashell".
+install(FILES io.aosc.plasmaaoscupdates.updates.desktop
+    DESTINATION ${KDE_INSTALL_APPDIR}
+)
+
 # ---------------------------------------------------------------------------
 # Plasmoid package
 # ---------------------------------------------------------------------------
