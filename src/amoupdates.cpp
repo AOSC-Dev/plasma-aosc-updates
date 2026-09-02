@@ -59,7 +59,6 @@ AmoUpdates::AmoUpdates(QObject *parent)
             this, &AmoUpdates::onUpdatesChangedExternally);
     connect(&m_client, &AmoClient::errorOccurred,
             this, [this](const QString &msg) {
-                setMessage(msg);
                 setActive(false);
                 setStatusMessage(i18nd(kTranslationDomain, "Error"));
                 setErrorMessage(msg);
@@ -80,9 +79,37 @@ AmoUpdates::AmoUpdates(QObject *parent)
                 SLOT(onPowerPropertiesChanged(QString,QVariantMap,QStringList)));
     refreshSystemState();
 
-    setMessage(i18nd(kTranslationDomain, "Idle"));
     setStatusMessage(i18nd(kTranslationDomain, "Idle"));
     setErrorMessage(QString());
+}
+
+QString AmoUpdates::message() const
+{
+    // The title is derived from the current state rather than stored, so it
+    // can never go stale (e.g. keep showing a previous error while a new
+    // operation is running).
+    if (isActive()) {
+        if (m_activity == Activity::CheckingUpdates)
+            return i18nd(kTranslationDomain, "Checking for updates...");
+        return i18nd(kTranslationDomain, "Installing updates...");
+    }
+
+    if (!isSystemUpToDate())
+        return i18ndp(kTranslationDomain,
+                      "%1 update available",
+                      "%1 updates available",
+                      count());
+
+    if (!isNetworkOnline())
+        return i18nd(kTranslationDomain, "Network is offline");
+
+    if (!m_checkDone)
+        return i18nd(kTranslationDomain, "Idle");
+
+    if (!lastCheckSuccessful())
+        return i18nd(kTranslationDomain, "Update check failed");
+
+    return i18nd(kTranslationDomain, "System is up to date");
 }
 
 QString AmoUpdates::iconName() const
@@ -141,6 +168,7 @@ void AmoUpdates::checkUpdates(bool manual)
     // new check will actually start, so a rejected request (m_active) can't
     // reclassify the operation already in progress.
     m_isManualCheck = manual;
+    m_activity = Activity::CheckingUpdates;
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
@@ -159,6 +187,7 @@ void AmoUpdates::installUpdates(const QStringList &packageIds)
     for (const QString &id : packageIds)
         names << packageBaseName(id);
 
+    m_activity = Activity::InstallingUpdates;
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
@@ -171,6 +200,7 @@ void AmoUpdates::installAllUpdates()
     if (m_active)
         return;
 
+    m_activity = Activity::InstallingUpdates;
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
@@ -332,30 +362,28 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
     }
 
     setActive(false);
+    m_activity = Activity::Idle;
+    m_checkDone = true;
     setLastCheckSuccessful(true);
     setErrorMessage(QString());
     setTimestamp(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     m_lastRefreshTimestamp = QDateTime::currentMSecsSinceEpoch() / 1000.0;
 
-    if (updates.isEmpty()) {
-        setMessage(i18nd(kTranslationDomain, "System is up to date"));
-    } else {
-        setMessage(i18ndp(kTranslationDomain,
-                          "%1 update available",
-                          "%1 updates available",
-                          updates.size()));
+    if (!updates.isEmpty())
         showUpdatesNotification(updates.size());
-    }
 
     emit updatesChanged();
+    // message() depends on m_checkDone, which just became true.
+    emit messageChanged();
 }
 
 void AmoUpdates::onRefreshFinished(bool success, const QString &error)
 {
     if (!success) {
         setActive(false);
+        m_activity = Activity::Idle;
+        m_checkDone = true;
         setLastCheckSuccessful(false);
-        setMessage(i18nd(kTranslationDomain, "Update check failed"));
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
@@ -368,6 +396,8 @@ void AmoUpdates::onRefreshFinished(bool success, const QString &error)
         if (notify)
             showErrorNotification(error);
         emit updatesChanged();
+        // message() depends on m_checkDone, which just became true.
+        emit messageChanged();
         return;
     }
 
@@ -420,18 +450,18 @@ void AmoUpdates::resetFailedAutoRefreshCount()
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
     if (success) {
-        setMessage(i18nd(kTranslationDomain, "Updates installed"));
         setStatusMessage(i18nd(kTranslationDomain, "Refreshing update list..."));
         setErrorMessage(QString());
         resetProgress();
         emit updatesInstalled();
         showInstalledNotification();
         // Stay active while re-fetching the list, then refresh the badge.
+        m_activity = Activity::InstallingUpdates;
         setActive(true);
         m_client.fetchUpdates();
     } else {
         setActive(false);
-        setMessage(i18nd(kTranslationDomain, "Update failed"));
+        m_activity = Activity::Idle;
         setStatusMessage(error);
         setErrorMessage(error);
         emit updateError(error);
@@ -591,13 +621,7 @@ void AmoUpdates::setActive(bool active)
         return;
     m_active = active;
     emit activeChanged();
-}
-
-void AmoUpdates::setMessage(const QString &message)
-{
-    if (m_message == message)
-        return;
-    m_message = message;
+    // message() depends on isActive(), so it may have changed as well.
     emit messageChanged();
 }
 
@@ -648,6 +672,8 @@ void AmoUpdates::setNetworkOnline(bool online)
         return;
     m_networkOnline = online;
     emit networkStateChanged();
+    // message() depends on the network state.
+    emit messageChanged();
 }
 
 void AmoUpdates::setNetworkMobile(bool mobile)
@@ -775,6 +801,8 @@ void AmoUpdates::setLastCheckSuccessful(bool ok)
     if (m_lastCheckSuccessful == ok)
         return;
     m_lastCheckSuccessful = ok;
+    // message() depends on the last check result.
+    emit messageChanged();
 }
 
 void AmoUpdates::showUpdatesNotification(int count)

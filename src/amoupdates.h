@@ -58,7 +58,7 @@ public:
 
     int count() const { return m_client.updates().size(); }
     bool isActive() const { return m_active; }
-    QString message() const { return m_message; }
+    QString message() const;
     QString statusMessage() const { return m_statusMessage; }
     QString errorMessage() const { return m_errorMessage; }
     QString iconName() const;
@@ -140,8 +140,14 @@ private slots:
                                   const QStringList &invalidatedProperties);
 
 private:
+    /// What the backend is currently doing; drives the computed `message`.
+    enum class Activity {
+        Idle,
+        CheckingUpdates,
+        InstallingUpdates,
+    };
+
     void setActive(bool active);
-    void setMessage(const QString &message);
     void setStatusMessage(const QString &message);
     void setErrorMessage(const QString &message);
     void setPercentage(int percentage);
@@ -181,7 +187,11 @@ private:
 
     AmoClient m_client;
     bool m_active = false;
-    QString m_message;
+    Activity m_activity = Activity::Idle;
+    /// Whether at least one update check has completed (successfully or not)
+    /// since the plasmoid started; distinguishes "not checked yet" from
+    /// "last check failed" in the computed `message`.
+    bool m_checkDone = false;
     QString m_statusMessage;
     QString m_errorMessage;
     QString m_timestamp;
