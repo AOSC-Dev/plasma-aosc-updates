@@ -9,6 +9,7 @@
 
 import QtQuick
 import org.kde.plasma.plasmoid
+import org.kde.plasma.components as PlasmaComponents3
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 import io.aosc.plasmaaoscupdates 1.0
@@ -99,6 +100,16 @@ PlasmoidItem
             anchors.fill: parent
             source: AmoUpdates.iconName
             active: parent.containsMouse
+        }
+
+        // Show a spinner on top of the busy icon while a check or install is
+        // running, like the system tray does for Plasmoid.busy. The spinner
+        // follows the panel's color scheme, so it stays visible on both light
+        // and dark panels.
+        PlasmaComponents3.BusyIndicator {
+            anchors.fill: parent
+            running: AmoUpdates.isActive
+            visible: running
         }
 
         onClicked: root.expanded = !root.expanded
