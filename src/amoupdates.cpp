@@ -710,8 +710,11 @@ void AmoUpdates::updateProgressJob()
     if (!m_progressJob)
         return;
 
+    // Only report the overall percentage, not byte counters: the
+    // notification UI derives its "Details" expander from the job's byte /
+    // file amounts, and amo has no per-file details worth showing. The
+    // percentage already covers the whole operation.
     m_progressJob->setProgress(m_percentage, m_statusMessage);
-    m_progressJob->setDownloadProgress(m_downloaded, m_downloadTotal);
 }
 
 void AmoUpdates::finishProgressJob(bool success, const QString &error)

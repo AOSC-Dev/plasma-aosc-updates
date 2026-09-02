@@ -35,10 +35,6 @@ public:
     /// the notification body.
     void setProgress(int percent, const QString &message);
 
-    /// Update download progress (bytes). Pass 0 for \a total to hide the
-    /// byte counters and only show the percentage.
-    void setDownloadProgress(qint64 downloaded, qint64 total);
-
     /// Finish the job. On success the notification disappears; on failure
     /// it stays with the error text.
     void finish(bool success, const QString &error);
