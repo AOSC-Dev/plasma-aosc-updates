@@ -652,6 +652,11 @@ void AmoUpdates::setStatusMessage(const QString &message)
         return;
     m_statusMessage = message;
     emit statusMessageChanged();
+    // The progress notification body mirrors the status message; forward it
+    // even when the percentage didn't change (e.g. spinner or stage
+    // messages with no new percent), so the text doesn't go stale. No-op
+    // when no job is active.
+    updateProgressJob();
 }
 
 void AmoUpdates::setErrorMessage(const QString &message)
