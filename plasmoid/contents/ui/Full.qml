@@ -56,7 +56,7 @@ Item {
             Layout.fillWidth: true
             level: 4
             wrapMode: Text.WordWrap
-            text: AmoUpdates.isNetworkOnline ? AmoUpdates.message : i18n("Network is offline")
+            text: AmoUpdates.message
         }
 
         PlasmaComponents3.Label {
