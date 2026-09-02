@@ -114,8 +114,13 @@ QString AmoUpdates::message() const
 
 QString AmoUpdates::iconName() const
 {
-    if (isActive())
-        return QStringLiteral("update-busy");
+    // Note: there is deliberately no "busy" state here. Breeze's
+    // update-busy.svg does not use `fill="currentColor"` on its main path
+    // (upstream bug), so it cannot be recolored for dark panels and renders
+    // as a dark blob on them. Whether an operation is running is instead
+    // communicated by Plasmoid.busy, which the UI renders as a spinner
+    // overlay that follows the color scheme.
+    //
     // Security updates warrant the red icon; other important (TUM-matched,
     // non-security) updates use the orange icon; routine updates use blue.
     if (hasSecurityUpdates())
