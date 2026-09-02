@@ -209,7 +209,7 @@ Item {
             icon.name: "install"
             Layout.alignment: Qt.AlignHCenter
             text: i18n("Install Updates")
-            onClicked: installDialog.open()
+            onClicked: AmoUpdates.installAllUpdates()
 
             PlasmaComponents3.ToolTip {
                 text: i18n("Performs the software update")
@@ -332,22 +332,6 @@ Item {
                 }
             }
         }
-    }
-
-    QQC2.Dialog {
-        id: installDialog
-
-        title: i18n("Install updates?")
-        modal: true
-        standardButtons: QQC2.Dialog.Ok | QQC2.Dialog.Cancel
-
-        contentItem: PlasmaComponents3.Label {
-            width: Kirigami.Units.gridUnit * 16
-            wrapMode: Text.WordWrap
-            text: i18n("Install all available updates?")
-        }
-
-        onAccepted: AmoUpdates.installAllUpdates()
     }
 
     function updateInterval() {
