@@ -24,6 +24,7 @@ find_package(KF6DBusAddons REQUIRED)
 find_package(KF6Notifications REQUIRED)
 find_package(KF6IconThemes REQUIRED)
 find_package(KF6Declarative REQUIRED)
+find_package(KF6JobWidgets REQUIRED)
 find_package(Plasma REQUIRED)
 
 # Keep the user-local layout compatible with Qt 6's default QML import path
@@ -39,6 +40,7 @@ set(amo_qmlplugins_SRCS
     src/qmlplugins.cpp
     src/amoupdates.cpp
     src/amoclient.cpp
+    src/amojob.cpp
 )
 
 add_library(amoqmlplugin SHARED ${amo_qmlplugins_SRCS})
@@ -57,6 +59,7 @@ target_link_libraries(amoqmlplugin
     KF6::DBusAddons
     KF6::Notifications
     KF6::IconThemes
+    KF6::JobWidgets
 )
 
 # Install the QML plugin into the io/aosc/plasmaaoscupdates module directory.
