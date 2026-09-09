@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: plasma-aosc-updates\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
 "POT-Creation-Date: 2026-09-09 22:50+0800\n"
-"PO-Revision-Date: 2026-09-09 22:47+0800\n"
+"PO-Revision-Date: 2026-09-09 22:51+0800\n"
 "Last-Translator: AOSC Updates contributors\n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
@@ -59,17 +59,15 @@ msgid "Software Updates Available"
 msgstr "有可用的软件更新"
 
 #: ../src/amoupdates.cpp:821
-#, fuzzy
 msgid "%1 system update is available , %2 of which is a security update"
 msgid_plural ""
 "%1 system updates are available, %2 of which are security updates"
 msgstr[0] "有 %1 个可用系统更新，其中 %2 个是安全更新"
 
 #: ../src/amoupdates.cpp:826
-#, fuzzy
 msgid "%1 new update is available "
 msgid_plural "%1 new updates are available"
-msgstr[0] "有 %1 个可用更新"
+msgstr[0] "有 %1 个可用系统更新"
 
 #: ../src/amoupdates.cpp:832
 msgid "Open"
