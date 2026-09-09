@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-09 22:45+0800\n"
+"POT-Creation-Date: 2026-09-09 22:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,14 +65,15 @@ msgid "Software Updates Available"
 msgstr ""
 
 #: ../src/amoupdates.cpp:821
-msgid "You have %1 new update, %2 of which is a security update"
-msgid_plural "You have %1 new updates, %2 of which are security updates"
+msgid "%1 system update is available , %2 of which is a security update"
+msgid_plural ""
+"%1 system updates are available, %2 of which are security updates"
 msgstr[0] ""
 msgstr[1] ""
 
 #: ../src/amoupdates.cpp:826
-msgid "You have %1 new update"
-msgid_plural "You have %1 new updates"
+msgid "%1 new update is available "
+msgid_plural "%1 new updates are available"
 msgstr[0] ""
 msgstr[1] ""
 
