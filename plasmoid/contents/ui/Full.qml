@@ -103,7 +103,7 @@ Item {
                 ? Kirigami.MessageType.Warning
                 : Kirigami.MessageType.Information
             text: AmoUpdates.hasSecurityUpdates
-                ? i18n("Important security updates are available.")
+                ? i18n("Security updates are available.")
                 : i18n("Important updates are available.")
             actions: [
                 Kirigami.Action {

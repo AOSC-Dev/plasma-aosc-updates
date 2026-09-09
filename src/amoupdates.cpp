@@ -813,7 +813,7 @@ void AmoUpdates::showUpdatesNotification(int count)
     if (security)
         m_lastNotification->setUrgency(KNotification::CriticalUrgency);
     m_lastNotification->setTitle(security
-        ? i18nd(kTranslationDomain, "Important Security Updates Available")
+        ? i18nd(kTranslationDomain, "Security Updates Available")
         : i18nd(kTranslationDomain, "Software Updates Available"));
     const int securityCount = securityUpdateCount();
     if (securityCount > 0) {
