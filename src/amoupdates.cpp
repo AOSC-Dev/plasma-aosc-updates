@@ -818,13 +818,13 @@ void AmoUpdates::showUpdatesNotification(int count)
     const int securityCount = securityUpdateCount();
     if (securityCount > 0) {
         m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "You have %1 new update, %2 of which is a security update",
-                                           "You have %1 new updates, %2 of which are security updates",
+                                           "%1 system update is available , %2 of which is a security update",
+                                           "%1 system updates are available, %2 of which are security updates",
                                            count, securityCount));
     } else {
         m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "You have %1 new update",
-                                           "You have %1 new updates",
+                                           "%1 new update is available ",
+                                           "%1 new updates are available",
                                            count));
     }
     m_lastNotification->setIconName(QStringLiteral("update-high"));
