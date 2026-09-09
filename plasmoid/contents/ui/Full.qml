@@ -299,33 +299,12 @@ Item {
 
                             PlasmaComponents3.Label {
                                 Layout.fillWidth: true
-                                opacity: 0.6
-                                text: i18np("Affects %1 package",
-                                           "Affects %1 packages",
-                                           packageCount)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
                                 visible: packages !== ""
                                 wrapMode: Text.WrapAnywhere
                                 opacity: 0.6
-                                text: i18n("Affected packages: %1", packages)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
-                                visible: childTopics !== ""
-                                wrapMode: Text.WrapAnywhere
-                                opacity: 0.6
-                                text: i18n("Included topics: %1", childTopics)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
-                                opacity: 0.6
-                                elide: Text.ElideRight
-                                text: i18n("Topic ID: %1", topicId)
+                                text: i18np("Affects %1 package: %2",
+                                            "Affects %1 packages: %2",
+                                            packageCount, packages)
                             }
                         }
                     }
