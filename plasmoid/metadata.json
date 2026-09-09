@@ -9,14 +9,6 @@
             {
                 "Name": "Mingcong Bai",
                 "Email": "jeffbai@aosc.io"
-            },
-            {
-                "Name": "DeepSeek",
-                "Email": "noreply@deepseek.com"
-            },
-            {
-                "Name": "OpenAI",
-                "Email": "noreply@openai.com"
             }
         ],
         "Category": "System Information",
@@ -27,6 +19,18 @@
         "License": "GPL-2.0-or-later",
         "Name": "System Updates",
         "Name[zh_CN]": "系统更新",
+        "OtherContributors": [
+            {
+                "Name": "DeepSeek",
+                "Email": "noreply@deepseek.com",
+                "Task": "AI assistance"
+            },
+            {
+                "Name": "OpenAI",
+                "Email": "noreply@openai.com",
+                "Task": "AI assistance"
+            }
+        ],
         "Version": "1.0",
         "Website": ""
     },
