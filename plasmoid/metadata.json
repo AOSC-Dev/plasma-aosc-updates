@@ -4,17 +4,17 @@
         "Authors": [
             {
                 "Email": "",
-                "Name": "AOSC Updates"
+                "Name": "System Update"
             }
         ],
         "Category": "System Information",
-        "Description": "Check and install system updates via amo",
-        "Description[zh_CN]": "通过 amo 检查并安装系统更新",
+        "Description": "Check and install AOSC OS system updates",
+        "Description[zh_CN]": "检查并安装 AOSC OS 系统更新",
         "Icon": "system-software-update",
         "Id": "io.aosc.plasmaaoscupdates.updates",
         "License": "GPL-2.0-or-later",
-        "Name": "AOSC Updates",
-        "Name[zh_CN]": "AOSC 更新",
+        "Name": "System Updates",
+        "Name[zh_CN]": "系统更新",
         "Version": "1.0",
         "Website": ""
     },

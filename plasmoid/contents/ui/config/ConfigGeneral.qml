@@ -54,13 +54,13 @@ KCM.SimpleKCM {
             id: battery
             Kirigami.FormData.label: i18nc("@label part of a sentence", "Check for updates when:")
             enabled: autoCheck.checked
-            text: i18nc("@option:check part of a sentence: Check for updates when", "On battery")
+            text: i18nc("@option:check part of a sentence: Check for updates when", "Running on battery power")
         }
 
         CheckBox {
             id: mobile
             enabled: autoCheck.checked
-            text: i18nc("@option:check part of a sentence: Check for updates when", "On a mobile connection")
+            text: i18nc("@option:check part of a sentence: Check for updates when", "Connected via a mobile broadband connection")
         }
     }
 }
