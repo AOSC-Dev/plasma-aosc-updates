@@ -90,8 +90,8 @@ QString AmoUpdates::message() const
     // operation is running).
     if (isActive()) {
         if (m_activity == Activity::CheckingUpdates)
-            return i18nd(kTranslationDomain, "Checking for updates...");
-        return i18nd(kTranslationDomain, "Installing updates...");
+            return i18nd(kTranslationDomain, "Checking for updates…");
+        return i18nd(kTranslationDomain, "Installing updates…");
     }
 
     if (!isSystemUpToDate())
@@ -172,7 +172,7 @@ void AmoUpdates::checkUpdates(bool manual)
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Checking for updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Checking for updates…"));
     m_client.refresh();
 }
 
@@ -185,7 +185,7 @@ void AmoUpdates::installAllUpdates()
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Installing all updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Installing system updates…"));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
 
@@ -431,7 +431,7 @@ void AmoUpdates::resetFailedAutoRefreshCount()
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
     if (success) {
-        setStatusMessage(i18nd(kTranslationDomain, "Refreshing update list..."));
+        setStatusMessage(i18nd(kTranslationDomain, "Checking for updates…"));
         setErrorMessage(QString());
         resetProgress();
         emit updatesInstalled();
