@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-09 22:33+0800\n"
+"POT-Creation-Date: 2026-09-09 22:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgid "Installing system updates…"
 msgstr ""
 
 #: ../src/amoupdates.cpp:816
-msgid "Important Security Updates Available"
+msgid "Security Updates Available"
 msgstr ""
 
 #: ../src/amoupdates.cpp:817
@@ -146,11 +146,13 @@ msgid "Connected via a mobile broadband connection"
 msgstr ""
 
 #: ../plasmoid/contents/ui/PackageDelegate.qml:28
-msgid "Security update"
+#: ../plasmoid/contents/ui/Full.qml:290
+msgid "Security Update"
 msgstr ""
 
 #: ../plasmoid/contents/ui/PackageDelegate.qml:29
-msgid "Important update"
+#: ../plasmoid/contents/ui/Full.qml:290
+msgid "Important Update"
 msgstr ""
 
 #: ../plasmoid/contents/ui/PackageDelegate.qml:30
@@ -170,7 +172,7 @@ msgid "Install"
 msgstr ""
 
 #: ../plasmoid/contents/ui/PackageDelegate.qml:34
-msgid "Upgrade"
+msgid "System Update"
 msgstr ""
 
 #: ../plasmoid/contents/ui/PackageDelegate.qml:65
@@ -200,7 +202,7 @@ msgid "Error: %1"
 msgstr ""
 
 #: ../plasmoid/contents/ui/Full.qml:106
-msgid "Important security updates are available."
+msgid "Security updates are available."
 msgstr ""
 
 #: ../plasmoid/contents/ui/Full.qml:107
@@ -249,14 +251,6 @@ msgstr ""
 
 #: ../plasmoid/contents/ui/Full.qml:247
 msgid "Update Details"
-msgstr ""
-
-#: ../plasmoid/contents/ui/Full.qml:290
-msgid "Security Update"
-msgstr ""
-
-#: ../plasmoid/contents/ui/Full.qml:290
-msgid "Important Update"
 msgstr ""
 
 #: ../plasmoid/contents/ui/Full.qml:305
