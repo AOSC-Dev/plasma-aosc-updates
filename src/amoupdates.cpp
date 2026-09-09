@@ -176,25 +176,6 @@ void AmoUpdates::checkUpdates(bool manual)
     m_client.refresh();
 }
 
-void AmoUpdates::installUpdates(const QStringList &packageIds)
-{
-    if (m_active || packageIds.isEmpty())
-        return;
-
-    // packageIds are "name:arch" qualified ids; amo expects bare names.
-    QStringList names;
-    names.reserve(packageIds.size());
-    for (const QString &id : packageIds)
-        names << packageBaseName(id);
-
-    m_activity = Activity::InstallingUpdates;
-    setActive(true);
-    resetProgress();
-    setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Installing updates..."));
-    m_client.applyChanges(names, QStringList(), false);
-}
-
 void AmoUpdates::installAllUpdates()
 {
     if (m_active)

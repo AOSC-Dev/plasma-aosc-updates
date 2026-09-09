@@ -78,7 +78,6 @@ public:
 
     // ---- Methods callable from QML ----
     Q_INVOKABLE void checkUpdates(bool manual);
-    Q_INVOKABLE void installUpdates(const QStringList &packageIds);
     Q_INVOKABLE void installAllUpdates();
     Q_INVOKABLE QString packageName(const QString &packageId) const;
     Q_INVOKABLE QString packageVersion(const QString &packageId) const;
