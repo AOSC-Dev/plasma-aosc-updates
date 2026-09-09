@@ -385,7 +385,15 @@ Item {
         for (var j = 0; j < ordered.length; j++) {
             var id = ordered[j]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id), "isSecurity": AmoUpdates.packageIsSecurity(id), "isImportant": AmoUpdates.packageIsImportant(id)})
+            updatesModel.append({
+                "id": id,
+                "name": AmoUpdates.packageName(id),
+                "desc": desc,
+                "version": AmoUpdates.packageVersion(id),
+                "operation": AmoUpdates.packageOperation(id),
+                "isSecurity": AmoUpdates.packageIsSecurity(id),
+                "isImportant": AmoUpdates.packageIsImportant(id)
+            })
         }
 
         topicUpdatesModel.clear()
