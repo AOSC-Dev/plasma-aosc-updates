@@ -15,3 +15,7 @@ xgettext \
 	--package-version='1.0' \
 	--msgid-bugs-address='maintainers@aosc.io' \
 	-o messages.pot
+
+for i in */*.po; do
+	msgmerge -U $i messages.pot
+done
