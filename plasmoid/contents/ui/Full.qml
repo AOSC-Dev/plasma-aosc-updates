@@ -323,6 +323,15 @@ Item {
 
                             PlasmaComponents3.Label {
                                 Layout.fillWidth: true
+                                // For most topics the ID is just the display
+                                // name lowercased with dashes instead of
+                                // spaces (e.g. "Bubblewrap 0.12.0" vs
+                                // "bubblewrap-0.12.0"), so showing it would
+                                // only repeat the heading above. It carries
+                                // extra information only for the rest (e.g.
+                                // "core-13-fixes-20251218" displayed as
+                                // "AOSC OS Core 13.0.2").
+                                visible: topicId !== displayName.toLowerCase().replace(/\s+/g, "-")
                                 opacity: 0.6
                                 elide: Text.ElideRight
                                 text: i18n("Topic ID: %1", topicId)
