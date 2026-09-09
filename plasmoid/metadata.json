@@ -3,8 +3,20 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "",
-                "Name": "System Update"
+                "Name": "Mag Mell",
+                "Email": "sakiiily@aosc.io"
+            },
+            {
+                "Name": "Mingcong Bai",
+                "Email": "jeffbai@aosc.io"
+            },
+            {
+                "Name": "DeepSeek",
+                "Email": "noreply@deepseek.com"
+            },
+            {
+                "Name": "OpenAI",
+                "Email": "noreply@openai.com"
             }
         ],
         "Category": "System Information",
