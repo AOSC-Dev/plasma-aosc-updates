@@ -19,74 +19,307 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.8.1\n"
 
-#: ../src/amoupdates.cpp:63
+#: ../plasmoid/contents/ui/Full.qml:72
+msgid "Updates are automatically checked %1."
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:88
+msgid "Last check: %1 ago"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:96
+msgid "Error: %1"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:106
+msgid "Security updates are available."
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:107
+msgid "Important updates are available."
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:111
+msgid "Details…"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:179
+msgid "Your system is up to date."
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:181
+msgid "Failed to check for updates."
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:182
+msgid "Update check in progress, please wait…"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:186
+msgid "Retry"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:186
+msgid "Check for Updates"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:202
+msgid "Download size: %1 · Storage space required: %2"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:211
+msgid "Install Updates"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:215
+msgid "Perform system update"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:239
+msgid "Back"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:247
+msgid "Update Details"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:290
+#: ../plasmoid/contents/ui/PackageDelegate.qml:28
+msgid "Security Update"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:290
+#: ../plasmoid/contents/ui/PackageDelegate.qml:29
+msgid "Important Update"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:305
+msgid "Affects %1 package: %2"
+msgid_plural "Affects %1 packages: %2"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:318
+msgid "daily"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:320
+msgid "weekly"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:322
+msgid "monthly"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:323 ../plasmoid/contents/ui/Full.qml:328
+msgid "never"
+msgstr ""
+
+#: ../plasmoid/contents/ui/Full.qml:331
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:334
+msgid "%1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:337
+msgid "%1 hour"
+msgid_plural "%1 hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:339
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:354
+msgid "%1 byte"
+msgid_plural "%1 bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../plasmoid/contents/ui/Full.qml:358
+msgid "%1 %2"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:30
+msgid "Remove"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:31
+msgid "Downgrade"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:32
+msgid "Reinstall"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:33
+msgid "Install"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:34
+msgid "System Update"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:65
+msgctxt "Package Name (Version)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:104
+msgctxt "description of the update"
+msgid "Update Description"
+msgstr ""
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:111
+msgid "No description available"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:23
+msgctxt "@label"
+msgid "Automatic update checks:"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
+msgid "Check for updates automatically"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:33
+msgctxt "@label check interval for updates"
+msgid "Check interval:"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:36
+msgid "Daily"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:43
+msgid "Weekly"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:50
+msgid "Monthly"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:55
+msgctxt "@label part of a sentence"
+msgid "Check for updates when:"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:57
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Running on battery power"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:63
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Connected via a mobile broadband connection"
+msgstr ""
+
+#: ../plasmoid/contents/config/config.qml:6
+msgid "General"
+msgstr ""
+
+#: ../src/amoclient.cpp:107 ../src/amoclient.cpp:122 ../src/amoclient.cpp:138
+msgid "Cannot connect to amo D-Bus service."
+msgstr ""
+
+#: ../src/amoclient.cpp:300
+msgid "The update service was restarted during the operation."
+msgstr ""
+
+#: ../src/amoclient.cpp:428
+msgid "Failed to parse result: %1"
+msgstr ""
+
+#: ../src/amoupdates.cpp:64
 msgid "Error"
 msgstr "Error"
 
-#: ../src/amoupdates.cpp:82 ../src/amoupdates.cpp:107
+#: ../src/amoupdates.cpp:84 ../src/amoupdates.cpp:114
 msgid "Idle"
 msgstr "Idle"
 
-#: ../src/amoupdates.cpp:93 ../src/amoupdates.cpp:175 ../src/amoupdates.cpp:434
+#: ../src/amoupdates.cpp:100 ../src/amoupdates.cpp:182
 msgid "Checking for updates…"
 msgstr "Checking for updates…"
 
-#: ../src/amoupdates.cpp:94
+#: ../src/amoupdates.cpp:101
 msgid "Installing updates…"
 msgstr "Installing updates…"
 
-#: ../src/amoupdates.cpp:99
+#: ../src/amoupdates.cpp:106
 msgid "%1 update available"
 msgid_plural "%1 updates available"
 msgstr[0] "%1 update available"
 msgstr[1] "%1 updates available"
 
-#: ../src/amoupdates.cpp:104
+#: ../src/amoupdates.cpp:111
 msgid "Network is offline"
 msgstr "Network is offline"
 
-#: ../src/amoupdates.cpp:110 ../src/amoupdates.cpp:850
+#: ../src/amoupdates.cpp:117 ../src/amoupdates.cpp:925
 msgid "Update check failed"
 msgstr "Update check failed"
 
-#: ../src/amoupdates.cpp:112
+#: ../src/amoupdates.cpp:119
 msgid "System is up to date"
 msgstr "System is up to date"
 
-#: ../src/amoupdates.cpp:188
+#: ../src/amoupdates.cpp:187
+msgid "Checking for updates"
+msgstr ""
+
+#: ../src/amoupdates.cpp:200
 msgid "Installing system updates…"
 msgstr "Installing system updates…"
 
-#: ../src/amoupdates.cpp:816
+#: ../src/amoupdates.cpp:201
+msgid "Installing system updates"
+msgstr ""
+
+#: ../src/amoupdates.cpp:457
+msgid "Refreshing update list…"
+msgstr ""
+
+#: ../src/amoupdates.cpp:891
 msgid "Security Updates Available"
 msgstr "Security Updates Available"
 
-#: ../src/amoupdates.cpp:817
+#: ../src/amoupdates.cpp:892
 msgid "Software Updates Available"
 msgstr "Software Updates Available"
 
-#: ../src/amoupdates.cpp:821
+#: ../src/amoupdates.cpp:896
 msgid "%1 system update is available , %2 of which is a security update"
 msgid_plural ""
 "%1 system updates are available, %2 of which are security updates"
 msgstr[0] "%1 system update is available , %2 of which is a security update"
 msgstr[1] "%1 system updates are available, %2 of which are security updates"
 
-#: ../src/amoupdates.cpp:826
+#: ../src/amoupdates.cpp:901
 msgid "%1 new update is available "
 msgid_plural "%1 new updates are available"
 msgstr[0] "%1 new update is available "
 msgstr[1] "%1 new updates are available"
 
-#: ../src/amoupdates.cpp:832
+#: ../src/amoupdates.cpp:907
 msgid "Open"
 msgstr "Open"
 
-#: ../src/amoupdates.cpp:862
+#: ../src/amoupdates.cpp:937
 msgid "Updates installed"
 msgstr "Updates installed"
 
-#: ../src/amoupdates.cpp:864
+#: ../src/amoupdates.cpp:939
 msgid "The system has been updated successfully."
 msgstr "The system has been updated successfully."
 

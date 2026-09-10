@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-09 22:50+0800\n"
+"POT-Creation-Date: 2026-09-10 11:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,74 +18,86 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../src/amoupdates.cpp:63
+#: ../src/amoupdates.cpp:64
 msgid "Error"
 msgstr ""
 
-#: ../src/amoupdates.cpp:82 ../src/amoupdates.cpp:107
+#: ../src/amoupdates.cpp:84 ../src/amoupdates.cpp:114
 msgid "Idle"
 msgstr ""
 
-#: ../src/amoupdates.cpp:93 ../src/amoupdates.cpp:175 ../src/amoupdates.cpp:434
+#: ../src/amoupdates.cpp:100 ../src/amoupdates.cpp:182
 msgid "Checking for updates…"
 msgstr ""
 
-#: ../src/amoupdates.cpp:94
+#: ../src/amoupdates.cpp:101
 msgid "Installing updates…"
 msgstr ""
 
-#: ../src/amoupdates.cpp:99
+#: ../src/amoupdates.cpp:106
 msgid "%1 update available"
 msgid_plural "%1 updates available"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/amoupdates.cpp:104
+#: ../src/amoupdates.cpp:111
 msgid "Network is offline"
 msgstr ""
 
-#: ../src/amoupdates.cpp:110 ../src/amoupdates.cpp:850
+#: ../src/amoupdates.cpp:117 ../src/amoupdates.cpp:925
 msgid "Update check failed"
 msgstr ""
 
-#: ../src/amoupdates.cpp:112
+#: ../src/amoupdates.cpp:119
 msgid "System is up to date"
 msgstr ""
 
-#: ../src/amoupdates.cpp:188
+#: ../src/amoupdates.cpp:187
+msgid "Checking for updates"
+msgstr ""
+
+#: ../src/amoupdates.cpp:200
 msgid "Installing system updates…"
 msgstr ""
 
-#: ../src/amoupdates.cpp:816
+#: ../src/amoupdates.cpp:201
+msgid "Installing system updates"
+msgstr ""
+
+#: ../src/amoupdates.cpp:457
+msgid "Refreshing update list…"
+msgstr ""
+
+#: ../src/amoupdates.cpp:891
 msgid "Security Updates Available"
 msgstr ""
 
-#: ../src/amoupdates.cpp:817
+#: ../src/amoupdates.cpp:892
 msgid "Software Updates Available"
 msgstr ""
 
-#: ../src/amoupdates.cpp:821
+#: ../src/amoupdates.cpp:896
 msgid "%1 system update is available , %2 of which is a security update"
 msgid_plural ""
 "%1 system updates are available, %2 of which are security updates"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/amoupdates.cpp:826
+#: ../src/amoupdates.cpp:901
 msgid "%1 new update is available "
 msgid_plural "%1 new updates are available"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/amoupdates.cpp:832
+#: ../src/amoupdates.cpp:907
 msgid "Open"
 msgstr ""
 
-#: ../src/amoupdates.cpp:862
+#: ../src/amoupdates.cpp:937
 msgid "Updates installed"
 msgstr ""
 
-#: ../src/amoupdates.cpp:864
+#: ../src/amoupdates.cpp:939
 msgid "The system has been updated successfully."
 msgstr ""
 
