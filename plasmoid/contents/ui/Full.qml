@@ -103,12 +103,12 @@ Item {
                 ? Kirigami.MessageType.Warning
                 : Kirigami.MessageType.Information
             text: AmoUpdates.hasSecurityUpdates
-                ? i18n("Important security updates are available.")
+                ? i18n("Security updates are available.")
                 : i18n("Important updates are available.")
             actions: [
                 Kirigami.Action {
                     icon.name: "documentinfo"
-                    text: i18n("View Details")
+                    text: i18n("Details…")
                     onTriggered: showDetails = true
                 }
             ]
@@ -176,10 +176,10 @@ Item {
                 visible: AmoUpdates.count === 0 && !AmoUpdates.isActive
 
                 text: AmoUpdates.lastCheckSuccessful
-                    ? i18n("No updates available")
+                    ? i18n("Your system is up to date.")
                     : (AmoUpdates.errorMessage !== ""
-                        ? i18n("The update check failed")
-                        : i18n("Update check has not completed"))
+                        ? i18n("Failed to check for updates.")
+                        : i18n("Update check in progress, please wait…"))
 
                 helpfulAction: QQC2.Action {
                     icon.name: "view-refresh"
@@ -199,7 +199,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
-            text: i18n("Download size: %1 · Disk space: %2",
+            text: i18n("Download size: %1 · Storage space required: %2",
                        formatBytes(AmoUpdates.totalDownloadSize),
                        formatBytes(AmoUpdates.diskSizeDelta, true))
         }
@@ -212,7 +212,7 @@ Item {
             onClicked: AmoUpdates.installAllUpdates()
 
             PlasmaComponents3.ToolTip {
-                text: i18n("Performs the software update")
+                text: i18n("Perform system update")
             }
         }
     }
@@ -287,7 +287,7 @@ Item {
                                 color: isSecurity
                                     ? Kirigami.Theme.negativeTextColor
                                     : Kirigami.Theme.highlightColor
-                                text: isSecurity ? i18n("Security update") : i18n("Important update")
+                                text: isSecurity ? i18n("Security Update") : i18n("Important Update")
                             }
 
                             PlasmaComponents3.Label {
@@ -299,33 +299,12 @@ Item {
 
                             PlasmaComponents3.Label {
                                 Layout.fillWidth: true
-                                opacity: 0.6
-                                text: i18np("Affects %1 package",
-                                           "Affects %1 packages",
-                                           packageCount)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
                                 visible: packages !== ""
                                 wrapMode: Text.WrapAnywhere
                                 opacity: 0.6
-                                text: i18n("Affected packages: %1", packages)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
-                                visible: childTopics !== ""
-                                wrapMode: Text.WrapAnywhere
-                                opacity: 0.6
-                                text: i18n("Included topics: %1", childTopics)
-                            }
-
-                            PlasmaComponents3.Label {
-                                Layout.fillWidth: true
-                                opacity: 0.6
-                                elide: Text.ElideRight
-                                text: i18n("Topic ID: %1", topicId)
+                                text: i18np("Affects %1 package: %2",
+                                            "Affects %1 packages: %2",
+                                            packageCount, packages)
                             }
                         }
                     }
@@ -364,7 +343,7 @@ Item {
         var value = Number(bytes)
         var negative = signed && value < 0
         var abs = Math.abs(value)
-        var units = ["B", "KB", "MB", "GB", "TB"]
+        var units = ["B", "KiB", "MiB", "GiB", "TiB"]
         var unit = 0
         while (abs >= 1024 && unit < units.length - 1) {
             abs /= 1024
@@ -406,7 +385,15 @@ Item {
         for (var j = 0; j < ordered.length; j++) {
             var id = ordered[j]
             var desc = AmoUpdates.packageDescription(id)
-            updatesModel.append({"id": id, "name": AmoUpdates.packageName(id), "desc": desc, "version": AmoUpdates.packageVersion(id), "operation": AmoUpdates.packageOperation(id), "isSecurity": AmoUpdates.packageIsSecurity(id), "isImportant": AmoUpdates.packageIsImportant(id)})
+            updatesModel.append({
+                "id": id,
+                "name": AmoUpdates.packageName(id),
+                "desc": desc,
+                "version": AmoUpdates.packageVersion(id),
+                "operation": AmoUpdates.packageOperation(id),
+                "isSecurity": AmoUpdates.packageIsSecurity(id),
+                "isImportant": AmoUpdates.packageIsImportant(id)
+            })
         }
 
         topicUpdatesModel.clear()

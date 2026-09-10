@@ -90,8 +90,8 @@ QString AmoUpdates::message() const
     // operation is running).
     if (isActive()) {
         if (m_activity == Activity::CheckingUpdates)
-            return i18nd(kTranslationDomain, "Checking for updates...");
-        return i18nd(kTranslationDomain, "Installing updates...");
+            return i18nd(kTranslationDomain, "Checking for updates…");
+        return i18nd(kTranslationDomain, "Installing updates…");
     }
 
     if (!isSystemUpToDate())
@@ -172,27 +172,8 @@ void AmoUpdates::checkUpdates(bool manual)
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Checking for updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Checking for updates…"));
     m_client.refresh();
-}
-
-void AmoUpdates::installUpdates(const QStringList &packageIds)
-{
-    if (m_active || packageIds.isEmpty())
-        return;
-
-    // packageIds are "name:arch" qualified ids; amo expects bare names.
-    QStringList names;
-    names.reserve(packageIds.size());
-    for (const QString &id : packageIds)
-        names << packageBaseName(id);
-
-    m_activity = Activity::InstallingUpdates;
-    setActive(true);
-    resetProgress();
-    setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Installing updates..."));
-    m_client.applyChanges(names, QStringList(), false);
 }
 
 void AmoUpdates::installAllUpdates()
@@ -204,7 +185,7 @@ void AmoUpdates::installAllUpdates()
     setActive(true);
     resetProgress();
     setErrorMessage(QString());
-    setStatusMessage(i18nd(kTranslationDomain, "Installing all updates..."));
+    setStatusMessage(i18nd(kTranslationDomain, "Installing system updates…"));
     m_client.applyChanges(QStringList(), QStringList(), true);
 }
 
@@ -450,7 +431,7 @@ void AmoUpdates::resetFailedAutoRefreshCount()
 void AmoUpdates::onApplyFinished(bool success, const QString &error)
 {
     if (success) {
-        setStatusMessage(i18nd(kTranslationDomain, "Refreshing update list..."));
+        setStatusMessage(i18nd(kTranslationDomain, "Checking for updates…"));
         setErrorMessage(QString());
         resetProgress();
         emit updatesInstalled();
@@ -832,18 +813,18 @@ void AmoUpdates::showUpdatesNotification(int count)
     if (security)
         m_lastNotification->setUrgency(KNotification::CriticalUrgency);
     m_lastNotification->setTitle(security
-        ? i18nd(kTranslationDomain, "Important Security Updates Available")
+        ? i18nd(kTranslationDomain, "Security Updates Available")
         : i18nd(kTranslationDomain, "Software Updates Available"));
     const int securityCount = securityUpdateCount();
     if (securityCount > 0) {
         m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "You have %1 new update, %2 of which is a security update",
-                                           "You have %1 new updates, %2 of which are security updates",
+                                           "%1 system update is available , %2 of which is a security update",
+                                           "%1 system updates are available, %2 of which are security updates",
                                            count, securityCount));
     } else {
         m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "You have %1 new update",
-                                           "You have %1 new updates",
+                                           "%1 new update is available ",
+                                           "%1 new updates are available",
                                            count));
     }
     m_lastNotification->setIconName(QStringLiteral("update-high"));

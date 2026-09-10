@@ -18,11 +18,11 @@
       <default>false</default>
     </entry>
     <entry name="check_on_battery" type="Bool">
-      <label>Check for updates when on battery</label>
+      <label>Check for updates while running on battery</label>
       <default>false</default>
     </entry>
     <entry name="check_on_mobile" type="Bool">
-      <label>Check for updates when on a mobile connection</label>
+      <label>Check for updates while connected via a mobile broadband connections</label>
       <default>false</default>
     </entry>
     <entry name="auto_check" type="Bool">

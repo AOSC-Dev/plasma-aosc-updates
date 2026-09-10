@@ -25,13 +25,13 @@ PlasmaExtras.ListItem {
     // "Important update" in blue, routine upgrades keep their operation label.
     // isSecurity / isImportant come from the ListModel (do NOT declare
     // readonly properties with the same name, they would shadow the model).
-    readonly property string operationLabel: isSecurity ? i18n("Security update")
-                                            : isImportant ? i18n("Important update")
+    readonly property string operationLabel: isSecurity ? i18n("Security Update")
+                                            : isImportant ? i18n("Important Update")
                                             : operation === "Remove" ? i18n("Remove")
                                             : operation === "Downgrade" ? i18n("Downgrade")
                                             : operation === "ReInstall" ? i18n("Reinstall")
                                             : operation === "Install" ? i18n("Install")
-                                            : i18n("Upgrade")
+                                            : i18n("System Update")
     readonly property color operationColor: isSecurity ? Kirigami.Theme.negativeTextColor
                                             : isImportant ? Kirigami.Theme.highlightColor
                                             : operation === "Remove" ? Kirigami.Theme.negativeTextColor
