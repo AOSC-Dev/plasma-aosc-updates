@@ -863,12 +863,16 @@ void AmoUpdates::setLastCheckSuccessful(bool ok)
 
 void AmoUpdates::showUpdatesNotification(int count)
 {
+    // The notification icon follows the same severity mapping as the tray
+    // icon: security updates are red, other important (TUM-matched) updates
+    // are orange, routine updates are blue.
+    const QString icon = iconName();
     // Only notify when the number of available updates changed since the
-    // last notification, or when the same transaction becomes important, so
+    // last notification, or when the transaction's severity changed, so
     // automatic checks don't spam the user while security changes stand out.
     const bool security = hasSecurityUpdates();
     if (count == m_lastUpdateCount
-        && security == m_lastNotificationWasImportant
+        && icon == m_lastNotificationIconName
         && m_lastNotification) {
         return;
     }
@@ -877,7 +881,7 @@ void AmoUpdates::showUpdatesNotification(int count)
         m_lastNotification->close();
 
     m_lastUpdateCount = count;
-    m_lastNotificationWasImportant = security;
+    m_lastNotificationIconName = icon;
     // Routine updates auto-close after a few seconds; security updates stay
     // until dismissed and are marked as important.
     m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
@@ -902,7 +906,7 @@ void AmoUpdates::showUpdatesNotification(int count)
                                            "%1 new updates are available",
                                            count));
     }
-    m_lastNotification->setIconName(QStringLiteral("update-high"));
+    m_lastNotification->setIconName(icon);
     KNotificationAction *openAction = m_lastNotification->addDefaultAction(
         i18nd(kTranslationDomain, "Open"));
     connect(openAction, &KNotificationAction::activated, this, [this]() {
@@ -911,7 +915,7 @@ void AmoUpdates::showUpdatesNotification(int count)
     connect(m_lastNotification, &KNotification::closed, this, [this]() {
         m_lastNotification = nullptr;
         m_lastUpdateCount = 0;
-        m_lastNotificationWasImportant = false;
+        m_lastNotificationIconName.clear();
     });
     m_lastNotification->sendEvent();
 }
