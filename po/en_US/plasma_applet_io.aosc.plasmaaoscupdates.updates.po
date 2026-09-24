@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-09 22:50+0800\n"
+"POT-Creation-Date: 2026-09-24 13:36+0800\n"
 "PO-Revision-Date: 2026-09-11 07:19+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: English (United States) <https://weblate.aosc.io/projects/"
@@ -19,133 +19,133 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 2026.8.1\n"
 
-#: ../plasmoid/contents/ui/Full.qml:72
+#: ../plasmoid/contents/ui/Full.qml:73
 msgid "Updates are automatically checked %1."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:88
+#: ../plasmoid/contents/ui/Full.qml:92
 msgid "Last check: %1 ago"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:96
+#: ../plasmoid/contents/ui/Full.qml:100
 msgid "Error: %1"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:106
+#: ../plasmoid/contents/ui/Full.qml:110
 msgid "Security updates are available."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:107
+#: ../plasmoid/contents/ui/Full.qml:111
 msgid "Important updates are available."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:111
+#: ../plasmoid/contents/ui/Full.qml:115
 msgid "Details…"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:179
+#: ../plasmoid/contents/ui/Full.qml:187
 msgid "Your system is up to date."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:181
+#: ../plasmoid/contents/ui/Full.qml:189
 msgid "Failed to check for updates."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:182
-msgid "Update check in progress, please wait…"
+#: ../plasmoid/contents/ui/Full.qml:190
+msgid "Updates have not been checked yet."
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:186
+#: ../plasmoid/contents/ui/Full.qml:194
 msgid "Retry"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:186
+#: ../plasmoid/contents/ui/Full.qml:194
 msgid "Check for Updates"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:202
+#: ../plasmoid/contents/ui/Full.qml:210
 msgid "Download size: %1 · Storage space required: %2"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:211
+#: ../plasmoid/contents/ui/Full.qml:219
 msgid "Install Updates"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:215
+#: ../plasmoid/contents/ui/Full.qml:223
 msgid "Perform system update"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:239
+#: ../plasmoid/contents/ui/Full.qml:247
 msgid "Back"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:247
+#: ../plasmoid/contents/ui/Full.qml:255
 msgid "Update Details"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:290
+#: ../plasmoid/contents/ui/Full.qml:298
 #: ../plasmoid/contents/ui/PackageDelegate.qml:28
 msgid "Security Update"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:290
+#: ../plasmoid/contents/ui/Full.qml:298
 #: ../plasmoid/contents/ui/PackageDelegate.qml:29
 msgid "Important Update"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:305
+#: ../plasmoid/contents/ui/Full.qml:313
 msgid "Affects %1 package: %2"
 msgid_plural "Affects %1 packages: %2"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:318
+#: ../plasmoid/contents/ui/Full.qml:326
 msgid "daily"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:320
+#: ../plasmoid/contents/ui/Full.qml:328
 msgid "weekly"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:322
+#: ../plasmoid/contents/ui/Full.qml:330
 msgid "monthly"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:323 ../plasmoid/contents/ui/Full.qml:328
+#: ../plasmoid/contents/ui/Full.qml:331 ../plasmoid/contents/ui/Full.qml:336
 msgid "never"
 msgstr ""
 
-#: ../plasmoid/contents/ui/Full.qml:331
+#: ../plasmoid/contents/ui/Full.qml:339
 msgid "%1 second"
 msgid_plural "%1 seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:334
+#: ../plasmoid/contents/ui/Full.qml:342
 msgid "%1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:337
+#: ../plasmoid/contents/ui/Full.qml:345
 msgid "%1 hour"
 msgid_plural "%1 hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:339
+#: ../plasmoid/contents/ui/Full.qml:347
 msgid "%1 day"
 msgid_plural "%1 days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:354
+#: ../plasmoid/contents/ui/Full.qml:362
 msgid "%1 byte"
 msgid_plural "%1 bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../plasmoid/contents/ui/Full.qml:358
+#: ../plasmoid/contents/ui/Full.qml:366
 msgid "%1 %2"
 msgstr ""
 
@@ -183,45 +183,49 @@ msgstr ""
 msgid "No description available"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:23
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
 msgctxt "@label"
 msgid "Automatic update checks:"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:25
 msgid "Check for updates automatically"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:33
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:34
 msgctxt "@label check interval for updates"
 msgid "Check interval:"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:36
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:37
 msgid "Daily"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:43
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:44
 msgid "Weekly"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:50
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:51
 msgid "Monthly"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:55
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:56
 msgctxt "@label part of a sentence"
 msgid "Check for updates when:"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:57
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:58
 msgctxt "@option:check part of a sentence: Check for updates when"
 msgid "Running on battery power"
 msgstr ""
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:63
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:64
 msgctxt "@option:check part of a sentence: Check for updates when"
 msgid "Connected via a mobile broadband connection"
+msgstr ""
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:70
+msgid "Check for updates at login"
 msgstr ""
 
 #: ../plasmoid/contents/config/config.qml:6

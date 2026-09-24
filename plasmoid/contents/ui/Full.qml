@@ -23,6 +23,7 @@ Item {
     property bool checkDaily: false
     property bool checkWeekly: false
     property bool checkMonthly: false
+    property double lastCheckTimestamp: 0
     property bool showDetails: false
 
     width: Kirigami.Units.gridUnit * 20
@@ -85,7 +86,10 @@ Item {
             font.italic: true
             font.pointSize: Kirigami.Theme.smallFont.pointSize;
             opacity: 0.6;
-            text: i18n("Last check: %1 ago", formatDuration(AmoUpdates.lastRefreshTimestamp()))
+            // The runtime value only starts out at the moment this session
+            // completes its first fetch, so fall back to the persisted
+            // timestamp until then instead of showing "never".
+            text: i18n("Last check: %1 ago", formatDuration(AmoUpdates.lastRefreshTimestamp() > 0 ? AmoUpdates.lastRefreshTimestamp() : lastCheckTimestamp))
         }
 
         PlasmaComponents3.Label {
@@ -175,11 +179,15 @@ Item {
 
                 visible: AmoUpdates.count === 0 && !AmoUpdates.isActive
 
+                // This placeholder is only visible while no check is
+                // running, so it must not claim one is in progress: without
+                // a result from this session the honest state is "not
+                // checked yet".
                 text: AmoUpdates.lastCheckSuccessful
                     ? i18n("Your system is up to date.")
                     : (AmoUpdates.errorMessage !== ""
                         ? i18n("Failed to check for updates.")
-                        : i18n("Update check in progress, please wait…"))
+                        : i18n("Updates have not been checked yet."))
 
                 helpfulAction: QQC2.Action {
                     icon.name: "view-refresh"
