@@ -98,6 +98,19 @@ public:
                       bool upgradeAll);
 
     /**
+     * @brief Ask the daemon to cancel the pending metadata refresh and stop
+     *        tracking it.
+     *
+     * Refreshes are the only cancelable operation: an apply must never be
+     * canceled, as stopping dpkg mid-transaction leaves the package
+     * database in an inconsistent state. On amo versions without a Cancel
+     * method the call fails harmlessly and this degrades to abandoning the
+     * pending task: the refresh keeps running in the daemon and its late
+     * result is ignored.
+     */
+    void cancel();
+
+    /**
      * @brief The last known list of available updates.
      */
     QList<UpdatePackage> updates() const { return m_updates; }
