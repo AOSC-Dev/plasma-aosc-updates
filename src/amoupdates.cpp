@@ -188,6 +188,23 @@ void AmoUpdates::checkUpdates(bool manual)
     m_client.refresh();
 }
 
+void AmoUpdates::cancelCheck()
+{
+    // Only metadata checks may be canceled; an install must run to
+    // completion, as interrupting dpkg would leave the package database in
+    // an inconsistent state. (The daemon enforces the same rule.)
+    if (!m_active || m_activity != Activity::CheckingUpdates)
+        return;
+
+    m_client.cancel();
+    // Dismiss the progress notification, if any, and go back to idle right
+    // away; the canceled refresh's late result report is discarded by
+    // AmoClient.
+    finishProgressJob(true, QString());
+    setActive(false);
+    m_activity = Activity::Idle;
+}
+
 void AmoUpdates::installAllUpdates()
 {
     if (m_active)

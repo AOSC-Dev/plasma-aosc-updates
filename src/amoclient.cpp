@@ -150,6 +150,25 @@ void AmoClient::applyChanges(const QStringList &install,
             this, &AmoClient::onApplyReply);
 }
 
+void AmoClient::cancel()
+{
+    // Only refresh checks are cancelable (see the header); callers must not
+    // invoke this while an apply runs.
+    if (m_iface->isValid()) {
+        QDBusPendingCall call = m_iface->asyncCall(QStringLiteral("Cancel"));
+        auto *watcher = new QDBusPendingCallWatcher(call, this);
+        // Older amo versions don't know Cancel; the error is expected and
+        // intentionally ignored (cancelling then degrades to no longer
+        // waiting for the pending task).
+        connect(watcher, &QDBusPendingCallWatcher::finished, watcher,
+                &QDBusPendingCallWatcher::deleteLater);
+    }
+
+    // Stop tracking the pending task either way, so a late result report for
+    // the canceled refresh is discarded by handleResult().
+    m_pendingTask = TaskType::None;
+}
+
 void AmoClient::onRefreshReply(QDBusPendingCallWatcher *watcher)
 {
     watcher->deleteLater();
@@ -457,8 +476,14 @@ void AmoClient::handleResult(const QString &json)
         }
     }
 
-    // Dispatch the result to the task that is currently pending.
+    // Dispatch the result to the task that is currently pending. Reports
+    // can also arrive for tasks this client never started (amo broadcasts
+    // them, e.g. to every applet instance) or for a task that was already
+    // abandoned; ignore those instead of misreporting them as our own.
     const TaskType task = m_pendingTask;
+    if (task == TaskType::None)
+        return;
+
     m_pendingTask = TaskType::None;
     if (task == TaskType::Apply) {
         emit applyFinished(success, error);
