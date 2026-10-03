@@ -162,10 +162,13 @@ PlasmoidItem
         // Optionally check right when the plasmoid loads, i.e. at login, so
         // the tray icon reflects the current state even if the last check
         // was recent (e.g. new updates appeared on the server since then).
-        // Off by default: a repository refresh at login can clash with the
-        // user's own update tools or with a network that is still coming up,
-        // which used to leave users unable to update; scheduled checks are
-        // unaffected.
+        //
+        // Check-on-login is disabled by default - a repository refresh at
+        // login can clash with user invocations of package management tools
+        // (i.e., oma or apt), or when the Internet connection is slow or
+        // unstable. This could be very annoying.
+        //
+        // Scheduled updates are not affected.
         if (autoCheck && checkOnLogin && networkAllowed && batteryAllowed) {
             lastCheckAttempt = Date.now() / 1000;
             AmoUpdates.checkUpdates(false /* manual */);
