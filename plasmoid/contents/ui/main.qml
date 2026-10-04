@@ -22,6 +22,7 @@ PlasmoidItem
         checkDaily: root.checkDaily
         checkWeekly: root.checkWeekly
         checkMonthly: root.checkMonthly
+        lastCheckTimestamp: root.lastCheckTimestamp
     }
     toolTipSubText: AmoUpdates.message
     Plasmoid.icon: AmoUpdates.iconName
@@ -32,6 +33,7 @@ PlasmoidItem
     property bool checkDaily: plasmoid.configuration.daily
     property bool checkWeekly: plasmoid.configuration.weekly
     property bool checkMonthly: plasmoid.configuration.monthly
+    property bool checkOnLogin: plasmoid.configuration.check_on_login
     property bool autoCheck: plasmoid.configuration.auto_check
     property bool checkOnMobile: plasmoid.configuration.check_on_mobile
 
@@ -157,10 +159,17 @@ PlasmoidItem
 
     Component.onCompleted: {
         timer.start()
-        // Always do an initial check when the plasmoid loads, so the tray
-        // icon reflects the current state even if the last check was recent
-        // (e.g. new updates appeared on the server since then).
-        if (autoCheck && networkAllowed && batteryAllowed) {
+        // Optionally check right when the plasmoid loads, i.e. at login, so
+        // the tray icon reflects the current state even if the last check
+        // was recent (e.g. new updates appeared on the server since then).
+        //
+        // Check-on-login is disabled by default - a repository refresh at
+        // login can clash with user invocations of package management tools
+        // (i.e., oma or apt), or when the Internet connection is slow or
+        // unstable. This could be very annoying.
+        //
+        // Scheduled updates are not affected.
+        if (autoCheck && checkOnLogin && networkAllowed && batteryAllowed) {
             lastCheckAttempt = Date.now() / 1000;
             AmoUpdates.checkUpdates(false /* manual */);
         }

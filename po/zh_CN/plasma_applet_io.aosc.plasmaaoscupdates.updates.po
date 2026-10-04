@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-10 11:13+0800\n"
+"POT-Creation-Date: 2026-09-24 13:36+0800\n"
 "PO-Revision-Date: 2026-09-09 22:51+0800\n"
 "Last-Translator: AOSC Updates contributors\n"
 "Language-Team: Chinese (Simplified)\n"
@@ -12,6 +12,225 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.9\n"
+
+#: ../plasmoid/contents/ui/Full.qml:73
+msgid "Updates are automatically checked %1."
+msgstr "%1 自动检查系统更新。"
+
+#: ../plasmoid/contents/ui/Full.qml:92
+msgid "Last check: %1 ago"
+msgstr "上次检查：%1 前"
+
+#: ../plasmoid/contents/ui/Full.qml:100
+msgid "Error: %1"
+msgstr "错误：%1"
+
+#: ../plasmoid/contents/ui/Full.qml:110
+msgid "Security updates are available."
+msgstr "有安全更新可用。"
+
+#: ../plasmoid/contents/ui/Full.qml:111
+msgid "Important updates are available."
+msgstr "有重要更新可用。"
+
+#: ../plasmoid/contents/ui/Full.qml:115
+msgid "Details…"
+msgstr "查看详情…"
+
+#: ../plasmoid/contents/ui/Full.qml:187
+msgid "Your system is up to date."
+msgstr "系统无需更新。"
+
+#: ../plasmoid/contents/ui/Full.qml:189
+msgid "Failed to check for updates."
+msgstr "更新检查失败。"
+
+#: ../plasmoid/contents/ui/Full.qml:190
+msgid "Updates have not been checked yet."
+msgstr "尚未检查更新。"
+
+#: ../plasmoid/contents/ui/Full.qml:194
+msgid "Retry"
+msgstr "重试"
+
+#: ../plasmoid/contents/ui/Full.qml:194
+msgid "Check for Updates"
+msgstr "检查更新"
+
+#: ../plasmoid/contents/ui/Full.qml:210
+msgid "Download size: %1 · Storage space required: %2"
+msgstr "下载大小：%1・所需存储空间：%2"
+
+#: ../plasmoid/contents/ui/Full.qml:219
+msgid "Install Updates"
+msgstr "安装更新"
+
+#: ../plasmoid/contents/ui/Full.qml:223
+msgid "Perform system update"
+msgstr "执行系统更新"
+
+#: ../plasmoid/contents/ui/Full.qml:247
+msgid "Back"
+msgstr "返回"
+
+#: ../plasmoid/contents/ui/Full.qml:255
+msgid "Update Details"
+msgstr "更新详情"
+
+#: ../plasmoid/contents/ui/Full.qml:298
+#: ../plasmoid/contents/ui/PackageDelegate.qml:28
+msgid "Security Update"
+msgstr "安全更新"
+
+#: ../plasmoid/contents/ui/Full.qml:298
+#: ../plasmoid/contents/ui/PackageDelegate.qml:29
+msgid "Important Update"
+msgstr "重要更新"
+
+#: ../plasmoid/contents/ui/Full.qml:313
+msgid "Affects %1 package: %2"
+msgid_plural "Affects %1 packages: %2"
+msgstr[0] "涉及 %1 个软件包：%2"
+
+#: ../plasmoid/contents/ui/Full.qml:326
+msgid "daily"
+msgstr "每天"
+
+#: ../plasmoid/contents/ui/Full.qml:328
+msgid "weekly"
+msgstr "每周"
+
+#: ../plasmoid/contents/ui/Full.qml:330
+msgid "monthly"
+msgstr "每月"
+
+#: ../plasmoid/contents/ui/Full.qml:331 ../plasmoid/contents/ui/Full.qml:336
+msgid "never"
+msgstr "从不"
+
+#: ../plasmoid/contents/ui/Full.qml:339
+msgid "%1 second"
+msgid_plural "%1 seconds"
+msgstr[0] "%1 秒"
+
+#: ../plasmoid/contents/ui/Full.qml:342
+msgid "%1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "%1 分钟"
+
+#: ../plasmoid/contents/ui/Full.qml:345
+msgid "%1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "%1 小时"
+
+#: ../plasmoid/contents/ui/Full.qml:347
+msgid "%1 day"
+msgid_plural "%1 days"
+msgstr[0] "%1 天"
+
+#: ../plasmoid/contents/ui/Full.qml:362
+msgid "%1 byte"
+msgid_plural "%1 bytes"
+msgstr[0] "%1 字节"
+
+#: ../plasmoid/contents/ui/Full.qml:366
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:30
+msgid "Remove"
+msgstr "卸载"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:31
+msgid "Downgrade"
+msgstr "降级"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:32
+msgid "Reinstall"
+msgstr "重装"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:33
+msgid "Install"
+msgstr "依赖增补"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:34
+msgid "System Update"
+msgstr "系统更新"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:65
+msgctxt "Package Name (Version)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:104
+msgctxt "description of the update"
+msgid "Update Description"
+msgstr "更新描述"
+
+#: ../plasmoid/contents/ui/PackageDelegate.qml:111
+msgid "No description available"
+msgstr "无可用的描述"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
+msgctxt "@label"
+msgid "Automatic update checks:"
+msgstr "自动检查更新："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:25
+msgid "Check for updates automatically"
+msgstr "自动检查更新"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:34
+msgctxt "@label check interval for updates"
+msgid "Check interval:"
+msgstr "检查更新间隔："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:37
+msgid "Daily"
+msgstr "每天"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:44
+msgid "Weekly"
+msgstr "每周"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:51
+msgid "Monthly"
+msgstr "每月"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:56
+msgctxt "@label part of a sentence"
+msgid "Check for updates when:"
+msgstr "检查更新的时机："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:58
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Running on battery power"
+msgstr "使用电池供电时"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:64
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Connected via a mobile broadband connection"
+msgstr "使用移动网络时"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:70
+msgid "Check for updates at login"
+msgstr "登录时检查更新"
+
+#: ../plasmoid/contents/config/config.qml:6
+msgid "General"
+msgstr "常规"
+
+#: ../src/amoclient.cpp:107 ../src/amoclient.cpp:122 ../src/amoclient.cpp:138
+msgid "Cannot connect to amo D-Bus service."
+msgstr "无法连接到 amo D-Bus 服务。"
+
+#: ../src/amoclient.cpp:300
+msgid "The update service was restarted during the operation."
+msgstr "更新服务在操作过程中被重启。"
+
+#: ../src/amoclient.cpp:428
+msgid "Failed to parse result: %1"
+msgstr "无法解析操作结果：%1"
 
 #: ../src/amoupdates.cpp:64
 msgid "Error"
@@ -93,220 +312,8 @@ msgstr "系统更新已安装"
 msgid "The system has been updated successfully."
 msgstr "已成功完成安装系统更新。"
 
-#: ../src/amoclient.cpp:107 ../src/amoclient.cpp:122 ../src/amoclient.cpp:138
-msgid "Cannot connect to amo D-Bus service."
-msgstr "无法连接到 amo D-Bus 服务。"
-
-#: ../src/amoclient.cpp:300
-msgid "The update service was restarted during the operation."
-msgstr "更新服务在操作过程中被重启。"
-
-#: ../src/amoclient.cpp:428
-msgid "Failed to parse result: %1"
-msgstr "无法解析操作结果：%1"
-
-#: ../plasmoid/contents/config/config.qml:6
-msgid "General"
-msgstr "常规"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:23
-msgctxt "@label"
-msgid "Automatic update checks:"
-msgstr "自动检查更新："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
-msgid "Check for updates automatically"
-msgstr "自动检查更新"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:33
-msgctxt "@label check interval for updates"
-msgid "Check interval:"
-msgstr "检查更新间隔："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:36
-msgid "Daily"
-msgstr "每天"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:43
-msgid "Weekly"
-msgstr "每周"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:50
-msgid "Monthly"
-msgstr "每月"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:55
-msgctxt "@label part of a sentence"
-msgid "Check for updates when:"
-msgstr "检查更新的时机："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:57
-msgctxt "@option:check part of a sentence: Check for updates when"
-msgid "Running on battery power"
-msgstr "使用电池供电时"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:63
-msgctxt "@option:check part of a sentence: Check for updates when"
-msgid "Connected via a mobile broadband connection"
-msgstr "使用移动网络时"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:28
-#: ../plasmoid/contents/ui/Full.qml:290
-msgid "Security Update"
-msgstr "安全更新"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:29
-#: ../plasmoid/contents/ui/Full.qml:290
-msgid "Important Update"
-msgstr "重要更新"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:30
-msgid "Remove"
-msgstr "卸载"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:31
-msgid "Downgrade"
-msgstr "降级"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:32
-msgid "Reinstall"
-msgstr "重装"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:33
-msgid "Install"
-msgstr "依赖增补"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:34
-msgid "System Update"
-msgstr "系统更新"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:65
-msgctxt "Package Name (Version)"
-msgid "%1 (%2)"
-msgstr "%1 (%2)"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:104
-msgctxt "description of the update"
-msgid "Update Description"
-msgstr "更新描述"
-
-#: ../plasmoid/contents/ui/PackageDelegate.qml:111
-msgid "No description available"
-msgstr "无可用的描述"
-
-#: ../plasmoid/contents/ui/Full.qml:72
-msgid "Updates are automatically checked %1."
-msgstr "%1 自动检查系统更新。"
-
-#: ../plasmoid/contents/ui/Full.qml:88
-msgid "Last check: %1 ago"
-msgstr "上次检查：%1 前"
-
-#: ../plasmoid/contents/ui/Full.qml:96
-msgid "Error: %1"
-msgstr "错误：%1"
-
-#: ../plasmoid/contents/ui/Full.qml:106
-msgid "Security updates are available."
-msgstr "有安全更新可用。"
-
-#: ../plasmoid/contents/ui/Full.qml:107
-msgid "Important updates are available."
-msgstr "有重要更新可用。"
-
-#: ../plasmoid/contents/ui/Full.qml:111
-msgid "Details…"
-msgstr "查看详情…"
-
-#: ../plasmoid/contents/ui/Full.qml:179
-msgid "Your system is up to date."
-msgstr "系统无需更新。"
-
-#: ../plasmoid/contents/ui/Full.qml:181
-msgid "Failed to check for updates."
-msgstr "更新检查失败。"
-
-#: ../plasmoid/contents/ui/Full.qml:182
-msgid "Update check in progress, please wait…"
-msgstr "正在查找更新，请稍候…"
-
-#: ../plasmoid/contents/ui/Full.qml:186
-msgid "Retry"
-msgstr "重试"
-
-#: ../plasmoid/contents/ui/Full.qml:186
-msgid "Check for Updates"
-msgstr "检查更新"
-
-#: ../plasmoid/contents/ui/Full.qml:202
-msgid "Download size: %1 · Storage space required: %2"
-msgstr "下载大小：%1・所需存储空间：%2"
-
-#: ../plasmoid/contents/ui/Full.qml:211
-msgid "Install Updates"
-msgstr "安装更新"
-
-#: ../plasmoid/contents/ui/Full.qml:215
-msgid "Perform system update"
-msgstr "执行系统更新"
-
-#: ../plasmoid/contents/ui/Full.qml:239
-msgid "Back"
-msgstr "返回"
-
-#: ../plasmoid/contents/ui/Full.qml:247
-msgid "Update Details"
-msgstr "更新详情"
-
-#: ../plasmoid/contents/ui/Full.qml:305
-msgid "Affects %1 package: %2"
-msgid_plural "Affects %1 packages: %2"
-msgstr[0] "涉及 %1 个软件包：%2"
-
-#: ../plasmoid/contents/ui/Full.qml:318
-msgid "daily"
-msgstr "每天"
-
-#: ../plasmoid/contents/ui/Full.qml:320
-msgid "weekly"
-msgstr "每周"
-
-#: ../plasmoid/contents/ui/Full.qml:322
-msgid "monthly"
-msgstr "每月"
-
-#: ../plasmoid/contents/ui/Full.qml:323 ../plasmoid/contents/ui/Full.qml:328
-msgid "never"
-msgstr "从不"
-
-#: ../plasmoid/contents/ui/Full.qml:331
-msgid "%1 second"
-msgid_plural "%1 seconds"
-msgstr[0] "%1 秒"
-
-#: ../plasmoid/contents/ui/Full.qml:334
-msgid "%1 minute"
-msgid_plural "%1 minutes"
-msgstr[0] "%1 分钟"
-
-#: ../plasmoid/contents/ui/Full.qml:337
-msgid "%1 hour"
-msgid_plural "%1 hours"
-msgstr[0] "%1 小时"
-
-#: ../plasmoid/contents/ui/Full.qml:339
-msgid "%1 day"
-msgid_plural "%1 days"
-msgstr[0] "%1 天"
-
-#: ../plasmoid/contents/ui/Full.qml:354
-msgid "%1 byte"
-msgid_plural "%1 bytes"
-msgstr[0] "%1 字节"
-
-#: ../plasmoid/contents/ui/Full.qml:358
-msgid "%1 %2"
-msgstr "%1 %2"
+#~ msgid "Update check in progress, please wait…"
+#~ msgstr "正在查找更新，请稍候…"
 
 #~ msgid "You have %1 new update"
 #~ msgid_plural "You have %1 new updates"

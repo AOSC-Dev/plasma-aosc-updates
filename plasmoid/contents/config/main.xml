@@ -25,6 +25,10 @@
       <label>Check for updates while connected via a mobile broadband connections</label>
       <default>false</default>
     </entry>
+    <entry name="check_on_login" type="Bool">
+      <label>Check for updates at login</label>
+      <default>false</default>
+    </entry>
     <entry name="auto_check" type="Bool">
       <label>Automatically check for updates</label>
       <default>true</default>
