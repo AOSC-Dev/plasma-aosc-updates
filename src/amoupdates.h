@@ -216,7 +216,10 @@ private:
     bool m_isManualCheck = false;
     double m_lastRefreshTimestamp = 0.0;
     int m_lastUpdateCount = 0;
-    bool m_lastNotificationWasImportant = false;
+    /// Icon of the pending updates-available notification; the notification
+    /// is only reused (instead of re-shown) while the update count and
+    /// severity are unchanged.
+    QString m_lastNotificationIconName;
     QPointer<KNotification> m_lastNotification;
     QHash<QString, UpdatePackage> m_packageMap;
 
