@@ -159,6 +159,9 @@ private:
     void setTimestamp(const QString &timestamp);
     void setLastCheckSuccessful(bool ok);
     void showUpdatesNotification(int count);
+    /// Close the pending updates-available notification (if any) and clear
+    /// the bookkeeping that tracks it.
+    void clearUpdatesNotification();
     void showErrorNotification(const QString &message);
     void showInstalledNotification();
 
