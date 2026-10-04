@@ -123,6 +123,14 @@ Item {
             indeterminate: AmoUpdates.percentage > 100
         }
 
+        PlasmaComponents3.Button {
+            visible: AmoUpdates.isCheckingForUpdates
+            icon.name: "dialog-cancel"
+            Layout.alignment: Qt.AlignHCenter
+            text: i18n("Cancel")
+            onClicked: AmoUpdates.cancelCheck()
+        }
+
         PlasmaComponents3.ScrollView {
             id: listViewScrollArea
 

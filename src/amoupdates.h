@@ -36,6 +36,10 @@ class AmoUpdates : public QObject
     // ---- Properties consumed by the QML UI ----
     Q_PROPERTY(int count READ count NOTIFY updatesChanged)
     Q_PROPERTY(bool isActive READ isActive NOTIFY activeChanged)
+    /// Whether a metadata check (rather than an install) is running; checks
+    /// are the only cancelable operation. (All activity transitions that
+    /// affect this also emit activeChanged.)
+    Q_PROPERTY(bool isCheckingForUpdates READ isCheckingForUpdates NOTIFY activeChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString statusMessage READ statusMessage NOTIFY statusMessageChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
@@ -60,6 +64,7 @@ public:
 
     int count() const { return m_client.updates().size(); }
     bool isActive() const { return m_active; }
+    bool isCheckingForUpdates() const { return m_active && m_activity == Activity::CheckingUpdates; }
     QString message() const;
     QString statusMessage() const { return m_statusMessage; }
     QString errorMessage() const { return m_errorMessage; }
@@ -80,6 +85,10 @@ public:
 
     // ---- Methods callable from QML ----
     Q_INVOKABLE void checkUpdates(bool manual);
+    /// Cancel the running metadata check. No-op unless a check is actually
+    /// running: an install must never be canceled, as interrupting dpkg
+    /// would leave the package database in an inconsistent state.
+    Q_INVOKABLE void cancelCheck();
     Q_INVOKABLE void installAllUpdates();
     Q_INVOKABLE QString packageName(const QString &packageId) const;
     Q_INVOKABLE QString packageVersion(const QString &packageId) const;
