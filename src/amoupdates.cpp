@@ -363,8 +363,14 @@ void AmoUpdates::onUpdatesListed(const QList<UpdatePackage> &updates,
     setTimestamp(QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat));
     m_lastRefreshTimestamp = QDateTime::currentMSecsSinceEpoch() / 1000.0;
 
-    if (!updates.isEmpty())
+    if (!updates.isEmpty()) {
         showUpdatesNotification(updates.size());
+    } else {
+        // Nothing left to install: take down a pending "updates available"
+        // notification instead of leaving it on screen. A security one is
+        // persistent, so it would otherwise stay until dismissed by hand.
+        clearUpdatesNotification();
+    }
 
     // The operation (check or install) is complete; dismiss the progress
     // notification.
@@ -877,47 +883,65 @@ void AmoUpdates::showUpdatesNotification(int count)
         return;
     }
 
-    if (m_lastNotification)
-        m_lastNotification->close();
+    clearUpdatesNotification();
 
     m_lastUpdateCount = count;
     m_lastNotificationIconName = icon;
     // Routine updates auto-close after a few seconds; security updates stay
     // until dismissed and are marked as important.
-    m_lastNotification = new KNotification(QStringLiteral("updatesAvailable"),
-                                           security ? KNotification::Persistent
-                                                     : KNotification::CloseOnTimeout,
-                                           this);
-    m_lastNotification->setComponentName(QStringLiteral("plasma-aosc-updates"));
+    KNotification *notification = new KNotification(QStringLiteral("updatesAvailable"),
+                                                    security ? KNotification::Persistent
+                                                              : KNotification::CloseOnTimeout,
+                                                    this);
+    m_lastNotification = notification;
+    notification->setComponentName(QStringLiteral("plasma-aosc-updates"));
     if (security)
-        m_lastNotification->setUrgency(KNotification::CriticalUrgency);
-    m_lastNotification->setTitle(security
+        notification->setUrgency(KNotification::CriticalUrgency);
+    notification->setTitle(security
         ? i18nd(kTranslationDomain, "Security Updates Available")
         : i18nd(kTranslationDomain, "Software Updates Available"));
     const int securityCount = securityUpdateCount();
     if (securityCount > 0) {
-        m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "%1 system update is available , %2 of which is a security update",
-                                           "%1 system updates are available, %2 of which are security updates",
-                                           count, securityCount));
+        notification->setText(i18ndp(kTranslationDomain,
+                                     "%1 system update is available , %2 of which is a security update",
+                                     "%1 system updates are available, %2 of which are security updates",
+                                     count, securityCount));
     } else {
-        m_lastNotification->setText(i18ndp(kTranslationDomain,
-                                           "%1 new update is available ",
-                                           "%1 new updates are available",
-                                           count));
+        notification->setText(i18ndp(kTranslationDomain,
+                                     "%1 new update is available ",
+                                     "%1 new updates are available",
+                                     count));
     }
-    m_lastNotification->setIconName(icon);
-    KNotificationAction *openAction = m_lastNotification->addDefaultAction(
+    notification->setIconName(icon);
+    KNotificationAction *openAction = notification->addDefaultAction(
         i18nd(kTranslationDomain, "Open"));
     connect(openAction, &KNotificationAction::activated, this, [this]() {
         emit openRequested();
     });
-    connect(m_lastNotification, &KNotification::closed, this, [this]() {
-        m_lastNotification = nullptr;
-        m_lastUpdateCount = 0;
-        m_lastNotificationIconName.clear();
+    // A notification that is replaced reports closed() after the replacement
+    // has been registered, so clearing the state then would lose track of the
+    // live notification (and it could never be taken down again). Only the
+    // notification we are currently tracking may clear the bookkeeping.
+    connect(notification, &KNotification::closed, this, [this, notification]() {
+        if (m_lastNotification == notification) {
+            m_lastNotification = nullptr;
+            m_lastUpdateCount = 0;
+            m_lastNotificationIconName.clear();
+        }
     });
-    m_lastNotification->sendEvent();
+    notification->sendEvent();
+}
+
+void AmoUpdates::clearUpdatesNotification()
+{
+    // Forget the notification before closing it: if close() reports closed()
+    // synchronously, the handler must not touch the new state.
+    KNotification *notification = m_lastNotification;
+    m_lastNotification = nullptr;
+    m_lastUpdateCount = 0;
+    m_lastNotificationIconName.clear();
+    if (notification)
+        notification->close();
 }
 
 void AmoUpdates::showErrorNotification(const QString &message)
