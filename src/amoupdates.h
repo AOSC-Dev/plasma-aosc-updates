@@ -39,7 +39,11 @@ class AmoUpdates : public QObject
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString statusMessage READ statusMessage NOTIFY statusMessageChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
-    Q_PROPERTY(QString iconName READ iconName NOTIFY updatesChanged)
+    // iconName() depends on both the update list and the activity state, so
+    // it has its own change signal; updatesChanged alone would leave the icon
+    // stale while a check or install is running (during which the update list
+    // does not change).
+    Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged)
     Q_PROPERTY(bool isSystemUpToDate READ isSystemUpToDate NOTIFY updatesChanged)
     Q_PROPERTY(QString timestamp READ timestamp NOTIFY updatesChanged)
     Q_PROPERTY(int percentage READ percentage NOTIFY percentageChanged)
@@ -109,6 +113,9 @@ public:
 signals:
     void updatesChanged();
     void activeChanged();
+    /// Emitted whenever iconName() may have changed: on activity changes and
+    /// on update-list changes.
+    void iconNameChanged();
     void messageChanged();
     void statusMessageChanged();
     void errorMessageChanged();
