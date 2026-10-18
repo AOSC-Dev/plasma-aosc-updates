@@ -37,5 +37,13 @@
       <label>Timestamp of the last successful update check</label>
       <default>0.0</default>
     </entry>
+    <entry name="suppress_pulse_animation" type="Bool">
+      <label>Suppress the tray icon bounce when new updates are detected</label>
+      <default>false</default>
+    </entry>
+    <entry name="suppress_spinner_animation" type="Bool">
+      <label>Suppress the tray icon spinner while an update is in progress</label>
+      <default>false</default>
+    </entry>
   </group>
 </kcfg>

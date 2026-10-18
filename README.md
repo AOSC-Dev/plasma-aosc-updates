@@ -11,6 +11,8 @@ modelled after plasma-pk-updates.
 - Shows a list of available updates with checkboxes to pick what to install
 - Performs full system upgrade or installs only the selected packages
 - Displays download/progress status while working
+- Lets the tray icon's animations (attention bounce, busy spinner) be turned
+  off in the applet settings
 - Highlights security updates from AOSC Topic Update Manifests (TUM)
 - Shows localized TUM names, cautions and affected package details
 

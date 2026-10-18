@@ -36,6 +36,8 @@ PlasmoidItem
     property bool checkOnLogin: plasmoid.configuration.check_on_login
     property bool autoCheck: plasmoid.configuration.auto_check
     property bool checkOnMobile: plasmoid.configuration.check_on_mobile
+    property bool suppressPulseAnimation: plasmoid.configuration.suppress_pulse_animation
+    property bool suppressSpinnerAnimation: plasmoid.configuration.suppress_spinner_animation
 
     property double lastCheckAttempt: 0
     property double lastCheckTimestamp: plasmoid.configuration.last_check_timestamp
@@ -63,11 +65,21 @@ PlasmoidItem
 
     // Show the attention (red dot) state only for security updates;
     // routine upgrades keep the plain active state.
+    //
+    // The bounce itself is not ours: the system tray pulses any item that
+    // publishes NeedsAttentionStatus (PulseAnimation in Plasma's
+    // AbstractItem.qml, gated on the status alone), and a plasmoid has no way
+    // to turn that off. When the user suppresses the bounce we therefore
+    // downgrade to ActiveStatus -- the icon stays still, while the security
+    // updates are still recognizable from the red "update-high" icon and the
+    // notification sent when the check completes.
     function trayStatus() {
         if (AmoUpdates.isActive)
             return PlasmaCore.Types.ActiveStatus;
-        if (AmoUpdates.hasSecurityUpdates)
-            return PlasmaCore.Types.NeedsAttentionStatus;
+        if (AmoUpdates.hasSecurityUpdates) {
+            return suppressPulseAnimation ? PlasmaCore.Types.ActiveStatus
+                                          : PlasmaCore.Types.NeedsAttentionStatus;
+        }
         if (!AmoUpdates.isSystemUpToDate)
             return PlasmaCore.Types.ActiveStatus;
         return PlasmaCore.Types.PassiveStatus;
@@ -108,9 +120,12 @@ PlasmoidItem
         // running, like the system tray does for Plasmoid.busy. The spinner
         // follows the panel's color scheme, so it stays visible on both light
         // and dark panels.
+        //
+        // Unlike the attention pulse this animation is ours, so suppressing it
+        // simply leaves the static "update-busy" icon in place.
         PlasmaComponents3.BusyIndicator {
             anchors.fill: parent
-            running: AmoUpdates.isActive
+            running: AmoUpdates.isActive && !root.suppressSpinnerAnimation
             visible: running
         }
 
