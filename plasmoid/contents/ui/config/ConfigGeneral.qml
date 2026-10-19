@@ -86,13 +86,13 @@ KCM.SimpleKCM {
         //    top of that.
         CheckBox {
             id: suppressPulse
-            Kirigami.FormData.label: i18nc("@label:group", "Animation:")
-            text: i18n("Do not bounce the tray icon for security updates")
+            Kirigami.FormData.label: i18nc("@label:group", "Reduce tray icon motion:")
+            text: i18n("Do not pulse the tray icon for security updates")
         }
 
         CheckBox {
             id: suppressSpinner
-            text: i18n("Do not spin the tray icon during an update")
+            text: i18n("Do not show a spinner when updating")
         }
     }
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-10-18 17:05+0800\n"
+"POT-Creation-Date: 2026-10-19 18:13+0800\n"
 "PO-Revision-Date: 2026-09-11 07:19+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: English (United States) <https://weblate.aosc.io/projects/"
@@ -66,16 +66,16 @@ msgstr ""
 
 #: ../plasmoid/contents/ui/config/ConfigGeneral.qml:89
 msgctxt "@label:group"
-msgid "Animation:"
-msgstr "Animation:"
+msgid "Reduce tray icon motion:"
+msgstr "Reduce tray icon motion:"
 
 #: ../plasmoid/contents/ui/config/ConfigGeneral.qml:90
-msgid "Do not bounce the tray icon for security updates"
-msgstr "Do not bounce the tray icon for security updates"
+msgid "Do not pulse the tray icon for security updates"
+msgstr "Do not pulse the tray icon for security updates"
 
 #: ../plasmoid/contents/ui/config/ConfigGeneral.qml:95
-msgid "Do not spin the tray icon during an update"
-msgstr "Do not spin the tray icon during an update"
+msgid "Do not show a spinner when updating"
+msgstr "Do not show a spinner when updating"
 
 #: ../plasmoid/contents/ui/Full.qml:73
 msgid "Updates are automatically checked %1."
@@ -245,86 +245,86 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: ../src/amoupdates.cpp:64
+#: ../src/amoupdates.cpp:67
 msgid "Error"
 msgstr "Error"
 
-#: ../src/amoupdates.cpp:84 ../src/amoupdates.cpp:114
+#: ../src/amoupdates.cpp:87 ../src/amoupdates.cpp:117
 msgid "Idle"
 msgstr "Idle"
 
-#: ../src/amoupdates.cpp:100 ../src/amoupdates.cpp:182
+#: ../src/amoupdates.cpp:103 ../src/amoupdates.cpp:185
 msgid "Checking for updates…"
 msgstr "Checking for updates…"
 
-#: ../src/amoupdates.cpp:101
+#: ../src/amoupdates.cpp:104
 msgid "Installing updates…"
 msgstr "Installing updates…"
 
-#: ../src/amoupdates.cpp:106
+#: ../src/amoupdates.cpp:109
 msgid "%1 update available"
 msgid_plural "%1 updates available"
 msgstr[0] "%1 update available"
 msgstr[1] "%1 updates available"
 
-#: ../src/amoupdates.cpp:111
+#: ../src/amoupdates.cpp:114
 msgid "Network is offline"
 msgstr "Network is offline"
 
-#: ../src/amoupdates.cpp:117 ../src/amoupdates.cpp:953
+#: ../src/amoupdates.cpp:120 ../src/amoupdates.cpp:961
 msgid "Update check failed"
 msgstr "Update check failed"
 
-#: ../src/amoupdates.cpp:119
+#: ../src/amoupdates.cpp:122
 msgid "System is up to date"
 msgstr "System is up to date"
 
-#: ../src/amoupdates.cpp:187
+#: ../src/amoupdates.cpp:190
 msgid "Checking for updates"
 msgstr ""
 
-#: ../src/amoupdates.cpp:200
+#: ../src/amoupdates.cpp:203
 msgid "Installing system updates…"
 msgstr "Installing system updates…"
 
-#: ../src/amoupdates.cpp:201
+#: ../src/amoupdates.cpp:204
 msgid "Installing system updates"
 msgstr ""
 
-#: ../src/amoupdates.cpp:463
+#: ../src/amoupdates.cpp:466
 msgid "Refreshing update list…"
 msgstr ""
 
-#: ../src/amoupdates.cpp:901
+#: ../src/amoupdates.cpp:909
 msgid "Security Updates Available"
 msgstr "Security Updates Available"
 
-#: ../src/amoupdates.cpp:902
+#: ../src/amoupdates.cpp:910
 msgid "Software Updates Available"
 msgstr "Software Updates Available"
 
-#: ../src/amoupdates.cpp:906
+#: ../src/amoupdates.cpp:914
 msgid "%1 system update is available , %2 of which is a security update"
 msgid_plural ""
 "%1 system updates are available, %2 of which are security updates"
 msgstr[0] "%1 system update is available , %2 of which is a security update"
 msgstr[1] "%1 system updates are available, %2 of which are security updates"
 
-#: ../src/amoupdates.cpp:911
+#: ../src/amoupdates.cpp:919
 msgid "%1 new update is available "
 msgid_plural "%1 new updates are available"
 msgstr[0] "%1 new update is available "
 msgstr[1] "%1 new updates are available"
 
-#: ../src/amoupdates.cpp:917
+#: ../src/amoupdates.cpp:925
 msgid "Open"
 msgstr "Open"
 
-#: ../src/amoupdates.cpp:965
+#: ../src/amoupdates.cpp:973
 msgid "Updates installed"
 msgstr "Updates installed"
 
-#: ../src/amoupdates.cpp:967
+#: ../src/amoupdates.cpp:975
 msgid "The system has been updated successfully."
 msgstr "The system has been updated successfully."
 
@@ -339,3 +339,10 @@ msgstr ""
 #: ../src/amoclient.cpp:428
 msgid "Failed to parse result: %1"
 msgstr ""
+
+#~ msgctxt "@label:group"
+#~ msgid "Animation:"
+#~ msgstr "Animation:"
+
+#~ msgid "Do not spin the tray icon during an update"
+#~ msgstr "Do not spin the tray icon during an update"
