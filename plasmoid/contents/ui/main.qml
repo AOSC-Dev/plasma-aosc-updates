@@ -66,11 +66,11 @@ PlasmoidItem
     // Show the attention (red dot) state only for security updates;
     // routine upgrades keep the plain active state.
     //
-    // The bounce itself is not ours: the system tray pulses any item that
+    // The bounce (breath) itself is not ours: the system tray pulses any item that
     // publishes NeedsAttentionStatus (PulseAnimation in Plasma's
     // AbstractItem.qml, gated on the status alone), and a plasmoid has no way
     // to turn that off. When the user suppresses the bounce we therefore
-    // downgrade to ActiveStatus -- the icon stays still, while the security
+    // downgrade to ActiveStatus - the icon stays still, while the security
     // updates are still recognizable from the red "update-high" icon and the
     // notification sent when the check completes.
     function trayStatus() {
