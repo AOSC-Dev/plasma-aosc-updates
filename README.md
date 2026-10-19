@@ -9,7 +9,7 @@ modelled after plasma-pk-updates.
 - Lives in the system tray, like other status notifier items
 - Icon appears only when updates are available (hides when up to date)
 - Shows a list of available updates with checkboxes to pick what to install
-- Performs a full system upgrade or installs only the selected packages
+- Performs full system upgrade or installs only the selected packages
 - Displays download/progress status while working
 - Highlights security updates from AOSC Topic Update Manifests (TUM)
 - Shows localized TUM names, cautions and affected package details
@@ -29,7 +29,7 @@ cmake --build build
 cmake --install build
 ```
 
-The installation puts the QML plugin into
+The install puts the QML plugin into
 `~/.local/lib/qt6/qml/io/aosc/plasmaaoscupdates` and the applet package into
 `~/.local/share/plasma/plasmoids`. For distro layouts that use `lib64`, set
 `-DAMO_QML_INSTALL_DIR=lib64/qt6/qml` when configuring.
