@@ -15,6 +15,8 @@ KCM.SimpleKCM {
     property alias cfg_check_on_mobile: mobile.checked
     property alias cfg_check_on_login: checkOnLogin.checked
     property alias cfg_auto_check: autoCheck.checked
+    property alias cfg_suppress_pulse_animation: suppressPulse.checked
+    property alias cfg_suppress_spinner_animation: suppressSpinner.checked
 
     Kirigami.FormLayout {
         id: form
@@ -68,6 +70,29 @@ KCM.SimpleKCM {
             id: checkOnLogin
             enabled: autoCheck.checked
             text: i18n("Check for updates at login")
+        }
+
+        // Tray icon animations. The two animations come from different places,
+        // hence two separate switches:
+        //
+        //  - The bounce is drawn by the system tray for any item that asks for
+        //    attention. It does not follow the global animation speed setting
+        //    in System Settings: at the "Instant" setting it keeps looping,
+        //    only faster, because animators with a duration of zero are given
+        //    a 1 ms duration to keep them firing. The applet can therefore only
+        //    avoid it by not requesting attention in the first place.
+        //  - The spinner is drawn by this applet, so it does follow the global
+        //    setting (and stops at "Instant"), and this switch turns it off on
+        //    top of that.
+        CheckBox {
+            id: suppressPulse
+            Kirigami.FormData.label: i18nc("@label:group", "Reduce tray icon motion:")
+            text: i18n("Do not pulse the tray icon for security updates")
+        }
+
+        CheckBox {
+            id: suppressSpinner
+            text: i18n("Do not show a spinner when updating")
         }
     }
 }

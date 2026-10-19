@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-aosc-updates 1.0\n"
 "Report-Msgid-Bugs-To: maintainers@aosc.io\n"
-"POT-Creation-Date: 2026-09-24 13:36+0800\n"
+"POT-Creation-Date: 2026-10-19 18:13+0800\n"
 "PO-Revision-Date: 2026-09-11 07:19+0000\n"
 "Last-Translator: Kaiyang Wu <origincode@aosc.io>\n"
 "Language-Team: Chinese (Traditional Han script) <https://weblate.aosc.io/"
@@ -18,6 +18,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.8.1\n"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:26
+msgctxt "@label"
+msgid "Automatic update checks:"
+msgstr "自動檢查更新："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:27
+msgid "Check for updates automatically"
+msgstr "自動檢查更新"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:36
+msgctxt "@label check interval for updates"
+msgid "Check interval:"
+msgstr "檢查更新間隔："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:39
+msgid "Daily"
+msgstr "每天"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:46
+msgid "Weekly"
+msgstr "每週"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:53
+msgid "Monthly"
+msgstr "每月"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:58
+msgctxt "@label part of a sentence"
+msgid "Check for updates when:"
+msgstr "檢查更新的時機："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:60
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Running on battery power"
+msgstr "使用電池供電時"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:66
+msgctxt "@option:check part of a sentence: Check for updates when"
+msgid "Connected via a mobile broadband connection"
+msgstr "使用行動網路時"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:72
+msgid "Check for updates at login"
+msgstr "登入時檢查更新"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:89
+msgctxt "@label:group"
+msgid "Reduce tray icon motion:"
+msgstr "減少托盤圖示動態效果："
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:90
+msgid "Do not pulse the tray icon for security updates"
+msgstr "有安全更新時不要播放呼吸效果"
+
+#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:95
+msgid "Do not show a spinner when updating"
+msgstr "更新時不要顯示旋轉動畫"
 
 #: ../plasmoid/contents/ui/Full.qml:73
 msgid "Updates are automatically checked %1."
@@ -177,54 +235,89 @@ msgstr "更新描述"
 msgid "No description available"
 msgstr "無可用的描述"
 
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:24
-msgctxt "@label"
-msgid "Automatic update checks:"
-msgstr "自動檢查更新："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:25
-msgid "Check for updates automatically"
-msgstr "自動檢查更新"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:34
-msgctxt "@label check interval for updates"
-msgid "Check interval:"
-msgstr "檢查更新間隔："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:37
-msgid "Daily"
-msgstr "每天"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:44
-msgid "Weekly"
-msgstr "每週"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:51
-msgid "Monthly"
-msgstr "每月"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:56
-msgctxt "@label part of a sentence"
-msgid "Check for updates when:"
-msgstr "檢查更新的時機："
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:58
-msgctxt "@option:check part of a sentence: Check for updates when"
-msgid "Running on battery power"
-msgstr "使用電池供電時"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:64
-msgctxt "@option:check part of a sentence: Check for updates when"
-msgid "Connected via a mobile broadband connection"
-msgstr "使用行動網路時"
-
-#: ../plasmoid/contents/ui/config/ConfigGeneral.qml:70
-msgid "Check for updates at login"
-msgstr "登入時檢查更新"
-
 #: ../plasmoid/contents/config/config.qml:6
 msgid "General"
 msgstr "通用"
+
+#: ../src/amoupdates.cpp:67
+msgid "Error"
+msgstr "錯誤"
+
+#: ../src/amoupdates.cpp:87 ../src/amoupdates.cpp:117
+msgid "Idle"
+msgstr "閒置"
+
+#: ../src/amoupdates.cpp:103 ../src/amoupdates.cpp:185
+msgid "Checking for updates…"
+msgstr "正在檢查更新…"
+
+#: ../src/amoupdates.cpp:104
+msgid "Installing updates…"
+msgstr "正在安裝更新…"
+
+#: ../src/amoupdates.cpp:109
+msgid "%1 update available"
+msgid_plural "%1 updates available"
+msgstr[0] "有 %1 個可用更新"
+
+#: ../src/amoupdates.cpp:114
+msgid "Network is offline"
+msgstr "未連接網路"
+
+#: ../src/amoupdates.cpp:120 ../src/amoupdates.cpp:961
+msgid "Update check failed"
+msgstr "更新檢查失敗"
+
+#: ../src/amoupdates.cpp:122
+msgid "System is up to date"
+msgstr "系統已是最新狀態"
+
+#: ../src/amoupdates.cpp:190
+msgid "Checking for updates"
+msgstr "正在檢查更新"
+
+#: ../src/amoupdates.cpp:203
+msgid "Installing system updates…"
+msgstr "正在安裝系統更新…"
+
+#: ../src/amoupdates.cpp:204
+msgid "Installing system updates"
+msgstr "正在安裝系統更新"
+
+#: ../src/amoupdates.cpp:466
+msgid "Refreshing update list…"
+msgstr "正在重新整理更新列表…"
+
+#: ../src/amoupdates.cpp:909
+msgid "Security Updates Available"
+msgstr "有可用的安全更新"
+
+#: ../src/amoupdates.cpp:910
+msgid "Software Updates Available"
+msgstr "有可用的軟體更新"
+
+#: ../src/amoupdates.cpp:914
+msgid "%1 system update is available , %2 of which is a security update"
+msgid_plural ""
+"%1 system updates are available, %2 of which are security updates"
+msgstr[0] "有 %1 個可用系統更新，其中 %2 個是安全更新"
+
+#: ../src/amoupdates.cpp:919
+msgid "%1 new update is available "
+msgid_plural "%1 new updates are available"
+msgstr[0] "有 %1 個可用系統更新"
+
+#: ../src/amoupdates.cpp:925
+msgid "Open"
+msgstr "開啟"
+
+#: ../src/amoupdates.cpp:973
+msgid "Updates installed"
+msgstr "系統更新已安裝"
+
+#: ../src/amoupdates.cpp:975
+msgid "The system has been updated successfully."
+msgstr "系統更新已成功完成。"
 
 #: ../src/amoclient.cpp:107 ../src/amoclient.cpp:122 ../src/amoclient.cpp:138
 msgid "Cannot connect to amo D-Bus service."
@@ -238,85 +331,12 @@ msgstr "更新服務在操作過程中被重新啟動。"
 msgid "Failed to parse result: %1"
 msgstr "無法解析操作結果：%1"
 
-#: ../src/amoupdates.cpp:64
-msgid "Error"
-msgstr "錯誤"
+#~ msgctxt "@label:group"
+#~ msgid "Animation:"
+#~ msgstr "動畫："
 
-#: ../src/amoupdates.cpp:84 ../src/amoupdates.cpp:114
-msgid "Idle"
-msgstr "閒置"
-
-#: ../src/amoupdates.cpp:100 ../src/amoupdates.cpp:182
-msgid "Checking for updates…"
-msgstr "正在檢查更新…"
-
-#: ../src/amoupdates.cpp:101
-msgid "Installing updates…"
-msgstr "正在安裝更新…"
-
-#: ../src/amoupdates.cpp:106
-msgid "%1 update available"
-msgid_plural "%1 updates available"
-msgstr[0] "有 %1 個可用更新"
-
-#: ../src/amoupdates.cpp:111
-msgid "Network is offline"
-msgstr "未連接網路"
-
-#: ../src/amoupdates.cpp:117 ../src/amoupdates.cpp:925
-msgid "Update check failed"
-msgstr "更新檢查失敗"
-
-#: ../src/amoupdates.cpp:119
-msgid "System is up to date"
-msgstr "系統已是最新狀態"
-
-#: ../src/amoupdates.cpp:187
-msgid "Checking for updates"
-msgstr "正在檢查更新"
-
-#: ../src/amoupdates.cpp:200
-msgid "Installing system updates…"
-msgstr "正在安裝系統更新…"
-
-#: ../src/amoupdates.cpp:201
-msgid "Installing system updates"
-msgstr "正在安裝系統更新"
-
-#: ../src/amoupdates.cpp:457
-msgid "Refreshing update list…"
-msgstr "正在重新整理更新列表…"
-
-#: ../src/amoupdates.cpp:891
-msgid "Security Updates Available"
-msgstr "有可用的安全更新"
-
-#: ../src/amoupdates.cpp:892
-msgid "Software Updates Available"
-msgstr "有可用的軟體更新"
-
-#: ../src/amoupdates.cpp:896
-msgid "%1 system update is available , %2 of which is a security update"
-msgid_plural ""
-"%1 system updates are available, %2 of which are security updates"
-msgstr[0] "有 %1 個可用系統更新，其中 %2 個是安全更新"
-
-#: ../src/amoupdates.cpp:901
-msgid "%1 new update is available "
-msgid_plural "%1 new updates are available"
-msgstr[0] "有 %1 個可用系統更新"
-
-#: ../src/amoupdates.cpp:907
-msgid "Open"
-msgstr "開啟"
-
-#: ../src/amoupdates.cpp:937
-msgid "Updates installed"
-msgstr "系統更新已安裝"
-
-#: ../src/amoupdates.cpp:939
-msgid "The system has been updated successfully."
-msgstr "系統更新已成功完成。"
+#~ msgid "Do not spin the tray icon during an update"
+#~ msgstr "更新進行時不要旋轉托盤圖示"
 
 #~ msgid "Update check in progress, please wait…"
 #~ msgstr "正在檢查更新，請稍候…"

@@ -58,6 +58,9 @@ AmoUpdates::AmoUpdates(QObject *parent)
             this, &AmoUpdates::onDescriptionsChanged);
     connect(&m_client, &AmoClient::updatesChanged,
             this, &AmoUpdates::onUpdatesChangedExternally);
+    // iconName() also depends on the update list, so forward that signal.
+    connect(this, &AmoUpdates::updatesChanged,
+            this, &AmoUpdates::iconNameChanged);
     connect(&m_client, &AmoClient::errorOccurred,
             this, [this](const QString &msg) {
                 setActive(false);
@@ -632,6 +635,11 @@ void AmoUpdates::setActive(bool active)
         return;
     m_active = active;
     emit activeChanged();
+    // iconName() switches between the "busy" and the update icons based on
+    // this flag, so the tray icon has to be refreshed here: updatesChanged is
+    // only emitted once the update list is fetched, which happens after the
+    // check or install finished.
+    emit iconNameChanged();
     // message() depends on isActive(), so it may have changed as well.
     emit messageChanged();
 }
